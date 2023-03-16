@@ -42,8 +42,6 @@ public class PayWithCash {
 		inputSlot.enable();
 		validator.enable();
 		storage.enable();
-		
-		
 	}
 	
 	/**
@@ -55,19 +53,9 @@ public class PayWithCash {
 	 */
 	public void inserted(Bill bill) throws DisabledException, OverloadException {
 		if (amountDue > 0) {
-			if (inputSlot.accept(bill)) {
-				if (validator.accept(bill)) {
-					amountDue -= bill.getValue();
-					storage.accept(bill);
-				} else {
-					inputSlot.emit(bill);
-				}
-			} else {
-				inputSlot.emit(bill);
-			}
-		} else {
+			 inputSlot.accept(bill);
+		}else {
 			returnChange();
-			// print receipt code here 
 		}
 		
 	}
