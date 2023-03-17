@@ -13,6 +13,7 @@ public class System {
 	private double amountDue = 0;
 	private boolean paymentProcess = false;
 	PayWithCashController payWithCashController = new PayWithCashController(station);
+	PrintReceipt printReceipt = new PrintReceipt(station);
 	
 	public System(SelfCheckoutStation station) {
 		this.station = station;
@@ -35,7 +36,14 @@ public class System {
 			paymentProcess = false; // exits the system out of payment
 			station.billInput.disable();
 			payWithCashController.deliverChange();
-			// CODE FOR CALLING PRINT RECEIPT
+			try {
+				printReceipt.printReceipt();
+			} catch (EmptyException ee) {
+				//the station will be suspended
+				
+				//the attendant informed that a duplicate receipt must be printed and that the station needs maintenance
+				
+			}
 		}
 	}
 	
