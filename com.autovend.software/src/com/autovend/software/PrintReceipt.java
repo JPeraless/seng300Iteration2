@@ -32,6 +32,7 @@ public class PrintReceipt implements ReceiptPrinterObserver {
 			}
 		}
 //		3. ReceiptPrinter: Printsthereceipt.
+		station.printer.cutPaper();
 //		4. System: Signals to Customer I/O that the customer’s session is complete.
 //		5. Customer I/O: Thanks the Customer.
 //		6. Customer I/O: Ready for a new customer session.
