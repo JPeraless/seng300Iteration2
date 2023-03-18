@@ -3,6 +3,7 @@ package com.autovend.software;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.autovend.devices.EmptyException;
 import com.autovend.devices.SelfCheckoutStation;
 import com.autovend.products.BarcodedProduct;
 
@@ -35,7 +36,14 @@ public class System {
 			paymentProcess = false; // exits the system out of payment
 			station.billInput.disable();
 			payWithCashController.deliverChange();
-			// CODE FOR CALLING PRINT RECEIPT
+			try {
+				PrintReceipt.print(station, billList);
+			} catch (EmptyException ee) {
+				//the station will be suspended
+				
+				//the attendant informed that a duplicate receipt must be printed and that the station needs maintenance
+				
+			}
 		}
 	}
 	
