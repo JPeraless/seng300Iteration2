@@ -17,7 +17,8 @@ public class Attendant {
     public Attendant(){}
 
     /**
-     * Allows the attendant to invoke the receipt printer when an error occurs
+     * Allows the attendant to invoke the receipt printer when an error occurs.
+     * Either the attendant will successfully print a receipt or a null receipt will occur do to an exception
      * @param selfCheckoutStation current self-checkout station
      * @param billList bill list to print
      */
@@ -31,7 +32,7 @@ public class Attendant {
     }
 
     /**
-     * Attendant refills ink
+     * Attendant refills ink and the printer is ready to go
      * @param rp receipt printer attendant needs to maintain
      * @param amount the amount to refill
      * @throws OverloadException Too much ink in receipt printer
@@ -42,7 +43,7 @@ public class Attendant {
     }
 
     /**
-     * Attendant refills paper
+     * Attendant refills paper and the printer is ready to go
      * @param rp receipt printer attendant needs to maintain
      * @throws OverloadException Too much paper in receipt printer
      */

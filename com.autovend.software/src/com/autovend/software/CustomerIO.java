@@ -4,10 +4,11 @@ package com.autovend.software;
  * Dummy class to simulate customer I/O
  */
 public class CustomerIO {
-    private Boolean thanks; // Status for if the customer needs to be thanked
-    private Boolean ready; // Status if ready for new customer session
+    private Boolean thanks = false; // Status for if the customer needs to be thanked
+    private Boolean ready = false; // Status if ready for new customer session
 
-    // Customer IO returns thank you message to screen ("Thank you for shopping with us today!")
+    // Customer IO returns thank you message to screen ("Thank you for shopping with us today!") or
+    // empty string if they shouldn't be thanked yet
     public String thankCustomer(){
         if(thanks){
             return "Thank you for shopping with us today!";

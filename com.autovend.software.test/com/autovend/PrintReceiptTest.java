@@ -197,18 +197,19 @@ public class PrintReceiptTest {
     }
 
     // Tests if the station is unblocked once paper is filled
+    @Test
     public void fillPaper() throws OverloadException{
         CustomerIO CIO = new CustomerIO();
         Attendant AT = new Attendant();
 
-        station_1.printer.addInk(0); // Out of ink
-        station_1.printer.addPaper(50);
+        station_1.printer.addInk(MAX_INK); // Out of ink
+        station_1.printer.addPaper(0);
         System sys = new System(station_1, AT, CIO);
         sys.setPrinting(true);
         sys.addBillList(DairyLand_Milk); sys.addBillList(Cinnamon_Toast_Crunch); sys.addBillList(Nature_Valley_Choc);
         sys.startPrinting();
         if(AT.isInformed()){
-            AT.fillPaper(sys.getStation().printer, MAX_INK);
+            AT.fillPaper(sys.getStation().printer, MAX_Paper);
         }
 
         assertFalse(AT.isInformed()); // Attendant should no longer be informed after they fill the ink
@@ -228,5 +229,74 @@ public class PrintReceiptTest {
 
         assertTrue(CIO.getThanks()); // Customer should have been thanked
         assertEquals("Thank you for shopping with us today!", CIO.thankCustomer());
+    }
+
+    // Test if customer is not flagged then, nothing should be printed to the screen
+    @Test
+    public void dontThankCustomer() {
+        CustomerIO CIO = new CustomerIO();
+        Attendant AT = new Attendant();
+        System sys = new System(station_1, AT, CIO);
+        // Don't fill system so that empty exception occurs, receipt not printer and customer
+        // will not be thanked
+
+        sys.setPrinting(true);
+        sys.addBillList(DairyLand_Milk); sys.addBillList(Cinnamon_Toast_Crunch); sys.addBillList(Nature_Valley_Choc);
+        sys.startPrinting();
+
+        assertFalse(CIO.getThanks());
+        assertEquals("", CIO.thankCustomer()); // Nothing displayed to customer
+    }
+
+    // Test attendant once flagged will print a new receipt
+    @Test
+    public void attendantPrints() throws OverloadException {
+        // Make empty system
+        CustomerIO CIO = new CustomerIO();
+        Attendant AT = new Attendant();
+        System sys = new System(station_1, AT, CIO);
+
+        // Try to print should notify attendant
+        sys.setPrinting(true);
+        sys.addBillList(DairyLand_Milk); sys.addBillList(Cinnamon_Toast_Crunch); sys.addBillList(Nature_Valley_Choc);
+        sys.startPrinting();
+
+        // AT fills printer
+        if(AT.isInformed()){
+            AT.fillPaper(sys.getStation().printer, MAX_Paper);
+            AT.fillInk(sys.getStation().printer, MAX_INK);
+            AT.invokeReceiptPrinter(station_1, billList);
+        }
+
+        String expected = """
+                4L DairyLand Milk      01350      $5.79
+                Cinnamon Toast Crunch      02970      $6.99
+                Nature Valley Chocolate Granola Bars      03640      $6.49
+                                
+                Total: $19.27""";
+
+        assertEquals(expected, sys.getStation().printer.removeReceipt()); // Attendant successfully fixes receipt printing
+        assertFalse(AT.isInformed()); // Attendant no longer informed
+    }
+
+    // Attendant tries and fails to print receipt should still be informed
+    @Test
+    public void attendantCantPrint() throws OverloadException {
+        // Make empty system
+        CustomerIO CIO = new CustomerIO();
+        Attendant AT = new Attendant();
+        System sys = new System(station_1, AT, CIO);
+
+        // Try to print should notify attendant
+        sys.setPrinting(true);
+        sys.addBillList(DairyLand_Milk); sys.addBillList(Cinnamon_Toast_Crunch); sys.addBillList(Nature_Valley_Choc);
+        sys.startPrinting();
+
+        if(AT.isInformed()){ // because attendant usually should be informed before they invoke printing receipt
+            AT.invokeReceiptPrinter(station_1, billList); // do not fill so another error can occur
+        }
+
+        assertNull(sys.getStation().printer.removeReceipt()); // There should be no receipt because of exception
+        assertTrue(AT.isInformed()); // Attendant should be informed so they can continue to try and fix
     }
 }
