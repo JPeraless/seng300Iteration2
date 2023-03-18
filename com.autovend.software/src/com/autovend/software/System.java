@@ -3,6 +3,7 @@ package com.autovend.software;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.autovend.devices.EmptyException;
 import com.autovend.devices.SelfCheckoutStation;
 import com.autovend.products.BarcodedProduct;
 

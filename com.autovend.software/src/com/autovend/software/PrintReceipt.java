@@ -1,11 +1,17 @@
 package com.autovend.software;
 
+import java.util.List;
+
+import com.autovend.devices.AbstractDevice;
+import com.autovend.devices.EmptyException;
+import com.autovend.devices.OverloadException;
 import com.autovend.devices.ReceiptPrinter;
 import com.autovend.devices.SelfCheckoutStation;
+import com.autovend.devices.observers.AbstractDeviceObserver;
 import com.autovend.devices.observers.ReceiptPrinterObserver;
 import com.autovend.products.BarcodedProduct;
 
-public static class PrintReceipt implements ReceiptPrinterObserver {
+public class PrintReceipt implements ReceiptPrinterObserver {
 	
 	public static void print(SelfCheckoutStation station, List<BarcodedProduct> billList) throws EmptyException {
 		StringBuilder sb = new StringBuilder();
@@ -18,12 +24,14 @@ public static class PrintReceipt implements ReceiptPrinterObserver {
 			sb.append("\n\n");
 		}
 //		2. System: Signals to the Receipt Printer to print the bill record.
-		String receipt = sb.toString();
+		char[] receipt = sb.toString().toCharArray();
 		for (char c : receipt) {
 			try {
 				station.printer.print(c);
 			} catch (OverloadException oe) {
-				station.printer.print("\n");
+				try {
+					station.printer.print('\n');
+				} catch (OverloadException ignored) {}
 			} catch (EmptyException ee) {
 				throw ee;
 			}
@@ -34,44 +42,40 @@ public static class PrintReceipt implements ReceiptPrinterObserver {
 //		5. Customer I/O: Thanks the Customer.
 //		6. Customer I/O: Ready for a new customer session.
 	}
-	
-	/**
-	 * Announces that the indicated printer is out of paper.
-	 * 
-	 * @param printer
-	 *            The device from which the event emanated.
-	 */
-	void reactToOutOfPaperEvent(ReceiptPrinter printer) {
+
+	@Override
+	public void reactToEnabledEvent(AbstractDevice<? extends AbstractDeviceObserver> device) {
+		// TODO Auto-generated method stub
 		
 	}
 
-	/**
-	 * Announces that the indicated printer is out of ink.
-	 * 
-	 * @param printer
-	 *            The device from which the event emanated.
-	 */
-	void reactToOutOfInkEvent(ReceiptPrinter printer) {
+	@Override
+	public void reactToDisabledEvent(AbstractDevice<? extends AbstractDeviceObserver> device) {
+		// TODO Auto-generated method stub
 		
 	}
 
-	/**
-	 * Announces that paper has been added to the indicated printer.
-	 * 
-	 * @param printer
-	 *            The device from which the event emanated.
-	 */
-	void reactToPaperAddedEvent(ReceiptPrinter printer) {
+	@Override
+	public void reactToOutOfPaperEvent(ReceiptPrinter printer) {
+		// TODO Auto-generated method stub
 		
 	}
 
-	/**
-	 * Announces that ink has been added to the indicated printer.
-	 * 
-	 * @param printer
-	 *            The device from which the event emanated.
-	 */
-	void reactToInkAddedEvent(ReceiptPrinter printer) {
+	@Override
+	public void reactToOutOfInkEvent(ReceiptPrinter printer) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void reactToPaperAddedEvent(ReceiptPrinter printer) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void reactToInkAddedEvent(ReceiptPrinter printer) {
+		// TODO Auto-generated method stub
 		
 	}
 	
