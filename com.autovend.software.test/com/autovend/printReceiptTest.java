@@ -8,6 +8,7 @@ import com.autovend.products.BarcodedProduct;
 import static com.autovend.software.PrintReceipt.*;
 
 
+import com.autovend.software.System;
 import org.junit.*;
 import static org.junit.Assert.assertEquals;
 
@@ -33,7 +34,7 @@ import java.util.List;
  */
 public class printReceiptTest {
     private List<BarcodedProduct> billList;
-    SelfCheckoutStation station_1;
+    private SelfCheckoutStation station_1;
 
     @Before
     public void setup() throws OverloadException {
@@ -83,11 +84,7 @@ public class printReceiptTest {
         station_1 = null;
     }
 
-    /**
-     * Normal test where there is enough paper and ink to print a completed receipt
-     * @throws EmptyException Printer has no more ink
-     * @throws OverloadException If the character runs off the line
-     */
+    //Normal test where there is enough paper and ink to print a completed receipt
     @Test
     public void testPrintingOfBillList() throws EmptyException, OverloadException {
 
@@ -95,19 +92,18 @@ public class printReceiptTest {
         station_1.printer.addPaper(500); // Add paper to printer
 
         String expected = """
-                4L DairyLand Milk______01350______$5.79
-                Cinnamon Toast Crunch______02970______$6.99
-                Nature Valley Chocolate Granola Bars______03640______$6.49
+                4L DairyLand Milk      01350      $5.79
+                Cinnamon Toast Crunch      02970      $6.99
+                Nature Valley Chocolate Granola Bars      03640      $6.49
                                 
                 Total: $19.27""";
 
-        String actual = print(station_1, billList);
+        print(station_1, billList); // print the receipt
+        String actual = station_1.printer.removeReceipt(); // Simulate customer removing receipt
         assertEquals(expected, actual);
     }
 
-    /**
-     * Tests when the receipt printer runs out of ink during printing
-     */
+    //Tests when the receipt printer runs out of ink during printing
     @Test(expected = EmptyException.class)
     public void testPrintingOutOfInk() throws OverloadException, EmptyException {
         station_1.printer.addInk(1);
@@ -115,14 +111,31 @@ public class printReceiptTest {
         print(station_1, billList);
     }
 
-    /**
-     * Tests when the receipt printer runs out of paper during printing
-     */
+    // Tests when the receipt printer runs out of paper during printing
     @Test(expected = EmptyException.class)
     public void testPrintingOutOfPaper() throws OverloadException, EmptyException{
-        station_1.printer.addInk(50000); // Fill with a lot of ink so this can't be what goes empty
+        station_1.printer.addInk(5000); // Fill with a lot of ink so this can't be what goes empty
         station_1.printer.addPaper(1);
         print(station_1, billList);
+    }
+
+    // Test that a new line is written if the line is too long and the remainder goes to the next line
+    @Test
+    public void testLongLine() throws OverloadException, EmptyException {
+        station_1.printer.addInk(5000); // fill up the receipt printer
+        station_1.printer.addPaper(500); // Add paper to printer
+
+        Barcode bar = new Barcode(Numeral.zero, Numeral.one, Numeral.three, Numeral.five, Numeral.zero);
+        BarcodedProduct longLine = new BarcodedProduct(bar,
+                "LONG_LINE_LONG_LINE_LONG_LINE_LONG_LINE_LONG_LINE_LONG_LINE_LONG_LINE_LONG_LINE_" +
+                        "LONG_LINE_LONG_LINE_LONG_LINE_LONG_LINE_LONG_LINE_LONG_LINE_LONG_LINE_LONG_LINE",
+                new BigDecimal("9999.99"), 25);
+
+        billList.add(longLine);
+        print(station_1, billList);
+
+       assertEquals(station_1.printer.removeReceipt(), "");
+
     }
 
 }
