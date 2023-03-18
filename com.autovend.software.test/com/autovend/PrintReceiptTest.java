@@ -1,8 +1,8 @@
 package com.autovend;
 
+import com.autovend.devices.AbstractDevice;
 import com.autovend.devices.EmptyException;
 import com.autovend.devices.OverloadException;
-import com.autovend.devices.ReceiptPrinter;
 import com.autovend.devices.SelfCheckoutStation;
 import com.autovend.products.BarcodedProduct;
 import static com.autovend.software.PrintReceipt.*;
@@ -34,7 +34,11 @@ import java.util.List;
 /**
  * Test the print Receipt class in software
  */
-public class printReceiptTest {
+public class PrintReceiptTest {
+
+    private static final int MAX_INK = 1048576;
+    private static final int MAX_Paper = 1024;
+
     private List<BarcodedProduct> billList;
     private SelfCheckoutStation station_1;
 
@@ -91,8 +95,8 @@ public class printReceiptTest {
     @Test
     public void testPrintingOfBillList() throws EmptyException, OverloadException {
 
-        station_1.printer.addInk(5000); // fill up the receipt printer
-        station_1.printer.addPaper(500); // Add paper to printer
+        station_1.printer.addInk(MAX_INK); // fill up the receipt printer
+        station_1.printer.addPaper(MAX_Paper); // Add paper to printer
 
         String expected = """
                 4L DairyLand Milk      01350      $5.79
@@ -110,14 +114,14 @@ public class printReceiptTest {
     @Test(expected = EmptyException.class)
     public void testPrintingOutOfInk() throws OverloadException, EmptyException {
         station_1.printer.addInk(1);
-        station_1.printer.addPaper(500); // Load with a lot of paper so this can't be what goes empty
+        station_1.printer.addPaper(MAX_Paper); // Load with a lot of paper so this can't be what goes empty
         print(station_1, billList);
     }
 
     // Tests when the receipt printer runs out of paper during printing
     @Test(expected = EmptyException.class)
     public void testPrintingOutOfPaper() throws OverloadException, EmptyException{
-        station_1.printer.addInk(5000); // Fill with a lot of ink so this can't be what goes empty
+        station_1.printer.addInk(MAX_INK); // Fill with a lot of ink so this can't be what goes empty
         station_1.printer.addPaper(1);
         print(station_1, billList);
     }
@@ -125,8 +129,8 @@ public class printReceiptTest {
     // Test that a new line is written if the line is too long and the remainder goes to the next line
     @Test
     public void testLongLine() throws OverloadException, EmptyException {
-        station_1.printer.addInk(5000); // fill up the receipt printer
-        station_1.printer.addPaper(500); // Add paper to printer
+        station_1.printer.addInk(MAX_INK); // fill up the receipt printer
+        station_1.printer.addPaper(MAX_Paper); // Add paper to printer
 
         Barcode bar = new Barcode(Numeral.zero, Numeral.one, Numeral.three, Numeral.five, Numeral.zero);
         BarcodedProduct longLine = new BarcodedProduct(bar,
@@ -147,14 +151,14 @@ public class printReceiptTest {
         CustomerIO CIO = new CustomerIO();
         Attendant AT = new Attendant();
 
-        station_1.printer.addInk(1); // Out of ink
-        station_1.printer.addPaper(50);
+        station_1.printer.addInk(0); // Out of ink
+        station_1.printer.addPaper(MAX_Paper);
         System sys = new System(station_1, AT, CIO);
-        sys.setPrinting(true);
+        sys.setPrinting(true); // Signal system to start printing
         sys.addBillList(DairyLand_Milk); sys.addBillList(Cinnamon_Toast_Crunch); sys.addBillList(Nature_Valley_Choc);
         sys.startPrinting();
 
-        assertTrue(AT.isInformed());
+        assertTrue(AT.isInformed()); // Attendant should be informed of out of ink event
     }
 
     // Tests if attendant gets flagged when out of paper
@@ -163,33 +167,51 @@ public class printReceiptTest {
         CustomerIO CIO = new CustomerIO();
         Attendant AT = new Attendant();
 
-        station_1.printer.addInk(5000); // Fill with a lot of ink so this can't be what goes empty
-        station_1.printer.addPaper(1);
+        station_1.printer.addInk(MAX_INK); // Fill with a lot of ink so this can't be what goes empty
+        station_1.printer.addPaper(0);
+        System sys = new System(station_1, AT, CIO);
+        sys.setPrinting(true); // Signal system to start printing
+        sys.addBillList(DairyLand_Milk); sys.addBillList(Cinnamon_Toast_Crunch); sys.addBillList(Nature_Valley_Choc);
+        sys.startPrinting();
+
+        assertTrue(AT.isInformed()); // Attendant should be informed of out of paper event
+    }
+
+    // Tests if the station is unblocked once ink is filled
+    @Test
+    public void fillInk() throws OverloadException {
+        CustomerIO CIO = new CustomerIO();
+        Attendant AT = new Attendant();
+
+        station_1.printer.addInk(0); // Out of ink
+        station_1.printer.addPaper(MAX_Paper);
         System sys = new System(station_1, AT, CIO);
         sys.setPrinting(true);
         sys.addBillList(DairyLand_Milk); sys.addBillList(Cinnamon_Toast_Crunch); sys.addBillList(Nature_Valley_Choc);
         sys.startPrinting();
+        if(AT.isInformed()){
+            AT.fillInk(sys.getStation().printer, MAX_INK);
+        }
 
-        assertTrue(AT.isInformed());
+        assertFalse(AT.isInformed()); // Attendant should no longer be informed after they fill the ink
     }
 
-    // Tests once attendant gets flagged they fill ink and paper
-    @Test
-    public void fillInkOrPaper() throws OverloadException {
+    // Tests if the station is unblocked once paper is filled
+    public void fillPaper() throws OverloadException{
         CustomerIO CIO = new CustomerIO();
         Attendant AT = new Attendant();
 
-        station_1.printer.addInk(1); // Out of ink
+        station_1.printer.addInk(0); // Out of ink
         station_1.printer.addPaper(50);
         System sys = new System(station_1, AT, CIO);
         sys.setPrinting(true);
         sys.addBillList(DairyLand_Milk); sys.addBillList(Cinnamon_Toast_Crunch); sys.addBillList(Nature_Valley_Choc);
         sys.startPrinting();
         if(AT.isInformed()){
-            AT.fill(sys.getStation().printer);
+            AT.fillPaper(sys.getStation().printer, MAX_INK);
         }
 
-        assertFalse(AT.isInformed());
+        assertFalse(AT.isInformed()); // Attendant should no longer be informed after they fill the ink
     }
 
     // Test flagging of customer
@@ -197,14 +219,14 @@ public class printReceiptTest {
     public void testThankCustomer() throws OverloadException {
         CustomerIO CIO = new CustomerIO();
         Attendant AT = new Attendant();
-        station_1.printer.addInk(5000); // fill up the receipt printer
-        station_1.printer.addPaper(500); // Add paper to printer
+        station_1.printer.addInk(MAX_INK); // fill up the receipt printer
+        station_1.printer.addPaper(MAX_Paper); // Add paper to printer
         System sys = new System(station_1, AT, CIO);
         sys.setPrinting(true);
         sys.addBillList(DairyLand_Milk); sys.addBillList(Cinnamon_Toast_Crunch); sys.addBillList(Nature_Valley_Choc);
         sys.startPrinting();
 
-        assertTrue(CIO.getThanks());;
-
+        assertTrue(CIO.getThanks()); // Customer should have been thanked
+        assertEquals("Thank you for shopping with us today!", CIO.thankCustomer());
     }
 }

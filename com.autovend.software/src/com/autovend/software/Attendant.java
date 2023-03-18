@@ -31,14 +31,24 @@ public class Attendant {
     }
 
     /**
-     * Attendant refills ink or paper
-     * @param rp receipt printer attendant uses
-     * @throws OverloadException Overfilled
+     * Attendant refills ink
+     * @param rp receipt printer attendant needs to maintain
+     * @param amount the amount to refill
+     * @throws OverloadException Too much ink in receipt printer
      */
-    public void fill(ReceiptPrinter rp) throws OverloadException {
-        rp.addInk(500);
-        rp.addPaper(500);
-        informed = false;
+    public void fillInk(ReceiptPrinter rp, Integer amount) throws OverloadException {
+        rp.addInk(amount);
+        informed = false; // Turns off informing the attendant
+    }
+
+    /**
+     * Attendant refills paper
+     * @param rp receipt printer attendant needs to maintain
+     * @throws OverloadException Too much paper in receipt printer
+     */
+    public void fillPaper(ReceiptPrinter rp, Integer amount) throws OverloadException{
+        rp.addPaper(amount);
+        informed = false; // Turns off informing the attendant
     }
 
     // Return if the attendant is informed to determine next course of action

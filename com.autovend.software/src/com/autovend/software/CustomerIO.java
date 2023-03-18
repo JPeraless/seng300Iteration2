@@ -7,12 +7,15 @@ public class CustomerIO {
     private Boolean thanks; // Status for if the customer needs to be thanked
     private Boolean ready; // Status if ready for new customer session
 
-    // Customer IO returns thank you message to screen
+    // Customer IO returns thank you message to screen ("Thank you for shopping with us today!")
     public String thankCustomer(){
-        return "Thank you for shopping with us today!";
+        if(thanks){
+            return "Thank you for shopping with us today!";
+        }
+        return "";
     }
 
-    // Sets if ready for new customer (at the start of new customer set to false, and once finisehd set to true)
+    // Sets if ready for new customer (at the start of new customer set to false, and once finished set to true)
     public void setReady(Boolean ready) {
         this.ready = ready;
     }
@@ -31,6 +34,5 @@ public class CustomerIO {
     public Boolean getThanks() {
         return thanks;
     }
-
 
 }
