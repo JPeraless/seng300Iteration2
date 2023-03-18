@@ -1,5 +1,16 @@
 package com.autovend.software;
 
+/*
+ * Members for Iteration 1:
+ * Michelle Loi (30019557)
+ * James Hayward (30149513)
+ * Caleb Cavilla ()
+ * Amandeep Kaur (30153923)
+ * Ethan Oke (30142180)
+ * Winjoy Tiop (30069663)
+ */
+
+
 /**
  * Dummy class to simulate customer I/O
  */

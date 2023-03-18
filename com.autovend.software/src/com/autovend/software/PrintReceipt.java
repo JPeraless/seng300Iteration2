@@ -12,6 +12,19 @@ import com.autovend.devices.observers.AbstractDeviceObserver;
 import com.autovend.devices.observers.ReceiptPrinterObserver;
 import com.autovend.products.BarcodedProduct;
 
+/*
+ * Members for Iteration 1:
+ * Michelle Loi (30019557)
+ * James Hayward (30149513)
+ * Caleb Cavilla ()
+ * Amandeep Kaur (30153923)
+ * Ethan Oke (30142180)
+ * Winjoy Tiop (30069663)
+ */
+
+/**
+ * Class to print receipts once customer's session is complete
+ */
 public class PrintReceipt implements ReceiptPrinterObserver {
 
 	/**
