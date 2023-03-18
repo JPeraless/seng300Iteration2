@@ -192,6 +192,7 @@ public class printReceiptTest {
         assertFalse(AT.isInformed());
     }
 
+    // Test flagging of customer
     @Test
     public void testThankCustomer() throws OverloadException {
         CustomerIO CIO = new CustomerIO();
@@ -206,5 +207,4 @@ public class printReceiptTest {
         assertTrue(CIO.getThanks());;
 
     }
-
 }
