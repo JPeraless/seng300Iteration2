@@ -23,7 +23,6 @@ public class System {
 	private List<BarcodedProduct> billList = new ArrayList<BarcodedProduct>();
 	private double amountDue = 0;
 	private boolean paymentProcess = false;
-	//PayWithCashController payWithCashController = new PayWithCashController(station);
 
 	private boolean printing;
 	Attendant attendant = new Attendant();
@@ -41,21 +40,22 @@ public class System {
 		this.attendant = attendant;
 		this.customerIO = customerIO;
 	}
-	
+
 	// sets the system to be ready to take payment, simulates customer indicating they want to pay cash for their bill
 	public void payWithCash() {
 		paymentProcess = true;
-		//station.billInput.register(payWithCashController);
+		PayWithCashController payWithCashController = new PayWithCashController(station);
+		station.billInput.register(payWithCashController);
 		station.billInput.enable();
-		//station.billValidator.register(payWithCashController);
+		station.billValidator.register(payWithCashController);
 	}
 	
-	public void changeAmountDue(int value) {
+	public void changeAmountDue(int value, PayWithCashController controller) {
 		amountDue -= value;
 		if (amountDue <= 0) {
 			paymentProcess = false; // exits the system out of payment
 			station.billInput.disable();
-			//payWithCashController.deliverChange();
+			controller.deliverChange();
 			printing = true; // Set boolean to signal receipt printer to print
 		}
 	}
