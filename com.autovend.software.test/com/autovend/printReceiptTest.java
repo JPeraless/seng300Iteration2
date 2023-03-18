@@ -6,11 +6,13 @@ import com.autovend.devices.ReceiptPrinter;
 import com.autovend.devices.SelfCheckoutStation;
 import com.autovend.products.BarcodedProduct;
 import static com.autovend.software.PrintReceipt.*;
+import static org.junit.Assert.*;
 
 
+import com.autovend.software.Attendant;
+import com.autovend.software.CustomerIO;
 import com.autovend.software.System;
 import org.junit.*;
-import static org.junit.Assert.assertEquals;
 
 
 import java.math.BigDecimal;
@@ -36,6 +38,10 @@ public class printReceiptTest {
     private List<BarcodedProduct> billList;
     private SelfCheckoutStation station_1;
 
+    // Create some products to register into the system for printing of receipt
+    private BarcodedProduct DairyLand_Milk, Cinnamon_Toast_Crunch, Nature_Valley_Choc;
+
+
     @Before
     public void setup() throws OverloadException {
 
@@ -43,9 +49,6 @@ public class printReceiptTest {
         Barcode Bar_Milk = new Barcode(Numeral.zero, Numeral.one, Numeral.three, Numeral.five, Numeral.zero);
         Barcode Bar_Cin = new Barcode(Numeral.zero, Numeral.two, Numeral.nine, Numeral.seven, Numeral.zero);
         Barcode Bar_Nat = new Barcode(Numeral.zero, Numeral.three, Numeral.six, Numeral.four, Numeral.zero);
-
-        // Create some products to register into the system for printing of receipt
-        BarcodedProduct DairyLand_Milk, Cinnamon_Toast_Crunch, Nature_Valley_Choc;
 
         // Create purchase items
         DairyLand_Milk = new BarcodedProduct(Bar_Milk, "4L DairyLand Milk",
@@ -135,6 +138,72 @@ public class printReceiptTest {
         print(station_1, billList);
 
        assertEquals(station_1.printer.removeReceipt(), "");
+
+    }
+
+    // Tests if attendant gets flagged when out of ink
+    @Test
+    public void flagAttendantInk() throws OverloadException {
+        CustomerIO CIO = new CustomerIO();
+        Attendant AT = new Attendant();
+
+        station_1.printer.addInk(1); // Out of ink
+        station_1.printer.addPaper(50);
+        System sys = new System(station_1, AT, CIO);
+        sys.setPrinting(true);
+        sys.addBillList(DairyLand_Milk); sys.addBillList(Cinnamon_Toast_Crunch); sys.addBillList(Nature_Valley_Choc);
+        sys.startPrinting();
+
+        assertTrue(AT.isInformed());
+    }
+
+    // Tests if attendant gets flagged when out of paper
+    @Test
+    public void flagAttendantPaper() throws OverloadException {
+        CustomerIO CIO = new CustomerIO();
+        Attendant AT = new Attendant();
+
+        station_1.printer.addInk(5000); // Fill with a lot of ink so this can't be what goes empty
+        station_1.printer.addPaper(1);
+        System sys = new System(station_1, AT, CIO);
+        sys.setPrinting(true);
+        sys.addBillList(DairyLand_Milk); sys.addBillList(Cinnamon_Toast_Crunch); sys.addBillList(Nature_Valley_Choc);
+        sys.startPrinting();
+
+        assertTrue(AT.isInformed());
+    }
+
+    // Tests once attendant gets flagged they fill ink and paper
+    @Test
+    public void fillInkOrPaper() throws OverloadException {
+        CustomerIO CIO = new CustomerIO();
+        Attendant AT = new Attendant();
+
+        station_1.printer.addInk(1); // Out of ink
+        station_1.printer.addPaper(50);
+        System sys = new System(station_1, AT, CIO);
+        sys.setPrinting(true);
+        sys.addBillList(DairyLand_Milk); sys.addBillList(Cinnamon_Toast_Crunch); sys.addBillList(Nature_Valley_Choc);
+        sys.startPrinting();
+        if(AT.isInformed()){
+            AT.fill(sys.getStation().printer);
+        }
+
+        assertFalse(AT.isInformed());
+    }
+
+    @Test
+    public void testThankCustomer() throws OverloadException {
+        CustomerIO CIO = new CustomerIO();
+        Attendant AT = new Attendant();
+        station_1.printer.addInk(5000); // fill up the receipt printer
+        station_1.printer.addPaper(500); // Add paper to printer
+        System sys = new System(station_1, AT, CIO);
+        sys.setPrinting(true);
+        sys.addBillList(DairyLand_Milk); sys.addBillList(Cinnamon_Toast_Crunch); sys.addBillList(Nature_Valley_Choc);
+        sys.startPrinting();
+
+        assertTrue(CIO.getThanks());;
 
     }
 

@@ -13,21 +13,31 @@ public class System {
 	private List<BarcodedProduct> billList = new ArrayList<BarcodedProduct>();
 	private double amountDue = 0;
 	private boolean paymentProcess = false;
-	PayWithCashController payWithCashController = new PayWithCashController(station);
-	
+	//PayWithCashController payWithCashController = new PayWithCashController(station);
+
+	private boolean printing;
+	Attendant attendant = new Attendant();
+	CustomerIO customerIO = new CustomerIO();
+
 	public System(SelfCheckoutStation station) {
 		this.station = station;
 		this.station.handheldScanner.disable();
 		this.station.mainScanner.disable();
 		this.station.billInput.disable();
 	}
+
+	public System(SelfCheckoutStation station, Attendant attendant, CustomerIO customerIO){
+		this.station = station;
+		this.attendant = attendant;
+		this.customerIO = customerIO;
+	}
 	
 	// sets the system to be ready to take payment, simulates customer indicating they want to pay cash for their bill
 	public void payWithCash() {
 		paymentProcess = true;
-		station.billInput.register(payWithCashController);
+		//station.billInput.register(payWithCashController);
 		station.billInput.enable();
-		station.billValidator.register(payWithCashController);
+		//station.billValidator.register(payWithCashController);
 	}
 	
 	public void changeAmountDue(int value) {
@@ -35,18 +45,25 @@ public class System {
 		if (amountDue <= 0) {
 			paymentProcess = false; // exits the system out of payment
 			station.billInput.disable();
-			payWithCashController.deliverChange();
-/*			try {
-				PrintReceipt.print(station, billList);
-			} catch (EmptyException ee) {
-				//the station will be suspended
-				
-				//the attendant informed that a duplicate receipt must be printed and that the station needs maintenance
-				
-			}*/
+			//payWithCashController.deliverChange();
+			printing = true; // Set boolean to signal receipt printer to print
 		}
 	}
-	
+
+	/**
+	 * Prints the receipt and notifies attendant of problems
+	 */
+	public void startPrinting(){
+		if(printing){
+			try {
+				PrintReceipt.print(station, billList);
+				customerIO.setThanks(true); // signal to customer session is complete
+			} catch (EmptyException e) {
+				// Print to screen that attendant has been flagged
+				attendant.setInformed(true);
+			}
+		}
+	}
 	
 	/**
 	 * Adds an item to the end of the current bill list
@@ -96,4 +113,7 @@ public class System {
 		return station;
 	}
 
+	public void setPrinting(boolean printing) {
+		this.printing = printing;
+	}
 }
