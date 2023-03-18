@@ -36,14 +36,14 @@ public class System {
 			paymentProcess = false; // exits the system out of payment
 			station.billInput.disable();
 			payWithCashController.deliverChange();
-			try {
+/*			try {
 				PrintReceipt.print(station, billList);
 			} catch (EmptyException ee) {
 				//the station will be suspended
 				
 				//the attendant informed that a duplicate receipt must be printed and that the station needs maintenance
 				
-			}
+			}*/
 		}
 	}
 	
