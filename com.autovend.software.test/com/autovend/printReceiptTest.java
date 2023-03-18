@@ -32,23 +32,19 @@ import java.util.List;
  * Test the print Receipt class in software
  */
 public class printReceiptTest {
-
-    // Create some products to register into the system for printing of receipt
-    private BarcodedProduct DairyLand_Milk, Cinnamon_Toast_Crunch, Nature_Valley_Choc;
-    private Barcode Bar_Milk, Bar_Cin, Bar_Nat;
-
     private List<BarcodedProduct> billList;
-
     SelfCheckoutStation station_1;
-    private ReceiptPrinter receiptPrinter;
 
     @Before
     public void setup() throws OverloadException {
 
         // Create barcodes for purchase items
-        Bar_Milk = new Barcode(Numeral.zero, Numeral.one, Numeral.three, Numeral.five, Numeral.zero);
-        Bar_Cin = new Barcode(Numeral.zero, Numeral.two, Numeral.nine, Numeral.seven, Numeral.zero);
-        Bar_Nat = new Barcode(Numeral.zero, Numeral.three, Numeral.six, Numeral.four, Numeral.zero);
+        Barcode Bar_Milk = new Barcode(Numeral.zero, Numeral.one, Numeral.three, Numeral.five, Numeral.zero);
+        Barcode Bar_Cin = new Barcode(Numeral.zero, Numeral.two, Numeral.nine, Numeral.seven, Numeral.zero);
+        Barcode Bar_Nat = new Barcode(Numeral.zero, Numeral.three, Numeral.six, Numeral.four, Numeral.zero);
+
+        // Create some products to register into the system for printing of receipt
+        BarcodedProduct DairyLand_Milk, Cinnamon_Toast_Crunch, Nature_Valley_Choc;
 
         // Create purchase items
         DairyLand_Milk = new BarcodedProduct(Bar_Milk, "4L DairyLand Milk",
@@ -70,7 +66,11 @@ public class printReceiptTest {
         // Setup and create station
         int[] billDenominations = {5, 10 , 15, 20, 50, 100};
         BigDecimal fiveCent = new BigDecimal("0.05");
-        BigDecimal[] coinDenominations = {fiveCent};
+        BigDecimal tenCent = new BigDecimal("0.10");
+        BigDecimal twentyFiveCent = new BigDecimal("0.25");
+        BigDecimal loonie = new BigDecimal("1");
+        BigDecimal toonie = new BigDecimal("2");
+        BigDecimal[] coinDenominations = {fiveCent, tenCent, twentyFiveCent, loonie, toonie};
         int scaleMaximumWeight = 50;
         int scaleSensitivity = 10;
         station_1 = new SelfCheckoutStation(Currency.getInstance("CAD"),
@@ -79,7 +79,8 @@ public class printReceiptTest {
 
     @After
     public void teardown(){
-
+        billList = null;
+        station_1 = null;
     }
 
     /**
