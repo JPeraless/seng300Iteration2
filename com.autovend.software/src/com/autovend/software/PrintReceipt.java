@@ -5,14 +5,11 @@ import com.autovend.devices.SelfCheckoutStation;
 import com.autovend.devices.observers.ReceiptPrinterObserver;
 import com.autovend.products.BarcodedProduct;
 
-public class PrintReceipt implements ReceiptPrinterObserver {
+public static class PrintReceipt implements ReceiptPrinterObserver {
 	
-	
-	
-	public void print(SelfCheckoutStation station) throws EmptyException {
+	public static void print(SelfCheckoutStation station, List<BarcodedProduct> billList) throws EmptyException {
 		StringBuilder sb = new StringBuilder();
 //		1. System: The bill record will be updated with details of the payment(s).
-		List<BarcodedProduct> billList = station.getBillList();
 		for (BarcodedProduct bp : billList) {
 			sb.append("Item: ");
 			sb.append(bp.getDescription());

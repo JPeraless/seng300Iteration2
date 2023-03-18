@@ -13,7 +13,6 @@ public class System {
 	private double amountDue = 0;
 	private boolean paymentProcess = false;
 	PayWithCashController payWithCashController = new PayWithCashController(station);
-	PrintReceipt printReceipt = new PrintReceipt(station);
 	
 	public System(SelfCheckoutStation station) {
 		this.station = station;
@@ -37,7 +36,7 @@ public class System {
 			station.billInput.disable();
 			payWithCashController.deliverChange();
 			try {
-				printReceipt.printReceipt();
+				PrintReceipt.print(station, billList);
 			} catch (EmptyException ee) {
 				//the station will be suspended
 				
