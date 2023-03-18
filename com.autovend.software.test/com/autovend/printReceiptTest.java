@@ -47,8 +47,9 @@ public class printReceiptTest {
         Nature_Valley_Choc = new BarcodedProduct(Bar_Nat, "Box of Nature Valley chocolate granola bars",
                 new BigDecimal("6.49"), 0.5);
 
-        //System.addBillList(DairyLand_Milk); Cannot access addBillList?
-
+        Station_1.addBillList(DairyLand_Milk);
+        Station_1.addBillList(Cinnamon_Toast_Crunch);
+        Station_1.addBillList(Nature_Valley_Choc);
     }
 
     @After
@@ -57,7 +58,7 @@ public class printReceiptTest {
     }
 
     @Test
-    public void test1(){
+    public void testPrintingOfBillList(){
 
     }
 }
