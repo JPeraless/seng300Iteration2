@@ -3,19 +3,8 @@ package com.autovend.software;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.autovend.devices.EmptyException;
 import com.autovend.devices.SelfCheckoutStation;
 import com.autovend.products.BarcodedProduct;
-
-/*
- * Members for Iteration 1:
- * Michelle Loi (30019557)
- * James Hayward (30149513)
- * Caleb Cavilla (30145972)
- * Amandeep Kaur (30153923)
- * Ethan Oke (30142180)
- * Winjoy Tiop (30069663)
- */
 
 public class System {
 
@@ -23,24 +12,14 @@ public class System {
 	private List<BarcodedProduct> billList = new ArrayList<BarcodedProduct>();
 	private double amountDue = 0;
 	private boolean paymentProcess = false;
-
-	private boolean printing;
-	Attendant attendant = new Attendant();
-	CustomerIO customerIO = new CustomerIO();
-
+	
 	public System(SelfCheckoutStation station) {
 		this.station = station;
 		this.station.handheldScanner.disable();
 		this.station.mainScanner.disable();
 		this.station.billInput.disable();
 	}
-
-	public System(SelfCheckoutStation station, Attendant attendant, CustomerIO customerIO){
-		this.station = station;
-		this.attendant = attendant;
-		this.customerIO = customerIO;
-	}
-
+	
 	// sets the system to be ready to take payment, simulates customer indicating they want to pay cash for their bill
 	public void payWithCash() {
 		paymentProcess = true;
@@ -56,25 +35,11 @@ public class System {
 			paymentProcess = false; // exits the system out of payment
 			station.billInput.disable();
 			controller.deliverChange(amountDue);
-			printing = true; // Set boolean to signal receipt printer to print
-		}
-	}
-
-	/**
-	 * Prints the receipt and notifies attendant of problems
-	 */
-	public void startPrinting(){
-		if(printing){
-			try {
-				PrintReceipt.print(station, billList);
-				customerIO.setThanks(true); // signal to customer session is complete
-			} catch (EmptyException e) {
-				// Print to screen that attendant has been flagged
-				attendant.setInformed(true);
-			}
+			// CODE FOR CALLING PRINT RECEIPT
 		}
 	}
 	
+
 	/**
 	 * Adds an item to the end of the current bill list
 	 */
@@ -123,7 +88,4 @@ public class System {
 		return station;
 	}
 
-	public void setPrinting(boolean printing) {
-		this.printing = printing;
-	}
 }

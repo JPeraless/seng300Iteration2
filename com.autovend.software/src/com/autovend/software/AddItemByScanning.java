@@ -13,6 +13,7 @@ package com.autovend.software;
 import com.autovend.Barcode;
 import com.autovend.devices.AbstractDevice;
 import com.autovend.devices.BarcodeScanner;
+import com.autovend.devices.SelfCheckoutStation;
 import com.autovend.devices.SimulationException;
 import com.autovend.devices.observers.AbstractDeviceObserver;
 import com.autovend.devices.observers.BarcodeScannerObserver;
@@ -30,7 +31,8 @@ public class AddItemByScanning extends System implements BarcodeScannerObserver{
 	private BarcodedProduct barcodedProduct; 
 	
 	
-	public AddItemByScanning(BarcodedProduct currentBarcodedProduct){
+	public AddItemByScanning(BarcodedProduct currentBarcodedProduct, SelfCheckoutStation station){
+		super(station);
 		this.barcodedProduct = currentBarcodedProduct;
 		
 	}
