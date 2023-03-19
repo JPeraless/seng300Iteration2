@@ -11,6 +11,7 @@ import static org.junit.Assert.*;
 
 import com.autovend.software.Attendant;
 import com.autovend.software.CustomerIO;
+import com.autovend.software.PrintReceipt;
 import com.autovend.software.System;
 import org.junit.*;
 
@@ -297,6 +298,44 @@ public class PrintReceiptTest {
         }
 
         assertNull(sys.getStation().printer.removeReceipt()); // There should be no receipt because of exception
-        assertTrue(AT.isInformed()); // Attendant should be informed so they can continue to try and fix
+        assertTrue(AT.isInformed()); // Attendant should be informed, so they can continue to try and fix
+    }
+
+    // Dummy Tests for Events to see if they can be triggered
+    @Test
+    public void dummyReactEnabled(){
+        PrintReceipt pr = new PrintReceipt();
+        pr.reactToEnabledEvent(station_1.printer);
+    }
+
+    @Test
+    public void dummyReactDisabled(){
+        PrintReceipt pr = new PrintReceipt();
+        pr.reactToDisabledEvent(station_1.printer);
+    }
+
+    @Test
+    public void dummyReactOutPaper(){
+        PrintReceipt pr = new PrintReceipt();
+        pr.reactToOutOfPaperEvent(station_1.printer);
+    }
+
+    @Test
+    public void dummyReactOutInk(){
+        PrintReceipt pr = new PrintReceipt();
+        pr.reactToOutOfInkEvent(station_1.printer);
+    }
+
+
+    @Test
+    public void dummyReactPaperAdd(){
+        PrintReceipt pr = new PrintReceipt();
+        pr.reactToPaperAddedEvent(station_1.printer);
+    }
+
+    @Test
+    public void dummyReactInkAdd(){
+        PrintReceipt pr = new PrintReceipt();
+        pr.reactToInkAddedEvent(station_1.printer);
     }
 }
