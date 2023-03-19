@@ -74,7 +74,6 @@ public class PayWithCashController extends System implements BillSlotObserver, B
 
 	@Override
 	public void reactToValidBillDetectedEvent(BillValidator validator, Currency currency, int value) {
-		out.println("Up here");
 		system.changeAmountDue(value, this);	
 	}
 
@@ -96,11 +95,11 @@ public class PayWithCashController extends System implements BillSlotObserver, B
 		List<Integer> keyList = new ArrayList<Integer>(station.billDispensers.keySet());
 		Collections.reverse(keyList);
 		for (int i : keyList) {
+			out.println("Here");
 			int numberOfBills = (int) (amountDue / i);
 			for (int j = 0; j < numberOfBills; j++) {
 					try {
 						station.billDispensers.get(i).emit();
-						out.println("Here");
 					} catch (DisabledException | EmptyException | OverloadException e) {
 						e.printStackTrace();
 					}		
