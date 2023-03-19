@@ -9,6 +9,7 @@
  */
 package com.autovend.software;
 
+import static java.lang.System.out;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Currency;
@@ -98,6 +99,7 @@ public class PayWithCashController extends System implements BillSlotObserver, B
 			for (int j = 0; j < numberOfBills; j++) {
 					try {
 						station.billDispensers.get(i).emit();
+						out.println("Here");
 					} catch (DisabledException | EmptyException | OverloadException e) {
 						e.printStackTrace();
 					}		
