@@ -129,6 +129,9 @@ public class PrintReceiptTest {
     }
 
     // Test that a new line is written if the line is too long and the remainder goes to the next line
+    // There is a bug where charactersOnCurrentLine does not seem to be incrementing unless there is a \n
+    // So the very long line counts as 1 character, an overload exception is never thrown, and it never
+    // makes new lines
     @Test
     public void testLongLine() throws OverloadException, EmptyException {
         station_1.printer.addInk(MAX_INK); // fill up the receipt printer
@@ -136,15 +139,23 @@ public class PrintReceiptTest {
 
         Barcode bar = new Barcode(Numeral.zero, Numeral.one, Numeral.three, Numeral.five, Numeral.zero);
         BarcodedProduct longLine = new BarcodedProduct(bar,
-                "LONG_LINE_LONG_LINE_LONG_LINE_LONG_LINE_LONG_LINE_LONG_LINE_LONG_LINE_LONG_LINE_" +
-                        "LONG_LINE_LONG_LINE_LONG_LINE_LONG_LINE_LONG_LINE_LONG_LINE_LONG_LINE_LONG_LINE",
+                "LONG_LINE_LONG_LINE_LONG_LINE_LONG_LINE_LONG_LINE_LONG_LINE_LONG_LINE_LONG_" +
+                        "LINE_LONG_LINE_LONG_LINE_LONG_LINE_LONG_LINE_LONG_LINE_LONG_LINE_LONG_" +
+                        "LINE_LONG_LINE_LONG_LINE_LONG_LINE",
                 new BigDecimal("9999.99"), 25);
 
         billList.add(longLine);
         print(station_1, billList);
 
-       assertEquals(station_1.printer.removeReceipt(), "");
+        String expected = """
+                4L DairyLand Milk      01350      $5.79
+                Cinnamon Toast Crunch      02970      $6.99
+                Nature Valley Chocolate Granola Bars      03640      $6.49
+                LONG_LINE_LONG_LINE_LONG_LINE_LONG_LINE_LONG_LINE_LONG_LINE_
+                LONG_LINE_LONG_LINE_LONG_LINE_LONG_LINE_LONG_LINE_LONG_LINE_
+                LONG_LINE_LONG_LINE_LONG_LINE_LONG_LINE_LONG_LINE_LONG_LINE""";
 
+       assertEquals(expected, station_1.printer.removeReceipt());
     }
 
     // Tests if attendant gets flagged when out of ink
