@@ -91,16 +91,12 @@ public class PayWithCashController extends System implements BillSlotObserver, B
 	 * @throws InterruptedException 
 	 */
 	public void deliverChange(double amountDue)  {
-		out.println("before: " + amountDue);
 		amountDue = (int) Math.ceil((-1*amountDue)/5) * 5; // round up to the nearest multiple of 5 to avoid under paying customer
-		out.println("after: " + amountDue);
 		List<Integer> keyList = new ArrayList<Integer>(station.billDispensers.keySet());
 		Collections.reverse(keyList);
 		for (int i : keyList) {
 			int numberOfBills = (int) (amountDue / i);
-			out.println("Denomination: " + i + " number this denomination: " + numberOfBills);
 			for (int j = 0; j < numberOfBills; j++) {
-				out.println("this code was executed");
 					try {
 						station.billDispensers.get(i).emit();
 					} catch (DisabledException | EmptyException | OverloadException e) {
