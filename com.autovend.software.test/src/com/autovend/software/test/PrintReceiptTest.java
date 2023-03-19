@@ -1,5 +1,7 @@
-package com.autovend;
+package com.autovend.software.test;
 
+import com.autovend.Barcode;
+import com.autovend.Numeral;
 import com.autovend.devices.EmptyException;
 import com.autovend.devices.OverloadException;
 import com.autovend.devices.SelfCheckoutStation;
