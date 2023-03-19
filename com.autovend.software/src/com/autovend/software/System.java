@@ -1,11 +1,15 @@
 package com.autovend.software;
 
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.List;
 
+import com.autovend.Bill;
 import com.autovend.devices.BillDispenser;
 import com.autovend.devices.EmptyException;
+import com.autovend.devices.OverloadException;
 import com.autovend.devices.SelfCheckoutStation;
+import com.autovend.devices.SimulationException;
 import com.autovend.products.BarcodedProduct;
 
 /*
@@ -44,7 +48,7 @@ public class System {
 	}
 
 	// sets the system to be ready to take payment, simulates customer indicating they want to pay cash for their bill
-	public void payWithCash() {
+	public void payWithCash() throws SimulationException, OverloadException {
 		paymentProcess = true;
 		PayWithCashController payWithCashController = new PayWithCashController(station, this);
 		station.billInput.register(payWithCashController);
@@ -52,6 +56,11 @@ public class System {
 		station.billValidator.register(payWithCashController);
 		for(BillDispenser dispenser : station.billDispensers.values())
 			dispenser.register(payWithCashController);
+		
+		for(int x : station.billDispensers.keySet()) {
+			Bill bill = new Bill(x, Currency.getInstance("CAD"));
+			station.billDispensers.get(x).load(bill, bill, bill, bill, bill);
+		}
 	}
 	
 	public void changeAmountDue(int value, PayWithCashController controller) {
