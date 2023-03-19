@@ -8,7 +8,8 @@
  * Winjoy Tiop (30069663)
  */
 
-import java.util.List;
+package com.autovend.software;
+
 import com.autovend.Barcode;
 import com.autovend.devices.AbstractDevice;
 import com.autovend.devices.BarcodeScanner;
@@ -47,16 +48,8 @@ public class AddItemByScanning extends System implements BarcodeScannerObserver{
 	}
 	
 	// Reacts to scanner and adds item which is detected 
-	public void barcodeScanned(BarcodeScanner barcodeScanner, Barcode barcode) throws SimulationException{
-		
-		super.addBillList(barcodedProduct);
-		
-	}
-	
-	@Override
-	public void reactToBarcodeScannedEvent(BarcodeScanner barcodeScanner, Barcode barcode) {
-		// TODO Auto-generated method stub
-		
+	public void reactToBarcodeScannedEvent(BarcodeScanner barcodeScanner, Barcode barcode) throws SimulationException{
+		super.addBillList(barcodedProduct);		
 	}
 	
 }
