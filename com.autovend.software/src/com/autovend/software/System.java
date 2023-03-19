@@ -44,7 +44,7 @@ public class System {
 	// sets the system to be ready to take payment, simulates customer indicating they want to pay cash for their bill
 	public void payWithCash() {
 		paymentProcess = true;
-		PayWithCashController payWithCashController = new PayWithCashController(station);
+		PayWithCashController payWithCashController = new PayWithCashController(station, this);
 		station.billInput.register(payWithCashController);
 		station.billInput.enable();
 		station.billValidator.register(payWithCashController);
