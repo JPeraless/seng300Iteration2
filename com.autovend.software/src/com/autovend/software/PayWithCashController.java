@@ -14,7 +14,9 @@ import java.util.Collections;
 import java.util.Currency;
 import java.util.List;
 
+import com.autovend.Bill;
 import com.autovend.devices.AbstractDevice;
+import com.autovend.devices.BillDispenser;
 import com.autovend.devices.BillSlot;
 import com.autovend.devices.BillValidator;
 import com.autovend.devices.DisabledException;
@@ -22,14 +24,16 @@ import com.autovend.devices.EmptyException;
 import com.autovend.devices.OverloadException;
 import com.autovend.devices.SelfCheckoutStation;
 import com.autovend.devices.observers.AbstractDeviceObserver;
+import com.autovend.devices.observers.BillDispenserObserver;
 import com.autovend.devices.observers.BillSlotObserver;
 import com.autovend.devices.observers.BillValidatorObserver;
 
-public class PayWithCashController extends System implements BillSlotObserver, BillValidatorObserver {
+public class PayWithCashController extends System implements BillSlotObserver, BillValidatorObserver, BillDispenserObserver {
 	
 	System system;
 	double amountDue;
 	SelfCheckoutStation station;
+	double changeDispensed = 0;
 	
 	public PayWithCashController(SelfCheckoutStation station, System system) {
 		super(station);
@@ -107,6 +111,42 @@ public class PayWithCashController extends System implements BillSlotObserver, B
 	
 	@Override
 	public void reactToInvalidBillDetectedEvent(BillValidator validator) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void reactToBillsFullEvent(BillDispenser dispenser) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void reactToBillsEmptyEvent(BillDispenser dispenser) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void reactToBillAddedEvent(BillDispenser dispenser, Bill bill) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void reactToBillRemovedEvent(BillDispenser dispenser, Bill bill) {
+		changeDispensed += bill.getValue();
+		
+	}
+
+	@Override
+	public void reactToBillsLoadedEvent(BillDispenser dispenser, Bill... bills) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void reactToBillsUnloadedEvent(BillDispenser dispenser, Bill... bills) {
 		// TODO Auto-generated method stub
 		
 	}
