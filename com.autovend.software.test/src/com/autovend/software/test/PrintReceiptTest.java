@@ -1,11 +1,12 @@
 package com.autovend.software.test;
 
-import com.autovend.Barcode;
-import com.autovend.Numeral;
 import com.autovend.devices.EmptyException;
 import com.autovend.devices.OverloadException;
 import com.autovend.devices.SelfCheckoutStation;
 import com.autovend.products.BarcodedProduct;
+import com.autovend.Barcode;
+import com.autovend.Numeral;
+
 import static com.autovend.software.PrintReceipt.*;
 import static org.junit.Assert.*;
 

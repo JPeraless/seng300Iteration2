@@ -32,7 +32,7 @@ public class PayWithCashController extends System implements BillSlotObserver, B
 	
 	public PayWithCashController(SelfCheckoutStation station) {
 		super(station);
-		station = super.getStation();
+		this.station = station;
 		amountDue = super.getAmountDue();
 	}
 
