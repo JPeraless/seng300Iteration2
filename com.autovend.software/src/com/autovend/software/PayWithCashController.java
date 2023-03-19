@@ -98,6 +98,7 @@ public class PayWithCashController extends System implements BillSlotObserver, B
 		Collections.reverse(keyList);
 		for (int i : keyList) {
 			int numberOfBills = (int) (amountDue / i);
+			out.println("Denomination: " + i + " number this denomination: " + numberOfBills);
 			for (int j = 0; j < numberOfBills; j++) {
 					try {
 						station.billDispensers.get(i).emit();
