@@ -47,8 +47,16 @@ public class AddItemByScanning extends System implements BarcodeScannerObserver{
 	}
 	
 	// Reacts to scanner and adds item which is detected 
-	public void reactToBarcodeScannedEvent(BarcodeScanner barcodeScanner, Barcode barcode) throws SimulationException{
-		super.addBillList(barcodedProduct);		
+	public void barcodeScanned(BarcodeScanner barcodeScanner, Barcode barcode) throws SimulationException{
+		
+		super.addBillList(barcodedProduct);
+		
+	}
+	
+	@Override
+	public void reactToBarcodeScannedEvent(BarcodeScanner barcodeScanner, Barcode barcode) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }
