@@ -84,7 +84,7 @@ public class PayWithCashController extends System implements BillSlotObserver, B
 	 *	</ul>
 	 * @throws InterruptedException 
 	 */
-	public void deliverChange()  {
+	public void deliverChange(double amountDue)  {
 		amountDue = ((amountDue + 4) / 5) * 5;; // round up to the nearest multiple of 5 to avoid under paying customer
 		List<Integer> keyList = new ArrayList<Integer>(station.billDispensers.keySet());
 		Collections.reverse(keyList);
