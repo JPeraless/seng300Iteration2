@@ -27,11 +27,13 @@ import com.autovend.devices.observers.BillValidatorObserver;
 
 public class PayWithCashController extends System implements BillSlotObserver, BillValidatorObserver {
 	
+	System system;
 	double amountDue;
 	SelfCheckoutStation station;
 	
-	public PayWithCashController(SelfCheckoutStation station) {
+	public PayWithCashController(SelfCheckoutStation station, System system) {
 		super(station);
+		this.system = system;
 		this.station = station;
 		amountDue = super.getAmountDue();
 	}
@@ -68,7 +70,7 @@ public class PayWithCashController extends System implements BillSlotObserver, B
 
 	@Override
 	public void reactToValidBillDetectedEvent(BillValidator validator, Currency currency, int value) {
-		super.changeAmountDue(value, this);	
+		system.changeAmountDue(value, this);	
 	}
 
 	/**
