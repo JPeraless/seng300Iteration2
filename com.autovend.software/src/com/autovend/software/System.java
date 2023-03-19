@@ -55,7 +55,7 @@ public class System {
 		if (amountDue <= 0) {
 			paymentProcess = false; // exits the system out of payment
 			station.billInput.disable();
-			controller.deliverChange();
+			controller.deliverChange(amountDue);
 			printing = true; // Set boolean to signal receipt printer to print
 		}
 	}
