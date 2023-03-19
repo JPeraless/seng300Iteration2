@@ -33,7 +33,7 @@ import com.autovend.devices.observers.BarcodeScannerObserver;
 import com.autovend.products.BarcodedProduct;
 import com.autovend.software.AddItemByScanning;
 
-public class AddItemByScanningTest implements BarcodeScannerObserver{
+public class AddItemByScanningTest {
 
     private BarcodedProduct Apple;
     private BarcodedProduct Orange;
@@ -140,23 +140,5 @@ public class AddItemByScanningTest implements BarcodeScannerObserver{
         Item.reactToBarcodeScannedEvent(Scanner, barcode);
     }
 
-
-    @Override
-    public void reactToEnabledEvent(AbstractDevice<? extends AbstractDeviceObserver> device) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void reactToDisabledEvent(AbstractDevice<? extends AbstractDeviceObserver> device) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void reactToBarcodeScannedEvent(BarcodeScanner barcodeScanner, Barcode barcode) {
-        // TODO Auto-generated method stub
-
-    }
 }
 
