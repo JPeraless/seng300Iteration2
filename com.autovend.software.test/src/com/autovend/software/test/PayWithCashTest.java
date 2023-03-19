@@ -20,7 +20,7 @@ import com.autovend.software.System;
      * James Hayward (30149513)
      * Caleb Cavilla (30145972)
      * Amandeep Kaur (30153923)
-     * Ethan Oke (30142180)
+     * Ethan Oke(30142180)
      * Winjoy Tiop (30069663)
      */
 
