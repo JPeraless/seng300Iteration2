@@ -33,7 +33,6 @@ public class PayWithCashController extends System implements BillSlotObserver, B
 	System system;
 	double amountDue;
 	SelfCheckoutStation station;
-	double changeDispensed = 0;
 	
 	public PayWithCashController(SelfCheckoutStation station, System system) {
 		super(station);
@@ -135,7 +134,7 @@ public class PayWithCashController extends System implements BillSlotObserver, B
 
 	@Override
 	public void reactToBillRemovedEvent(BillDispenser dispenser, Bill bill) {
-		changeDispensed += bill.getValue();
+		system.changeDispensed += bill.getValue();
 		
 	}
 

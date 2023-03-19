@@ -20,6 +20,7 @@ import com.autovend.products.BarcodedProduct;
 
 public class System {
 
+	double changeDispensed = 0;
 	private SelfCheckoutStation station;
 	private List<BarcodedProduct> billList = new ArrayList<BarcodedProduct>();
 	private double amountDue = 0;
