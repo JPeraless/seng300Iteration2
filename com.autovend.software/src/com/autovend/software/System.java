@@ -3,6 +3,7 @@ package com.autovend.software;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.autovend.devices.BillDispenser;
 import com.autovend.devices.EmptyException;
 import com.autovend.devices.SelfCheckoutStation;
 import com.autovend.products.BarcodedProduct;
@@ -48,6 +49,8 @@ public class System {
 		station.billInput.register(payWithCashController);
 		station.billInput.enable();
 		station.billValidator.register(payWithCashController);
+		for(BillDispenser dispenser : station.billDispensers.values())
+			dispenser.register(payWithCashController);
 	}
 	
 	public void changeAmountDue(int value, PayWithCashController controller) {
