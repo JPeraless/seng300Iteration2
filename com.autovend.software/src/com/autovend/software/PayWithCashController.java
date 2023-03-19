@@ -74,6 +74,7 @@ public class PayWithCashController extends System implements BillSlotObserver, B
 
 	@Override
 	public void reactToValidBillDetectedEvent(BillValidator validator, Currency currency, int value) {
+		out.println("Up here");
 		system.changeAmountDue(value, this);	
 	}
 
