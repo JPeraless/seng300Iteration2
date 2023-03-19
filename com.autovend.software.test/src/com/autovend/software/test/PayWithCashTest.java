@@ -74,7 +74,7 @@ import com.autovend.software.System;
         //Test system's payWithCash() function
         @SuppressWarnings("deprecation")
         @Test
-        public void testSystemPayWithCash() throws DisabledException {
+        public void testSystemPayWithCash() throws DisabledException,OverloadException {
             system.setAmountDue(10.00);
             system.payWithCash();
             station.billValidator.accept(bill);
@@ -86,7 +86,7 @@ import com.autovend.software.System;
         //Test that deliver change works correctly within system
         @SuppressWarnings("deprecation")
         @Test
-        public void testSystemDeliverChange() throws DisabledException {
+        public void testSystemDeliverChange() throws DisabledException,OverloadException {
             system.setAmountDue(7.99);
             system.payWithCash();
             station.billValidator.accept(bill);
@@ -99,7 +99,7 @@ import com.autovend.software.System;
         //Test for the bills that are dispensed by deliver change
         @SuppressWarnings("deprecation")
         @Test
-        public void testSystemDispenseChange() throws DisabledException {
+        public void testSystemDispenseChange() throws DisabledException, OverloadException {
             system.setAmountDue(7.99);
             system.payWithCash();
             station.billValidator.accept(bill);
