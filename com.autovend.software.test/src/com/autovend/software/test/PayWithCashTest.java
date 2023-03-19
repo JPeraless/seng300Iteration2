@@ -4,17 +4,12 @@ import java.math.BigDecimal;
 import java.util.Currency;
 import java.util.Locale;
 
+import com.autovend.devices.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.autovend.Bill;
-import com.autovend.devices.BillSlot;
-import com.autovend.devices.BillValidator;
-import com.autovend.devices.DisabledException;
-import com.autovend.devices.OverloadException;
-import com.autovend.devices.SelfCheckoutStation;
-import com.autovend.devices.SimulationException;
 import com.autovend.software.PayWithCashController;
 import com.autovend.software.System;
 
@@ -37,6 +32,7 @@ import com.autovend.software.System;
         private Bill bill;
         private SelfCheckoutStation station;
         private System system;
+        private BillDispenser dispenser;
 
         //Default setup: standard self checkout station and a 5$ bill
         @Before
@@ -57,6 +53,8 @@ import com.autovend.software.System;
             station = new SelfCheckoutStation(currency, billDenominations, coinDenominations,10,1);
 
             system = new System(station);
+
+            dispenser = new BillDispenser(50);
         }
 
         //Reset the self checkout station and bill to null
@@ -68,20 +66,21 @@ import com.autovend.software.System;
         }
 
         //Test creating a pay with cash controller with a null station
-        @Test (expected = SimulationException.class)
+        @Test (expected = NullPointerException.class)
         public void testCreateWithNullStation() {
-            new PayWithCashController(null);
+            new PayWithCashController(null,system);
         }
 
         //Test system's payWithCash() function
         @SuppressWarnings("deprecation")
         @Test
         public void testSystemPayWithCash() throws DisabledException {
+            system.setAmountDue(10.00);
             system.payWithCash();
             station.billValidator.accept(bill);
             double expected = 5.00;
             double actual = system.getAmountDue();
-            assertEquals(expected,actual);
+            assertEquals(expected,actual,0.05);
         }
 
         //Test that deliver change works correctly within system
@@ -94,43 +93,86 @@ import com.autovend.software.System;
             station.billValidator.accept(bill);
             double expected = -2.01;
             double actual = system.getAmountDue();
-            assertEquals(expected,actual);
+            assertEquals(expected,actual,0.05);
+        }
+
+        //Test for the bills that are dispensed by deliver change
+        @SuppressWarnings("deprecation")
+        @Test
+        public void testSystemDispenseChange() throws DisabledException {
+            system.setAmountDue(7.99);
+            system.payWithCash();
+            station.billValidator.accept(bill);
+            station.billValidator.accept(bill);
+            double expected = 5.0;
+            double actual = system.getChangeDispensed();
+            assertEquals(expected,actual,0.05);
         }
 
         @Test
         public void reactToEnabledEvent() {
-            controller = new PayWithCashController(station);
+            controller = new PayWithCashController(station,system);
             controller.reactToEnabledEvent(station.billInput);
         }
 
         @Test
         public void reactToDisabledEvent() {
-            controller = new PayWithCashController(station);
+            controller = new PayWithCashController(station,system);
             controller.reactToDisabledEvent(station.billInput);
         }
 
         @Test
         public void dummyReactToBillInsertedEvent() {
-            controller = new PayWithCashController(station);
+            controller = new PayWithCashController(station,system);
             controller.reactToBillInsertedEvent(station.billInput);
         }
 
         @Test
         public void dummyReactToBillEjectedEvent() {
-            controller = new PayWithCashController(station);
+            controller = new PayWithCashController(station,system);
             controller.reactToBillEjectedEvent(station.billInput);
         }
 
         @Test
         public void dummyReactToBillRemovedEvent() {
-            controller = new PayWithCashController(station);
+            controller = new PayWithCashController(station,system);
             controller.reactToBillRemovedEvent(station.billInput);
         }
 
         @Test
         public void dummyReactToInvalidBillDetectedEvent(){
-            controller = new PayWithCashController(station);
+            controller = new PayWithCashController(station,system);
             controller.reactToInvalidBillDetectedEvent(station.billValidator);
+        }
+
+        @Test
+        public void dummyReactToBillsFullEvent(){
+            controller = new PayWithCashController(station,system);
+            controller.reactToBillsFullEvent(dispenser);
+        }
+
+        @Test
+        public void dummyReactToBillsEmptyEvent(){
+            controller = new PayWithCashController(station,system);
+            controller.reactToBillsEmptyEvent(dispenser);
+        }
+
+        @Test
+        public void dummyReactToBillAddedEvent(){
+            controller = new PayWithCashController(station,system);
+            controller.reactToBillAddedEvent(dispenser,bill);
+        }
+
+        @Test
+        public void dummyReactToBillsLoadedEvent(){
+            controller = new PayWithCashController(station,system);
+            controller.reactToBillsLoadedEvent(dispenser,bill);
+        }
+
+        @Test
+        public void dummyReactToBillsUnloadedEvent(){
+            controller = new PayWithCashController(station,system);
+            controller.reactToBillsUnloadedEvent(dispenser,bill);
         }
 
     }
