@@ -126,7 +126,7 @@ public class System {
 	 * sets the total amount due
 	 */
 	public void setAmountDue(double amountDue) {
-		this.amountDue = amountDue;
+		this.amountDue = this.amountDue + amountDue;
 	}
 	
 	/**
