@@ -134,7 +134,7 @@ public class PayWithCashController extends System implements BillSlotObserver, B
 
 	@Override
 	public void reactToBillRemovedEvent(BillDispenser dispenser, Bill bill) {
-		system.changeDispensed += bill.getValue();
+		system.setChangeDispensed(system.getChangeDispensed() + bill.getValue());
 		
 	}
 

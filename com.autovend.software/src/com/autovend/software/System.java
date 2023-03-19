@@ -20,7 +20,7 @@ import com.autovend.products.BarcodedProduct;
 
 public class System {
 
-	double changeDispensed = 0;
+	private double changeDispensed = 0;
 	private SelfCheckoutStation station;
 	private List<BarcodedProduct> billList = new ArrayList<BarcodedProduct>();
 	private double amountDue = 0;
@@ -129,6 +129,14 @@ public class System {
 
 	public void setPrinting(boolean printing) {
 		this.printing = printing;
+	}
+
+	public double getChangeDispensed() {
+		return changeDispensed;
+	}
+
+	public void setChangeDispensed(double changeDispensed) {
+		this.changeDispensed = changeDispensed;
 	}
 }
 
