@@ -30,7 +30,7 @@ public class PrintReceipt implements ReceiptPrinterObserver {
 	/**
 	 * Prints customer's bill record once payment has been received in full where, the bill record contains
 	 * BarcodedProducts. The receipt is formatted as follows:
-	 * 						Item ______Barcode______ $Price
+	 * 						Item      Barcode      $Price
 	 *
 	 * 						Total: $......
 	 * @param station The self-checkout station the customer is using
@@ -66,6 +66,7 @@ public class PrintReceipt implements ReceiptPrinterObserver {
 			} catch (OverloadException oe){
 				try {
 					station.printer.print('\n');
+					station.printer.print(c);
 				} catch (OverloadException ignored) {}
 			}
 		}

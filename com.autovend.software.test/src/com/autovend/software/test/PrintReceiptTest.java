@@ -302,6 +302,16 @@ public class PrintReceiptTest {
         assertTrue(AT.isInformed()); // Attendant should be informed, so they can continue to try and fix
     }
 
+
+    // Tests setReady setter in CustomerIO
+    @Test
+    public void testSetReady() {
+        CustomerIO CIO = new CustomerIO();
+        // Setter should have set ready field to true
+        CIO.setReady(true);
+        assertTrue(CIO.getReady());
+    }
+
     // Dummy Tests for Events to see if they can be triggered
     @Test
     public void dummyReactEnabled(){
