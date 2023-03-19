@@ -100,6 +100,7 @@ public class PayWithCashController extends System implements BillSlotObserver, B
 			int numberOfBills = (int) (amountDue / i);
 			out.println("Denomination: " + i + " number this denomination: " + numberOfBills);
 			for (int j = 0; j < numberOfBills; j++) {
+				out.println("this code was executed");
 					try {
 						station.billDispensers.get(i).emit();
 					} catch (DisabledException | EmptyException | OverloadException e) {
