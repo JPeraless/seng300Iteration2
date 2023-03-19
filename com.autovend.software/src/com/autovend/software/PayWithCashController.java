@@ -92,7 +92,7 @@ public class PayWithCashController extends System implements BillSlotObserver, B
 	 */
 	public void deliverChange(double amountDue)  {
 		out.println("before: " + amountDue);
-		amountDue = ((amountDue + 4) / 5) * 5;; // round up to the nearest multiple of 5 to avoid under paying customer
+		amountDue =  Math.ceil(amountDue/5) * 5; // round up to the nearest multiple of 5 to avoid under paying customer
 		out.println("after: " + amountDue);
 		List<Integer> keyList = new ArrayList<Integer>(station.billDispensers.keySet());
 		Collections.reverse(keyList);
