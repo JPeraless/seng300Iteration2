@@ -16,7 +16,7 @@ import com.autovend.products.BarcodedProduct;
  * Members for Iteration 1:
  * Michelle Loi (30019557)
  * James Hayward (30149513)
- * Caleb Cavilla ()
+ * Caleb Cavilla (30145972)
  * Amandeep Kaur (30153923)
  * Ethan Oke (30142180)
  * Winjoy Tiop (30069663)
