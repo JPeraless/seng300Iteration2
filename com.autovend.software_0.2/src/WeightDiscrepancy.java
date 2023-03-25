@@ -8,7 +8,23 @@ import com.autovend.devices.SimulationException;
 
 
 /*
- * TODO 1. map out three options, 2.
+ * 
+ * System
+ * 
+ * 
+ * \add item here/
+ * 
+ * if (weightDiscrepancyFound() {
+ * 	boolean customerChoice = CustomerIO.bagOrNot();
+ * 	boolean attendantApproval = AttendantIO.approveDiscrepancy();
+ * 
+ * 	WeightDiscrepancy discrep = new WeightDiscrepancy(this.baggingArea.getCurrentWeight(), customerChoice, attendantApproval);
+ * 	discrep.weightDiscrepancy(this.station);
+ * }
+ * 
+ * 
+ * 
+ * 
  */
 
 
@@ -16,101 +32,58 @@ public class WeightDiscrepancy {
 	
 	static SelfCheckoutStation station;
 	double expectedWeight;
+	boolean customerNoBag;
+	boolean attendantApproved;
 	
 	
-	public WeightDiscrepancy(double expectedWeight) {
+	public WeightDiscrepancy(double expectedWeight, boolean noBag, boolean attendantApproved) {
 		
 		this.expectedWeight = expectedWeight;
-		
+		this.customerNoBag = noBag;
+		this.attendantApproved = attendantApproved;
 		
 	}
 	
 
-
-	public void weightDiscrepancy() throws OverloadException{
-		boolean itemBagged = WeightDiscrepancy.doNotBagRequest(station, null, null);
-		if (!itemBagged) {
-			throw new SimulationException("FIX THIS");
+	// return: true -> attendant is helping or approval was good, false -> weight change in response to customerIO
+	
+	public boolean weightDiscrepancy(SelfCheckoutStation staion) throws OverloadException {
+		// case a
+		if (this.baggingAreaDiscrepancy(station.baggingArea)) {
+			return false;
 		}
 		
+		// case c
+		if (!attendantApproved) {
+			//notify attendant, they have to investigate
+			throw new SimulationException("Weight override not approved, please wait for attendant assistance...\n");
+		}
+		
+		// case b
+		else if (customerNoBag && attendantApproved) {
+			return true;
+		}
+		
+		
+		// system requirements unclear about this case.
+		else {
+			return false;
+		}
+		
+		
+		
 	}
 	
 	
-	
-
-	
-	
-	//Option a
 	
 	
 	// TODO make sure that each check is only carried out if signalled by system for options a, b, and c
 	public boolean baggingAreaDiscrepancy(ElectronicScale baggingArea) throws OverloadException {
 		return baggingArea.getCurrentWeight() != expectedWeight;
-		
-		
-		
 	}
 	
 	
-	
-	
-	// stub for user decision
-	private static boolean bagOrNot(boolean check) {
-		return check;
-	}
-	
-	
-	// stub for attendant weight oevrride approval
-	private static boolean attendantApproval(boolean check) {
-		return check;
-	}
-	
-	
-	
-	//Option b
-	
-	// return whether or not item has NOT been placed in bagging area
-	public static boolean doNotBagRequest(SelfCheckoutStation station, BarcodedUnit item, System customer) throws OverloadException {
-		double areaWeight = station.baggingArea.getCurrentWeight();
-		
-		//customer IO signal
-		boolean customerDecision = /*System.*/bagOrNot(true);
-		// if dont want to bag
-		if (customerDecision) {
-			
-			// get attendant approval
-			if (WeightDiscrepancy.attendantApproval(true)) {
-				areaWeight -= item.getWeight();
-				return true;
-			}
-		
-		}
-			
-		// else if the customer tries bagging the item anyway
-		// LOCK SYSTEM AND WAIT FOR ATTENDANT APPROVAL?
-		station.handheldScanner.disable();
-		station.mainScanner.disable();
-		station.billInput.disable();
-		station.baggingArea.disable();
-		station.scale.disable();
-		return false;
-			
 
-		
-		// if they do want to bag it
-		// either wait until they 
-		
-		
-	}
-	
-	//Option c
-	
-	public static void attendantDiscApproval() {
-		
-		
-		
-	}
-	
 	
 	
 		
