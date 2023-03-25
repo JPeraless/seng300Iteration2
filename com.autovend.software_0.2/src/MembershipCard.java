@@ -1,0 +1,48 @@
+	import java.util.Scanner;
+
+public class MembershipCard {
+
+	   private Scanner scanner;
+
+		    public void MembershipNumberInput() {
+		        scanner = new Scanner(System.in);
+		    }
+
+		    
+		    /* public String enterMembershipNumber() {
+		        String membershipNumber = "";
+		        boolean isValid = false;
+
+		        while (!isValid) {
+		            System.out.print("Please enter your membership number: ");
+		            membershipNumber = scanner.nextLine();
+
+
+	// Check if the membership number is valid  (contains only digits, is of correct length, And is in database)
+		             
+		            if (isValidMembershipNumber(membershipNumber)) {
+		                isValid = true;
+		            } else {
+		                System.out.println("Invalid membership number. Please try again.");
+		            }
+		        }
+
+		        return membershipNumber;
+		    }
+
+
+		**/
+
+
+		    // Need to create seperate string for customer name, and if tap is enabled or not ???
+		    
+		    
+		    
+		    //Still have to work on Exceptions:
+		    //1. Bad membership numbers should be detected and the customer informed about this. It is possible
+		    //that they made a typographical error, or that what they believed to be their membership number is not correct.
+		    	
+		    //2. The customer should be able to cancel the operation, rather than being forced to provide a valid number
+
+
+}
