@@ -5,11 +5,34 @@ import com.autovend.devices.OverloadException;
 import com.autovend.devices.SelfCheckoutStation;
 import com.autovend.devices.SimulationException;
 
+
+
+/*
+ * TODO 1. map out three options, 2.
+ */
+
+
 public class WeightDiscrepancy {
+	
+	static SelfCheckoutStation station;
+	double expectedWeight;
+	
+	
+	public WeightDiscrepancy(double expectedWeight) {
+		
+		this.expectedWeight = expectedWeight;
+		
+		
+	}
+	
 
 
-	public static void weightDiscrepancy() {
-
+	public void weightDiscrepancy() throws OverloadException{
+		boolean itemBagged = WeightDiscrepancy.doNotBagRequest(station, null, null);
+		if (!itemBagged) {
+			throw new SimulationException("FIX THIS");
+		}
+		
 	}
 	
 	
@@ -21,11 +44,10 @@ public class WeightDiscrepancy {
 	
 	
 	// TODO make sure that each check is only carried out if signalled by system for options a, b, and c
-	public static void baggingAreaDiscrepancy(ElectronicScale baggingArea) throws OverloadException {
-		boolean itemBagged = WeightDiscrepancy.doNotBagRequest(baggingArea, null, null);
-		if (!itemBagged) {
-			throw new SimulationException("FIX THIS");
-		}
+	public boolean baggingAreaDiscrepancy(ElectronicScale baggingArea) throws OverloadException {
+		return baggingArea.getCurrentWeight() != expectedWeight;
+		
+		
 		
 	}
 	
@@ -83,7 +105,7 @@ public class WeightDiscrepancy {
 	
 	//Option c
 	
-	public static void attendantSignal() {
+	public static void attendantDiscApproval() {
 		
 		
 		
