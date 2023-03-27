@@ -27,9 +27,11 @@ public class CustomerIO {
 	 * Weight of bags is a random weight in range (0, 1)
 	 * 
 	 */
-	public void addBag(ElectronicScale baggingArea) {
-		SellableUnit bag = new BarcodedUnit(null, new Random().nextDouble());
+	public double addBag(ElectronicScale baggingArea) {
+		double weight = new Random().nextDouble();
+		SellableUnit bag = new BarcodedUnit(null, weight);
 		baggingArea.add(bag);
+		return weight;
 	}
 
 }
