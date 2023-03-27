@@ -1,15 +1,3 @@
-/*
- * Members for Iteration 1:
- * Michelle Loi (30019557)
- * James Hayward (30149513)
- * Caleb Cavilla (30145972)
- * Amandeep Kaur (30153923)
- * Ethan Oke (30142180)
- * Winjoy Tiop (30069663)
- */
-
-
-
 import com.autovend.Barcode;
 import com.autovend.devices.AbstractDevice;
 import com.autovend.devices.BarcodeScanner;
@@ -27,31 +15,31 @@ purchase.
 
 
 public class AddItemByScanning extends System implements BarcodeScannerObserver{
-	
-	private BarcodedProduct barcodedProduct; 
-	
-	
+
+	private BarcodedProduct barcodedProduct;
+
+
 	public AddItemByScanning(BarcodedProduct currentBarcodedProduct, SelfCheckoutStation station){
 		super(station);
 		this.barcodedProduct = currentBarcodedProduct;
-		
+
 	}
-	
+
 	@Override
 	public void reactToEnabledEvent(AbstractDevice<? extends AbstractDeviceObserver> device) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void reactToDisabledEvent(AbstractDevice<? extends AbstractDeviceObserver> device) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
-	// Reacts to scanner and adds item which is detected 
+
+	// Reacts to scanner and adds item which is detected
 	public void reactToBarcodeScannedEvent(BarcodeScanner barcodeScanner, Barcode barcode) throws SimulationException{
-		super.addBillList(barcodedProduct);		
+		super.addBillList(barcodedProduct);
 	}
-	
+
 }
