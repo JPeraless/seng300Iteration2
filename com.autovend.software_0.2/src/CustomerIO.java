@@ -14,6 +14,9 @@ public class CustomerIO {
 	// boolean indicating when user is done adding bags
 	private boolean allBagsAdded;
 	
+	//number of bags the customer has indicated they want to purchase
+	private int wantToPurchasBags;
+	
 	// getter for abvoe variable, probably redundant? 
 	public boolean doneAddingBags() {
 		return this.allBagsAdded;
@@ -32,6 +35,31 @@ public class CustomerIO {
 		SellableUnit bag = new BarcodedUnit(null, weight);
 		baggingArea.add(bag);
 		return weight;
+	}
+	
+	/**
+	 * Function that is called when the customer indicates that they want to purchase bags
+	 * 
+	 * @param numberOfBagsToPurchase: number of bags the customer wants to purchase
+	 */
+	public void wantToPurchaseBags(int numberOfBagsToPurchase) {
+		this.wantToPurchasBags = numberOfBagsToPurchase;
+	}
+	
+	/**
+	 * Getter for the number of bags customer wants to purchase
+	 * 
+	 * @return: returns the number of bags the customer wants to purchase
+	 */
+	public int getWantToPurchaseBags() {
+		return wantToPurchasBags;
+	}
+	
+	/**
+	 * Sets the number of bags customer wants to purchase to 0 once the bag purchase is complete
+	 */
+	public void addBagComplete() {
+		this.wantToPurchasBags = 0;
 	}
 
 }
