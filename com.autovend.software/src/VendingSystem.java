@@ -136,17 +136,6 @@ public class VendingSystem {
 			detected.weightDiscrepancyOptions();
 			}
 		}
-	public void addItemStationDisable() {
-		station.mainScanner.disable();
-		station.handheldScanner.disable();
-		station.billInput.disable();
-	}
-	
-	public void addItemStationEnable() {
-		station.mainScanner.enable();
-		station.handheldScanner.enable();
-		station.billInput.enable();
-	}
 }
 
 
