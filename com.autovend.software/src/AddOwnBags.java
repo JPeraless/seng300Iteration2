@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Random;
 
 import com.autovend.Barcode;
@@ -14,7 +15,11 @@ import com.autovend.devices.observers.AbstractDeviceObserver;
 import com.autovend.devices.observers.ElectronicScaleObserver;
 
 public class AddOwnBags implements ElectronicScaleObserver {
+	//TODO: I THINK THIS FIELD CAN BE CUT, SHOULD REALLY ONLY BE USED AS PARAMETER I THINK
 	boolean attendantApprovedBags;
+	
+	// TODO: ITEMS CAN'T HAVE A NULL BARCODE, SO JUST MADE A CONSTANT BARCODE HERE FOR BAGS
+	//		 THAT THE WHOLE SYSTEM CAN ACCESS
 	public static final Barcode BAG_BARCODE = new Barcode(new Numeral[] {Numeral.nine, Numeral.nine, Numeral.nine, Numeral.nine});
 		
 	/**
@@ -25,21 +30,30 @@ public class AddOwnBags implements ElectronicScaleObserver {
 	 * 
 	 */
 	
-	public void addOwnBags(SelfCheckoutStation station, int bags, boolean attendantApproved) throws OverloadException {
+	public void addOwnBags(SelfCheckoutStation station, int number_bags, boolean attendantApproved) throws OverloadException {
+		// if disabled handle exception
 		if (station.baggingArea.isDisabled()) {
 			throw new DisabledException();
 		}
 		
+		
+		// get the attendant approval flag
 		this.attendantApprovedBags = attendantApproved;
 		
 		// assumed that customer was signaled that they want to add bags
 		System.out.println("Please add your bags");
-	
+		
+		// array to store bags in memory
+		BarcodedUnit[] bags = new BarcodedUnit[number_bags];
+		
+		// add bags, increment running weight of bags
 		double bagWeight = 0;
-		for(int i = 0; i < bags; i ++) {
-			double weight = addBag(station.baggingArea);
-			bagWeight = bagWeight + weight;
+		for(int i = 0; i < number_bags; i ++) {
+			bags[i] = getBag();
+			bagWeight += bags[i].getWeight();
+			station.baggingArea.add(bags[i]);
 		}
+		
 		
 		// Idk if this counts as signaling system.
 		System.out.println("Weight has been changed, weight of bags is: " + bagWeight);
@@ -50,12 +64,38 @@ public class AddOwnBags implements ElectronicScaleObserver {
 		
 		// If attendant does not approve of bags
 		if (!attendantApprovedBags) {
-			throw new SimulationException("Bags not approved");
+			//throw new SimulationException("Bags not approved");
+			/**
+			 * When an attendant disproves of adding bags, I think that
+			 * is still in line with / part of a successful simulation.
+			 * 
+			 *  So maybe instead, if an attendant doesn't approve bags, 
+			 *  we should enable the station again but remove the added bags first
+			 *  to allow the customer to continue doing what they were doing.
+			 *  
+			 *  Ideally the attendant would have cleared this up through 
+			 *  communication with the customer right?
+			 *  
+			 *  Let me know what you think we can change the details again
+			 * 
+			 * 
+			 */
+			
+			// so here, if the attendant has not approved, we remove all of the bags from the scale
+			// and proceed with transaction
+			for (BarcodedUnit bag : bags) {
+				station.baggingArea.remove(bag);
+			}
+			System.out.println("Bags removed\n");
+
 		}
-		System.out.println("Bags approved");
-		
+		else {
+			// otherwise
+			System.out.println("Bags approved");
+		}
 		stationEnable(station); // enables station if bags are approved
 		System.out.println("Customer may continue with transaction");
+		
 	}
 	
 	/*
@@ -64,11 +104,9 @@ public class AddOwnBags implements ElectronicScaleObserver {
 	 * Weight of bags is a random weight in range (0, 1)
 	 * 
 	 */
-	public double addBag(ElectronicScale baggingArea) {
+	public BarcodedUnit getBag() {
 		double weight = new Random().nextDouble();
-		SellableUnit bag = new BarcodedUnit(AddOwnBags.BAG_BARCODE, weight);
-		baggingArea.add(bag);
-		return weight;
+		return new BarcodedUnit(AddOwnBags.BAG_BARCODE, weight);
 	}
 	
 	/** 

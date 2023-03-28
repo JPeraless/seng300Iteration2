@@ -68,13 +68,32 @@ public class AddOwnBagsTest {
 	
 	
 	
-	
+	/**
+	 * Test to ensure that a DisabledException is thrown
+	 * if bagging area scale is disabled.
+	 * 
+	 * Bug found found with this, code originally allowed
+	 * a bag to be added while the scale was disabled
+	 * 
+	 */
 	@Test
 	public void addWhileDisabled() {
 		this.station.baggingArea.disable();
-		
-		assertThrows(DisabledException.class, () -> this.useCase.addOwnBags(this.station, 10, true));
-		
+		assertThrows(DisabledException.class, () -> this.useCase.addOwnBags(this.station, 10, true));	
 	}
+	
+	
+	/**
+	 * So for this test case, we can check to see that after trying to add bags,
+	 * without attendant approval the 
+	 * 
+	 * 
+	 * 
+	 */
+	//@Test
+	//public void attendantNotApproved {
+	//	this.station.baggingArea.i
+		//assertThrows(DisabledException.class, () -> this.useCase.addOwnBags(this.station, 10, true));	
+	//}
 
 }
