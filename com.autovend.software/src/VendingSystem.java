@@ -107,6 +107,18 @@ public class VendingSystem {
 	public void setPrinting(boolean printing) {
 		this.printing = printing;
 	}
+	
+	public void addItemStationDisable() {
+		station.mainScanner.disable();
+		station.handheldScanner.disable();
+		station.billInput.disable();
+	}
+	
+	public void addItemStationEnable() {
+		station.mainScanner.enable();
+		station.handheldScanner.enable();
+		station.billInput.enable();
+	}
 }
 
 

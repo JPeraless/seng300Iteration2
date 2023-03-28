@@ -28,7 +28,10 @@ public class AddItem extends VendingSystem implements BarcodeScannerObserver{
 	}
 	
 	public void AddItemByScanning(BarcodeScanner scanner) throws Exception{
-		if(scanner.scan())
+		if(scanner.scan(barcodedUnit)) {
+			
+			addItemStationDisable();
+		}
 	}
 
 	@Override
