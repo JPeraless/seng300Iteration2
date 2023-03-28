@@ -52,6 +52,9 @@ public class AddItem implements BarcodeScannerObserver{
 	}
 	
 
+	public PLUCodedProduct getProductFromPlu(plu code) {
+		return ProductDatabases.
+	}
 	
 	
 	public void AddItemByScanning(SelfCheckoutStation station) throws Exception {
@@ -93,6 +96,43 @@ public class AddItem implements BarcodeScannerObserver{
 		}
 	}
 
+	
+	public void AddItemByPLU (SelfCheckoutStation station) throws Exception {
+		  PLUCodedUnit copyOfUnit = (PLUCodedUnit) this.unit;
+		  PLUCodedProduct pluProduct = getProductFromPLUCode(copyOfUnit.getPLUCode());
+
+		
+        if (station.mainScanner.scan(copyOfUnit)) {
+            // disable station
+            addItemStationDisable();
+
+            // get product/unit info
+            double weightInGrams = copyOfUnit.getWeight();
+            BigDecimal pricePerKg = pluProduct.getPricePerKg();
+
+            // notify customer
+            System.out.println("Please place your item in the bagging area");
+
+            // add item to the baggingArea ElectronicScale
+            station.baggingArea.add(copyOfUnit);
+
+            // increment weight total
+            this.totalWeight += weightInGrams;
+
+            // calculate price based on weight
+            BigDecimal price = pricePerKg.multiply(BigDecimal.valueOf(weightInGrams / 1000));
+
+            // increment price total
+            totalPrice.add(price);
+
+            // react to barcode scanned event (adds PLUCodedUnit to BillList)
+            reactToBarcodeScannedEvent(station.mainScanner, copyOfUnit.getPLUCode());
+        }
+    }
+
+	
+	
+	
 	private void addItemStationDisable() {
 		station.mainScanner.disable();
 		station.handheldScanner.disable();
