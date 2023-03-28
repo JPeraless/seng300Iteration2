@@ -34,17 +34,29 @@ public class AddItem extends VendingSystem implements BarcodeScannerObserver{
 	
 	public void AddItemByScanning(BarcodeScanner scanner) throws Exception{
 		if(scanner.scan(barcodedUnit)) {
-			
+			//disable station
 			addItemStationDisable();
 			
+			//get product/unit info
 			double weightInGrams = barcodedUnit.getWeight();
 			BigDecimal price = barcodedProduct.getPrice();
 			
+			//notify customer
 			System.out.println("Please place your item in the bagging area");
 			
 			// ADD ITEM TO BAGGING AREA HERE
 			
+			//increment weight total
 			totalWeight += weightInGrams;
+			
+			//check for weight discrepancy using totalWeight
+			checkForWeightDiscrepancy(totalWeight);
+			
+			//increment price total
+			totalPrice.add(price);
+			
+			//react to barcode scanned event (adds barcodedUnit to BillList)
+			reactToBarcodeScannedEvent(scanner, barcodedUnit.getBarcode());
 			
 		}
 	}
