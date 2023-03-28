@@ -22,12 +22,13 @@ purchase.
 //TODO: change constructor implementation, instead use barcode to create unit/product from database and pass into functions 
 
 
-public class AddItem extends VendingSystem implements BarcodeScannerObserver{
+public class AddItem implements BarcodeScannerObserver{
 	//private BarcodedUnit barcodedUnit;
 	//private BarcodedProduct barcodedProduct;
-	double totalWeight = 0;
-	BigDecimal totalPrice = BigDecimal.ZERO;
-	private SellableUnit unit;
+	private double totalWeight = 0;
+	private BigDecimal totalPrice = BigDecimal.ZERO;
+	protected SellableUnit unit;
+	protected SelfCheckoutStation station;
 	
 
 	/**
@@ -38,43 +39,32 @@ public class AddItem extends VendingSystem implements BarcodeScannerObserver{
 	 * @param currentUnit - Unit to be added (PLU or barcoded)
 	 */
 	public AddItem(SelfCheckoutStation station, SellableUnit currentUnit){
-		super(station);
-
+		
+		this.station = station;
 		this.unit = currentUnit; 
 
 	}
 		
-	/*
-	 *  DON'T THINK THIS METHOD IS NECESSARY, UNIT IS ALREADY PASSED IN AS 
-	 * 
-	 */
-	/*
-	public BarcodedUnit getUnitFromBarcode (Barcode barcode) {
-		for(Barcode barcode1: ProductDatabases.BARCODED_PRODUCT_DATABASE.keySet()) {
-			if(barcode == barcode1) {
-				BarcodedUnit item = new BarcodedUnit(barcode1, ProductDatabases.BARCODED_PRODUCT_DATABASE.get(barcode1).getExpectedWeight());
-				return item;
-			}
-			
-		}
-		return null;
-	}
-	*/
+
 	
 	public BarcodedProduct getProductFromBarcode(Barcode barcode) {
 		return ProductDatabases.BARCODED_PRODUCT_DATABASE.get(barcode);
 	}
 	
+
 	
 	
 	public void AddItemByScanning(SelfCheckoutStation station) throws Exception {
 		BarcodedUnit copyOfUnit = (BarcodedUnit) this.unit;
 		BarcodedProduct barcodedProduct = getProductFromBarcode(copyOfUnit.getBarcode());
-		addItemStationEnable();
+
+		
 		if(station.mainScanner.scan(copyOfUnit)) {
+			//WeightDiscrepancy wd = new WeightDiscrepancy(station);
 			
 			//disable station
 			addItemStationDisable();
+			
 			
 			//get product/unit info
 			double weightInGrams = copyOfUnit.getWeight();
@@ -87,20 +77,34 @@ public class AddItem extends VendingSystem implements BarcodeScannerObserver{
 			station.baggingArea.add(copyOfUnit);
 			
 			//increment weight total
-			totalWeight += weightInGrams;
+			this.totalWeight += weightInGrams;
 			
-			//check for weight discrepancy using totalWeight
-			checkForWeightDiscrepancy(totalWeight);
+			//boolean discrepancyCheck = wd.weightDiscrepancyOptions();
+			
+			//if (!discrepancyCheck) {
+			//	throw new SimulationException("User added or removed item in repsonse");
+			//}
 			
 			//increment price total
 			totalPrice.add(price);
 			
 			//react to barcode scanned event (adds barcodedUnit to BillList)
 			reactToBarcodeScannedEvent(station.mainScanner, copyOfUnit.getBarcode());
-			
 		}
 	}
 
+	private void addItemStationDisable() {
+		station.mainScanner.disable();
+		station.handheldScanner.disable();
+		station.billInput.disable();
+	}
+	
+	private void addItemStationEnable() {
+		station.mainScanner.enable();
+		station.handheldScanner.enable();
+		station.billInput.enable();
+	}
+	
 	@Override
 	public void reactToEnabledEvent(AbstractDevice<? extends AbstractDeviceObserver> device) {
 		// TODO Auto-generated method stub
@@ -115,7 +119,7 @@ public class AddItem extends VendingSystem implements BarcodeScannerObserver{
 
 	// Reacts to scanner and adds item which is detected
 	public void reactToBarcodeScannedEvent(BarcodeScanner barcodeScanner, Barcode barcode) throws SimulationException{
-		super.addBillList(getProductFromBarcode(barcode));
+
 	}
 
 }
