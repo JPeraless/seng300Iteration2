@@ -2,8 +2,10 @@ import java.util.Random;
 
 import com.autovend.Barcode;
 import com.autovend.BarcodedUnit;
+import com.autovend.Numeral;
 import com.autovend.SellableUnit;
 import com.autovend.devices.AbstractDevice;
+import com.autovend.devices.DisabledException;
 import com.autovend.devices.ElectronicScale;
 import com.autovend.devices.OverloadException;
 import com.autovend.devices.SelfCheckoutStation;
@@ -13,6 +15,7 @@ import com.autovend.devices.observers.ElectronicScaleObserver;
 
 public class AddOwnBags implements ElectronicScaleObserver {
 	boolean attendantApprovedBags;
+	public static final Barcode BAG_BARCODE = new Barcode(new Numeral[] {Numeral.nine, Numeral.nine, Numeral.nine, Numeral.nine});
 		
 	/**
 	 * @param station - SelfCheckoutStation in use
@@ -22,9 +25,12 @@ public class AddOwnBags implements ElectronicScaleObserver {
 	 * 
 	 */
 	
-	public void addOwnBags(SelfCheckoutStation station, int bags) throws OverloadException {
+	public void addOwnBags(SelfCheckoutStation station, int bags, boolean attendantApproved) throws OverloadException {
+		if (station.baggingArea.isDisabled()) {
+			throw new DisabledException();
+		}
 		
-		this.attendantApprovedBags = attendantApprovedBags;
+		this.attendantApprovedBags = attendantApproved;
 		
 		// assumed that customer was signaled that they want to add bags
 		System.out.println("Please add your bags");
@@ -60,7 +66,7 @@ public class AddOwnBags implements ElectronicScaleObserver {
 	 */
 	public double addBag(ElectronicScale baggingArea) {
 		double weight = new Random().nextDouble();
-		SellableUnit bag = new BarcodedUnit(null, weight);
+		SellableUnit bag = new BarcodedUnit(AddOwnBags.BAG_BARCODE, weight);
 		baggingArea.add(bag);
 		return weight;
 	}
