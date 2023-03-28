@@ -1,3 +1,5 @@
+import java.math.BigDecimal;
+
 import com.autovend.Barcode;
 import com.autovend.devices.AbstractDevice;
 import com.autovend.devices.BarcodeScanner;
@@ -18,6 +20,9 @@ purchase.
 public class AddItem extends VendingSystem implements BarcodeScannerObserver{
 	private BarcodedUnit barcodedUnit;
 	private BarcodedProduct barcodedProduct;
+	double totalWeight = 0;
+	BigDecimal totalPrice = BigDecimal.ZERO;
+	
 
 
 	public AddItem(BarcodedProduct currentBarcodedProduct,BarcodedUnit currentBarcodedUnit, SelfCheckoutStation station){
@@ -31,6 +36,13 @@ public class AddItem extends VendingSystem implements BarcodeScannerObserver{
 		if(scanner.scan(barcodedUnit)) {
 			
 			addItemStationDisable();
+			
+			double weightInGrams = barcodedUnit.getWeight();
+			BigDecimal price = barcodedProduct.getPrice();
+			
+			System.out.println("Please place your item in the bagging area");
+			
+			
 		}
 	}
 
