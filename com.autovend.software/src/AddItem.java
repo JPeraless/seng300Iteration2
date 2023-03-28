@@ -6,6 +6,7 @@ import com.autovend.devices.SimulationException;
 import com.autovend.devices.observers.AbstractDeviceObserver;
 import com.autovend.devices.observers.BarcodeScannerObserver;
 import com.autovend.products.BarcodedProduct;
+import com.autovend.BarcodedUnit;
 
 
 /**
@@ -14,15 +15,20 @@ purchase.
  */
 
 
-public class AddItemByScanning extends VendingSystem implements BarcodeScannerObserver{
-
+public class AddItem extends VendingSystem implements BarcodeScannerObserver{
+	private BarcodedUnit barcodedUnit;
 	private BarcodedProduct barcodedProduct;
 
 
-	public AddItemByScanning(BarcodedProduct currentBarcodedProduct, SelfCheckoutStation station){
+	public AddItem(BarcodedProduct currentBarcodedProduct,BarcodedUnit currentBarcodedUnit, SelfCheckoutStation station){
 		super(station);
 		this.barcodedProduct = currentBarcodedProduct;
+		this.barcodedUnit = currentBarcodedUnit; 
 
+	}
+	
+	public void AddItemByScanning(BarcodeScanner scanner) throws Exception{
+		if(scanner.scan())
 	}
 
 	@Override
