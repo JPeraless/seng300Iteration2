@@ -16,8 +16,24 @@ import com.autovend.devices.SelfCheckoutStation;
 import com.autovend.external.*;
 import com.autovend.products.BarcodedProduct;
 
+
+
+
+import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertEquals;
+
+
+import java.util.Currency;
+import java.util.Locale;
+
+
+
+import com.autovend.devices.DisabledException;
+import com.autovend.devices.OverloadException;
+
+
+
 public class AddItemByScanningTest extends BaseTestCase {
-	SelfCheckoutStation station;
 	AddItem useCase;
 	
 	SellableUnit unit0;
@@ -39,7 +55,7 @@ public class AddItemByScanningTest extends BaseTestCase {
 
 	@Before
 	public void setUp() throws Exception {
-		this.initializeStation();
+		super.initializeStation();
 		unit0 = new BarcodedUnit(BARCODE_0, 1f);
 		unit1 = new BarcodedUnit(BARCODE_1, 2f);
 		unit2 = new BarcodedUnit(BARCODE_2, 3f);
@@ -59,7 +75,7 @@ public class AddItemByScanningTest extends BaseTestCase {
 
 	@After
 	public void tearDown() throws Exception {
-		this.deinitializeStation();
+		super.initializeStation();
 		unit0 = null;
 		unit1 = null;
 		unit2 = null;
@@ -76,9 +92,18 @@ public class AddItemByScanningTest extends BaseTestCase {
 		
 	}
 
+	/**
+	 * Functionn to ensure a DisabledException is thrown
+	 * when trying to scan while system not ready
+	 * to accept scanned items
+	 * 
+	 * 
+	 */
 	@Test
-	public void test() {
-
+	public void scanWhenDisabled() {
+		this.useCase = new AddItem(product0, (BarcodedUnit)unit0, super.station);
+		this.station.mainScanner.disable();
+		assertThrows(DisabledException.class, () -> this.useCase.AddItemByScanning(super.station));
 	}
 
 }
