@@ -9,8 +9,11 @@ import com.autovend.devices.observers.AbstractDeviceObserver;
 import com.autovend.devices.observers.BarcodeScannerObserver;
 import com.autovend.external.ProductDatabases;
 import com.autovend.products.BarcodedProduct;
+import com.autovend.products.PLUCodedProduct;
 import com.autovend.products.Product;
 import com.autovend.BarcodedUnit;
+import com.autovend.PriceLookUpCode;
+import com.autovend.PriceLookUpCodedUnit;
 import com.autovend.SellableUnit;
 
 
@@ -52,8 +55,8 @@ public class AddItem implements BarcodeScannerObserver{
 	}
 	
 
-	public PLUCodedProduct getProductFromPlu(plu code) {
-		return ProductDatabases.
+	public PLUCodedProduct getProductFromPLU(PriceLookUpCode plu) {
+		return ProductDatabases.PLU_PRODUCT_DATABASE.get(plu);
 	}
 	
 	
