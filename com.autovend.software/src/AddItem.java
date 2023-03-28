@@ -9,7 +9,9 @@ import com.autovend.devices.observers.AbstractDeviceObserver;
 import com.autovend.devices.observers.BarcodeScannerObserver;
 import com.autovend.external.ProductDatabases;
 import com.autovend.products.BarcodedProduct;
+import com.autovend.products.Product;
 import com.autovend.BarcodedUnit;
+import com.autovend.SellableUnit;
 
 
 /**
@@ -25,17 +27,28 @@ public class AddItem extends VendingSystem implements BarcodeScannerObserver{
 	//private BarcodedProduct barcodedProduct;
 	double totalWeight = 0;
 	BigDecimal totalPrice = BigDecimal.ZERO;
-	private Barcode barcode;
+	private SellableUnit unit;
 	
 
-
-	public AddItem(BarcodedProduct currentBarcodedProduct,BarcodedUnit currentBarcodedUnit, SelfCheckoutStation station){
+	/**
+	 * 
+	 * 
+	 * 
+	 * @param staion - the station being used by the system
+	 * @param currentUnit - Unit to be added (PLU or barcoded)
+	 */
+	public AddItem(SelfCheckoutStation station, SellableUnit currentUnit){
 		super(station);
-		//this.barcodedProduct = currentBarcodedProduct;
-		//this.barcodedUnit = currentBarcodedUnit; 
+
+		this.unit = currentUnit; 
 
 	}
-	
+		
+	/*
+	 *  DON'T THINK THIS METHOD IS NECESSARY, UNIT IS ALREADY PASSED IN AS 
+	 * 
+	 */
+	/*
 	public BarcodedUnit getUnitFromBarcode (Barcode barcode) {
 		for(Barcode barcode1: ProductDatabases.BARCODED_PRODUCT_DATABASE.keySet()) {
 			if(barcode == barcode1) {
@@ -46,38 +59,32 @@ public class AddItem extends VendingSystem implements BarcodeScannerObserver{
 		}
 		return null;
 	}
+	*/
 	
 	public BarcodedProduct getProductFromBarcode(Barcode barcode) {
-		for(Barcode barcode1 : ProductDatabases.BARCODED_PRODUCT_DATABASE.keySet()) {
-			if(barcode == barcode1) {
-				return ProductDatabases.BARCODED_PRODUCT_DATABASE.get(barcode1);
-				
-			}
-		}
-		return null;
+		return ProductDatabases.BARCODED_PRODUCT_DATABASE.get(barcode);
 	}
 	
 	
 	
-	public void AddItemByScanning(SelfCheckoutStation station) throws Exception{
-		
-		BarcodedProduct barcodedProduct = getProductFromBarcode(barcode);
-		BarcodedUnit barcodedUnit = getUnitFromBarcode(barcode);
-		
-		if(station.mainScanner.scan(barcodedUnit)) {
+	public void AddItemByScanning(SelfCheckoutStation station) throws Exception {
+		BarcodedUnit copyOfUnit = (BarcodedUnit) this.unit;
+		BarcodedProduct barcodedProduct = getProductFromBarcode(copyOfUnit.getBarcode());
+		addItemStationEnable();
+		if(station.mainScanner.scan(copyOfUnit)) {
 			
 			//disable station
 			addItemStationDisable();
 			
 			//get product/unit info
-			double weightInGrams = barcodedUnit.getWeight();
+			double weightInGrams = copyOfUnit.getWeight();
 			BigDecimal price = barcodedProduct.getPrice();
 			
 			//notify customer
 			System.out.println("Please place your item in the bagging area");
 			
 			//add item to the baggingArea ElectronicScale
-			station.baggingArea.add(barcodedUnit);
+			station.baggingArea.add(copyOfUnit);
 			
 			//increment weight total
 			totalWeight += weightInGrams;
@@ -89,7 +96,7 @@ public class AddItem extends VendingSystem implements BarcodeScannerObserver{
 			totalPrice.add(price);
 			
 			//react to barcode scanned event (adds barcodedUnit to BillList)
-			reactToBarcodeScannedEvent(station.mainScanner, barcodedUnit.getBarcode());
+			reactToBarcodeScannedEvent(station.mainScanner, copyOfUnit.getBarcode());
 			
 		}
 	}

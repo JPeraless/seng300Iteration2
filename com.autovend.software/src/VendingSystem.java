@@ -48,7 +48,7 @@ public class VendingSystem {
 	 * Prints the receipt and notifies attendant of problems
 	 */
 	public void startPrinting(){
-		if(printing){
+		if(printing) {
 			try {
 				PrintReceipt.print(station, billList);
 			} catch (EmptyException e) {
