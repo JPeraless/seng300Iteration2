@@ -42,6 +42,9 @@ public class AddItem extends VendingSystem implements BarcodeScannerObserver{
 			
 			System.out.println("Please place your item in the bagging area");
 			
+			// ADD ITEM TO BAGGING AREA HERE
+			
+			totalWeight += weightInGrams;
 			
 		}
 	}

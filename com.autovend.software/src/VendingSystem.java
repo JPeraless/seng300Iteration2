@@ -134,6 +134,7 @@ public class VendingSystem {
 			//a weight discrepancy is detected 
 			WeightDiscrepancy detected = new WeightDiscrepancy(attendantApproved, station);
 			detected.weightDiscrepancyOptions();
+			}
 		}
 	public void addItemStationDisable() {
 		station.mainScanner.disable();
