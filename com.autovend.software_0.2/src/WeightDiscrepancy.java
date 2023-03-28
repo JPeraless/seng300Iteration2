@@ -28,6 +28,42 @@ import com.autovend.devices.SimulationException;
  */
 
 
+/*
+ * System
+ * ....
+ * 
+ * 	if (weightDiscrepancy) {
+ * 		
+ * 		//customer wants to bad
+ * 
+ * 		boolean outcome = new WeightDiscrepancy(expectedWeight, bagTrue, approved).weightDiscrepancy();
+ * 
+ 		if (outcome) {
+ 		disable
+ 		}
+ 		else {
+ 		
+ 		exceptions
+ 		}
+ * 
+ * }
+ * 
+ * 
+ * 
+ * 
+ * ....
+ * 
+ * 
+ * 
+ * 
+ * 
+ */
+
+
+
+
+
+
 public class WeightDiscrepancy {
 	
 	static SelfCheckoutStation station;
@@ -47,17 +83,17 @@ public class WeightDiscrepancy {
 
 	// return: true -> attendant is helping or approval was good, false -> weight change in response to customerIO
 	
+	/*
+	 * TODO: 
+	 * 
+	 */
 	public boolean weightDiscrepancy(SelfCheckoutStation staion) throws OverloadException {
 		// case a
 		if (this.baggingAreaDiscrepancy(station.baggingArea)) {
 			return false;
 		}
 		
-		// case c
-		if (!attendantApproved) {
-			//notify attendant, they have to investigate
-			throw new SimulationException("Weight override not approved, please wait for attendant assistance...\n");
-		}
+		
 		
 		// case b
 		else if (customerNoBag && attendantApproved) {
@@ -65,13 +101,19 @@ public class WeightDiscrepancy {
 		}
 		
 		
+		
+		// case c
+		if (!attendantApproved) {
+			return false;
+		}
+		
+
+		
+		
 		// system requirements unclear about this case.
 		else {
 			return false;
 		}
-		
-		
-		
 	}
 	
 	
