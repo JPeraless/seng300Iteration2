@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.autovend.devices.EmptyException;
+import com.autovend.devices.OverloadException;
 import com.autovend.devices.SelfCheckoutStation;
 import com.autovend.products.BarcodedProduct;
 
@@ -103,9 +104,37 @@ public class VendingSystem {
 	public SelfCheckoutStation getStation() {
 		return station;
 	}
+	
+	
 
 	public void setPrinting(boolean printing) {
 		this.printing = printing;
+	}
+	
+	
+	private boolean attendantApproved = false; 
+	
+	/**
+	 * Changes the value of the attendantApproved variable
+	 * 
+	 * @param selected: new value for attendantApproved variable
+	 */
+	public void setAttendantApproved(boolean selected) {
+		this.attendantApproved = selected;
+	}
+	
+	/**
+	 * This method is called when the bagging area scale announces a change is weight.
+	 * 
+	 * @param expectedWeight: Expected weight of the bagging area scale
+	 * @throws OverloadException: If the weight has overloaded the scale
+	 */
+	public void checkForWeightDiscrepancy(double expectedWeight) throws OverloadException {
+		if (station.baggingArea.getCurrentWeight() != expectedWeight) { //if there is a weight discrepancy
+			//a weight discrepancy is detected 
+			WeightDiscrepancy detected = new WeightDiscrepancy(attendantApproved, station);
+			detected.weightDiscrepancyOptions();
+		}
 	}
 }
 

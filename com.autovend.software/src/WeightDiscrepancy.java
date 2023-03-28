@@ -68,15 +68,21 @@ public class WeightDiscrepancy {
 	
 	static SelfCheckoutStation station;
 	double expectedWeight;
-	boolean customerNoBag;
+	//boolean customerNoBag;
 	boolean attendantApproved;
 	
 	
-	public WeightDiscrepancy(double expectedWeight, boolean noBag, boolean attendantApproved) {
+	public WeightDiscrepancy(boolean noBag, SelfCheckoutStation station) throws OverloadException {
 		
-		this.expectedWeight = expectedWeight;
-		this.customerNoBag = noBag;
+		//this.customerNoBag = noBag;
 		this.attendantApproved = attendantApproved;
+		this.station = station;
+		this.expectedWeight = station.baggingArea.getCurrentWeight();
+		
+		//disable the selfcheckout system since a weight discrepancy is detected
+		station.handheldScanner.disable();
+		station.mainScanner.disable();
+		station.billInput.disable();
 		
 	}
 	
@@ -87,33 +93,26 @@ public class WeightDiscrepancy {
 	 * TODO: 
 	 * 
 	 */
-	public boolean weightDiscrepancy(SelfCheckoutStation staion) throws OverloadException {
-		// case a
+	public void weightDiscrepancyOptions() throws OverloadException {
+		boolean discrepancyResolved = false;
+		
+		// case a: if the weight is back to expected weight 
 		if (this.baggingAreaDiscrepancy(station.baggingArea)) {
-			return false;
+			discrepancyResolved = true;
 		}
 		
-		
-		
-		// case b
-		else if (customerNoBag && attendantApproved) {
-			return true;
+		// case c: if attendant approves the discrepancy
+		if (attendantApproved) {
+			discrepancyResolved = true;
 		}
 		
-		
-		
-		// case c
-		if (!attendantApproved) {
-			return false;
+		if (discrepancyResolved) {
+			//enable the station when if the discrepancy is resolved
+			station.handheldScanner.enable();
+			station.mainScanner.enable();
+			station.billInput.enable();
 		}
 		
-
-		
-		
-		// system requirements unclear about this case.
-		else {
-			return false;
-		}
 	}
 	
 	
@@ -121,7 +120,7 @@ public class WeightDiscrepancy {
 	
 	// TODO make sure that each check is only carried out if signalled by system for options a, b, and c
 	public boolean baggingAreaDiscrepancy(ElectronicScale baggingArea) throws OverloadException {
-		return baggingArea.getCurrentWeight() != expectedWeight;
+		return baggingArea.getCurrentWeight() == expectedWeight;
 	}
 	
 	
