@@ -14,7 +14,7 @@ import com.autovend.devices.observers.AbstractDeviceObserver;
 import com.autovend.devices.observers.BillSlotObserver;
 import com.autovend.devices.observers.BillValidatorObserver;
 
-public class PayWithCashController extends System implements BillSlotObserver, BillValidatorObserver {
+public class PayWithCashController extends VendingSystem implements BillSlotObserver, BillValidatorObserver {
 	
 	double amountDue;
 	SelfCheckoutStation station;
