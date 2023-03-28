@@ -16,7 +16,7 @@ import com.autovend.BarcodedUnit;
 purchase.
  */
 
-
+//TODO: change constructor implementation, instead use barcode to create unit/product from database and pass into functions 
 public class AddItem extends VendingSystem implements BarcodeScannerObserver{
 	private BarcodedUnit barcodedUnit;
 	private BarcodedProduct barcodedProduct;
@@ -32,8 +32,8 @@ public class AddItem extends VendingSystem implements BarcodeScannerObserver{
 
 	}
 	
-	public void AddItemByScanning(BarcodeScanner scanner) throws Exception{
-		if(scanner.scan(barcodedUnit)) {
+	public void AddItemByScanning(SelfCheckoutStation station) throws Exception{
+		if(station.mainScanner.scan(barcodedUnit)) {
 			//disable station
 			addItemStationDisable();
 			
@@ -44,7 +44,8 @@ public class AddItem extends VendingSystem implements BarcodeScannerObserver{
 			//notify customer
 			System.out.println("Please place your item in the bagging area");
 			
-			// ADD ITEM TO BAGGING AREA HERE
+			//add item to the baggingArea ElectronicScale
+			station.baggingArea.add(barcodedUnit);
 			
 			//increment weight total
 			totalWeight += weightInGrams;
@@ -56,7 +57,7 @@ public class AddItem extends VendingSystem implements BarcodeScannerObserver{
 			totalPrice.add(price);
 			
 			//react to barcode scanned event (adds barcodedUnit to BillList)
-			reactToBarcodeScannedEvent(scanner, barcodedUnit.getBarcode());
+			reactToBarcodeScannedEvent(station.mainScanner, barcodedUnit.getBarcode());
 			
 		}
 	}
