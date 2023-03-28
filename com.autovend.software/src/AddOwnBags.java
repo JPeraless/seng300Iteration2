@@ -16,7 +16,7 @@ import com.autovend.devices.observers.ElectronicScaleObserver;
 
 public class AddOwnBags implements ElectronicScaleObserver {
 	//TODO: I THINK THIS FIELD CAN BE CUT, SHOULD REALLY ONLY BE USED AS PARAMETER I THINK
-	boolean attendantApprovedBags;
+	private boolean attendantApprovedBags;
 	
 	// TODO: ITEMS CAN'T HAVE A NULL BARCODE, SO JUST MADE A CONSTANT BARCODE HERE FOR BAGS
 	//		 THAT THE WHOLE SYSTEM CAN ACCESS
@@ -36,6 +36,9 @@ public class AddOwnBags implements ElectronicScaleObserver {
 			throw new DisabledException();
 		}
 		
+		if (number_bags == 0) {
+			return;
+		}
 		
 		// get the attendant approval flag
 		this.attendantApprovedBags = attendantApproved;
@@ -52,6 +55,10 @@ public class AddOwnBags implements ElectronicScaleObserver {
 			bags[i] = getBag();
 			bagWeight += bags[i].getWeight();
 			station.baggingArea.add(bags[i]);
+			
+			// calling this is literally the only way to get an overload exception from
+			// hardware unless we implement our own function. I think this works tho
+			station.baggingArea.getCurrentWeight();
 		}
 		
 		
@@ -105,7 +112,7 @@ public class AddOwnBags implements ElectronicScaleObserver {
 	 * 
 	 */
 	public BarcodedUnit getBag() {
-		double weight = new Random().nextDouble();
+		double weight = new Random().nextDouble(0.1, 1);
 		return new BarcodedUnit(AddOwnBags.BAG_BARCODE, weight);
 	}
 	
@@ -144,12 +151,8 @@ public class AddOwnBags implements ElectronicScaleObserver {
 
 	@Override
 	public void reactToWeightChangedEvent(ElectronicScale scale, double weightInGrams) {
-		try {
-			System.out.println(String.format("New bag added\n Bag weight: %.2f\nCurrent total weight: %.2f\n", weightInGrams, scale.getCurrentWeight()));
-		}
-		catch(OverloadException e) {
-			System.out.println(String.format("OVERLOAD ERROR REFER TO ERROR CODE BELOW:\n%s", e.getStackTrace().toString()));
-		}
+		System.out.println(String.format("New bag added\n Bag weight: %.2f\nCurrent total weight: %.2f\n", weightInGrams, scale.getCurrentWeight()));
+
 	}
 
 	@Override

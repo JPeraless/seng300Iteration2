@@ -15,6 +15,9 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.autovend.Barcode;
+import com.autovend.BarcodedUnit;
+import com.autovend.Numeral;
 import com.autovend.devices.DisabledException;
 import com.autovend.devices.OverloadException;
 import com.autovend.devices.SelfCheckoutStation;
@@ -22,25 +25,10 @@ import com.autovend.devices.SelfCheckoutStation;
 
 public class AddOwnBagsTest {
 	AddOwnBags useCase;
-	private SelfCheckoutStation station;
+	SelfCheckoutStation station;
+	final int weightLimit = 100; 
 	
-	
-	
-	
-	
-	
-	
-	
-/*	
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-		
-	}
 
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-	}
-*/
 	
 	
 	@Before
@@ -65,6 +53,8 @@ public class AddOwnBagsTest {
 
 	@After
 	public void tearDown() throws Exception {
+		this.station = null;
+		this.useCase = null;
 	}
 
 	
@@ -148,4 +138,61 @@ public class AddOwnBagsTest {
 		assertTrue(weightBefore - this.station.baggingArea.getCurrentWeight() <= 1);
 	}
 
+	
+	/**
+	 *  Test to make sure that an OverloadExcepiton is thrown if an attendant
+	 *  approves an amount of bags that is heavier than the scale alloows
+	 * @throws Exception 
+	 * 
+	 */
+	
+	@Test
+	public void tooManyBags() throws Exception {
+		// fill scale with heavy item
+		BarcodedUnit reallyHeavyItem = new BarcodedUnit(new Barcode(new Numeral[] {Numeral.one}), this.weightLimit);
+		this.station.baggingArea.add(reallyHeavyItem);
+		
+		// make sure that trying to add many bags will cause an overload exception
+		assertThrows(OverloadException.class, () -> this.useCase.addOwnBags(this.station, 100, true));
+		
+		tearDown();
+		setUp();
+		
+		// make sure that trying to add even one bag will cause an overload exception
+		reallyHeavyItem = new BarcodedUnit(new Barcode(new Numeral[] {Numeral.one}), this.weightLimit);
+		this.station.baggingArea.add(reallyHeavyItem);
+		assertThrows(OverloadException.class, () -> this.useCase.addOwnBags(this.station, 1, true));
+		
+	}
+	
+	/**
+	 * 	Edge case for when a customer may accidentally choose to add personal
+	 *  bags when they have none. Let's make sure that the user can enter 0
+	 *  with no erros happening. Weight should be the same before and after adding bags
+	 * @throws Exception 
+	 * 
+	 */
+	
+	@Test
+	public void addNoBags() throws Exception {
+		
+		// make sure that if attendant approval is true, this works
+		double weightBefore = this.station.baggingArea.getCurrentWeight();
+		this.useCase.addOwnBags(station, 0, true);
+		assertEquals(weightBefore, this.station.baggingArea.getCurrentWeight(), 0.00001);
+		
+		tearDown();
+		setUp();
+		
+		// make sure that if attendant doesn't approve, the same thing happens
+		
+		// TODO: my thought here is that the attendant doesn't have to worry
+		//	about no bags being added, so the check can be skipped
+		//	let me know what you think to whoever reads this
+		weightBefore = this.station.baggingArea.getCurrentWeight();
+		this.useCase.addOwnBags(station, 0, false);
+		assertEquals(weightBefore, this.station.baggingArea.getCurrentWeight(), 0.00001);
+		
+	}
+	
 }
