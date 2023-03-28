@@ -14,7 +14,7 @@ purchase.
  */
 
 
-public class AddItemByScanning extends System implements BarcodeScannerObserver{
+public class AddItemByScanning extends VendingSystem implements BarcodeScannerObserver{
 
 	private BarcodedProduct barcodedProduct;
 
