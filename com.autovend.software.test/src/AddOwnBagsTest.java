@@ -23,30 +23,14 @@ import com.autovend.devices.OverloadException;
 import com.autovend.devices.SelfCheckoutStation;
 
 
-public class AddOwnBagsTest {
-	AddOwnBags useCase;
-	SelfCheckoutStation station;
-	final int weightLimit = 100; 
+public class AddOwnBagsTest extends BaseTestCase {
+	private AddOwnBags useCase;
 	
 
-	
-	
+	// INITIALIZE STATION IS EXTENDED FROM BaseTestCase.java
 	@Before
 	public void setUp() throws Exception {
-		Currency curr = Currency.getInstance(Locale.CANADA);
-		
-		int[] billDenoms = {5,10,20,50,100};
-		
-		double[] coinDenomFloats = {0.01f, 0.5f, 0.10f, 0.25f, 1f, 2f};
-		BigDecimal[] coinDenoms = new BigDecimal[coinDenomFloats.length];
-		for (int i = 0; i < coinDenomFloats.length; ++i) {
-			coinDenoms[i] = BigDecimal.valueOf(coinDenomFloats[i]);
-		}
-		
-		int scaleMax = 100;
-		int scaleSensitivity = 1;
-		
-		this.station = new SelfCheckoutStation(curr, billDenoms, coinDenoms, scaleMax, scaleSensitivity);
+		this.initializeStation();
 		this.useCase = new AddOwnBags();
 		
 	}
@@ -57,7 +41,6 @@ public class AddOwnBagsTest {
 		this.useCase = null;
 	}
 
-	
 	
 	
 	/**
