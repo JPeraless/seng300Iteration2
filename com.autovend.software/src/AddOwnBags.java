@@ -151,7 +151,7 @@ public class AddOwnBags implements ElectronicScaleObserver {
 
 	@Override
 	public void reactToWeightChangedEvent(ElectronicScale scale, double weightInGrams) {
-		System.out.println(String.format("New bag added\n Bag weight: %.2f\nCurrent total weight: %.2f\n", weightInGrams, scale.getCurrentWeight()));
+		System.out.println(String.format("New bag added\n Bag weight: %.2f\nCurrent total weight: %.2f\n", weightInGrams));
 
 	}
 
