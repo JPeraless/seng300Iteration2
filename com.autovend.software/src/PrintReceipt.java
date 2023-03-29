@@ -33,6 +33,9 @@ public class PrintReceipt implements ReceiptPrinterObserver {
 	private SelfCheckoutStation station;
 	private String currentMessage;
 	private CustomerIO CO;
+//	private String currentBillPrinted;
+	private AttendentStub attendent;
+	private boolean added = false;
 
 //	
 	public PrintReceipt(SelfCheckoutStation stn) {
@@ -42,8 +45,16 @@ public class PrintReceipt implements ReceiptPrinterObserver {
 	public void registerCustomerIO(CustomerIO anotherCO) {
 		CO = anotherCO;
 	}
-
-	public void print(SelfCheckoutStation stn, List<BarcodedProduct> billList) throws EmptyException{
+	
+	public void registerAttendent(AttendentStub att) {
+		attendent = att;
+	}
+	
+	public ReceiptPrinter getPrinter() {
+		return station.printer;
+	}
+	
+	public void print(List<BarcodedProduct> billList) throws EmptyException, OverloadException{
 
 		// Tracks the total cost of the customers purchase
 		BigDecimal total = new BigDecimal(0);
@@ -67,6 +78,7 @@ public class PrintReceipt implements ReceiptPrinterObserver {
 		char[] receipt = receiptOutput.toString().toCharArray();
 		for (char c : receipt) {
 			try{
+//				currentBillPrinted += c;
 				station.printer.print(c);
 			} catch (OverloadException oe){
 				for(PrintReceiptObserver observer : observers) {
@@ -77,22 +89,35 @@ public class PrintReceipt implements ReceiptPrinterObserver {
 //					for(PrintReceiptObserver observer : observers) {
 //						observer.requiresMaintance(station, e.getMessage());
 //					}
+					station.printer.cutPaper(); // Cut the paper
+
 					currentMessage = e.getMessage();
 					reactToOutOfPaperEvent(station.printer);
+//					if (added) {
+//						station.printer.print(c);
+//					}
+					break;
 				} else {
 //					for(PrintReceiptObserver observer : observers) {
 //						observer.requiresMaintance(station, e.getMessage());
 //					}
+					station.printer.cutPaper(); // Cut the paper
+
 					currentMessage = e.getMessage();
 					reactToOutOfInkEvent(station.printer);
+//					if (added) {
+//						station.printer.print(c);
+//					}
+					break;
 
 				}
 
 			}
 		}
-		
-
 		station.printer.cutPaper(); // Cut the paper
+		for (PrintReceiptObserver observer : observers) {
+			observer.sessionComplete(station);
+		}
 	}
 
 
@@ -114,6 +139,7 @@ public class PrintReceipt implements ReceiptPrinterObserver {
 			observer.requiresMaintance(station, currentMessage);
 		}
 		CO.errorCall(currentMessage);
+		added = attendent.addPaperToPrinter();
 	}
 
 
@@ -123,6 +149,8 @@ public class PrintReceipt implements ReceiptPrinterObserver {
 			observer.requiresMaintance(station, currentMessage);
 		}	
 		CO.errorCall(currentMessage);
+		added = attendent.addInkToPrinter();
+	
 	}
 
 	@Override

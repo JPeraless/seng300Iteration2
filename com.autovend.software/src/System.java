@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.autovend.devices.EmptyException;
+import com.autovend.devices.OverloadException;
 import com.autovend.devices.SelfCheckoutStation;
 import com.autovend.products.BarcodedProduct;
 
@@ -16,13 +17,23 @@ public class System {
 	private boolean printing;
 	
 	private PrintReceipt receiptController;
+	private CustomerIO customerio;
+	private AttendentStub attendent;
 
 	public System(SelfCheckoutStation station) {
 		this.station = station;
 		this.station.handheldScanner.disable();
 		this.station.mainScanner.disable();
 		this.station.billInput.disable();
+		
+		
+		customerio = new CustomerIO();
+		attendent = new AttendentStub(receiptController);
+		
 		receiptController = new PrintReceipt(station);
+		receiptController.registerCustomerIO(customerio);
+		receiptController.registerAttendent(attendent);
+		
 		station.printer.register(receiptController);
 	}
 
@@ -50,8 +61,9 @@ public class System {
 	/**
 	 * Prints the receipt and notifies attendant of problems
 	 * @throws EmptyException 
+	 * @throws OverloadException 
 	 */
-	public void startPrinting() throws EmptyException{
+	public void startPrinting() throws EmptyException, OverloadException{
 		if(printing) {
 //		{
 //			try {
@@ -62,7 +74,7 @@ public class System {
 //			}
 //		}
 			
-		receiptController.print(station, billList);
+		receiptController.print(billList);
 		}
 	}
 	
