@@ -14,12 +14,16 @@ public class System {
 	private boolean paymentProcess = false;
 
 	private boolean printing;
+	
+	private PrintReceipt receiptController;
 
 	public System(SelfCheckoutStation station) {
 		this.station = station;
 		this.station.handheldScanner.disable();
 		this.station.mainScanner.disable();
 		this.station.billInput.disable();
+		receiptController = new PrintReceipt(station);
+		station.printer.register(receiptController);
 	}
 
 
@@ -45,14 +49,20 @@ public class System {
 
 	/**
 	 * Prints the receipt and notifies attendant of problems
+	 * @throws EmptyException 
 	 */
-	public void startPrinting(){
-		if(printing){
-			try {
-				PrintReceipt.print(station, billList);
-			} catch (EmptyException e) {
-
-			}
+	public void startPrinting() throws EmptyException{
+		if(printing) {
+//		{
+//			try {
+////				PrintReceipt.print(station, billList);
+//				
+//			} catch (EmptyException e) {
+//
+//			}
+//		}
+			
+		receiptController.print(station, billList);
 		}
 	}
 	

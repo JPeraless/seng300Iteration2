@@ -1,4 +1,5 @@
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.autovend.devices.AbstractDevice;
@@ -27,7 +28,22 @@ public class PrintReceipt implements ReceiptPrinterObserver {
 	 * @return A string representing the receipt
 	 * @throws EmptyException Receipt printer contains no ink
 	 */
-	public static void print(SelfCheckoutStation station, List<BarcodedProduct> billList) throws EmptyException{
+	
+	private ArrayList<PrintReceiptObserver> observers = new ArrayList<>();
+	private SelfCheckoutStation station;
+	private String currentMessage;
+	private CustomerIO CO;
+
+//	
+	public PrintReceipt(SelfCheckoutStation stn) {
+		station = stn;
+	}
+	
+	public void registerCustomerIO(CustomerIO anotherCO) {
+		CO = anotherCO;
+	}
+
+	public void print(SelfCheckoutStation stn, List<BarcodedProduct> billList) throws EmptyException{
 
 		// Tracks the total cost of the customers purchase
 		BigDecimal total = new BigDecimal(0);
@@ -53,11 +69,28 @@ public class PrintReceipt implements ReceiptPrinterObserver {
 			try{
 				station.printer.print(c);
 			} catch (OverloadException oe){
-				try {
-					station.printer.print('\n');
-				} catch (OverloadException ignored) {}
+				for(PrintReceiptObserver observer : observers) {
+					observer.requiresMaintance(station, oe.getMessage());
+				}
+			} catch (EmptyException e) {
+				if (e.getMessage().contains("There is no paper in the printer.")) {
+//					for(PrintReceiptObserver observer : observers) {
+//						observer.requiresMaintance(station, e.getMessage());
+//					}
+					currentMessage = e.getMessage();
+					reactToOutOfPaperEvent(station.printer);
+				} else {
+//					for(PrintReceiptObserver observer : observers) {
+//						observer.requiresMaintance(station, e.getMessage());
+//					}
+					currentMessage = e.getMessage();
+					reactToOutOfInkEvent(station.printer);
+
+				}
+
 			}
 		}
+		
 
 		station.printer.cutPaper(); // Cut the paper
 	}
@@ -77,14 +110,19 @@ public class PrintReceipt implements ReceiptPrinterObserver {
 
 	@Override
 	public void reactToOutOfPaperEvent(ReceiptPrinter printer) {
-		// TODO Auto-generated method stub
-		
+		for (PrintReceiptObserver observer : observers) {
+			observer.requiresMaintance(station, currentMessage);
+		}
+		CO.errorCall(currentMessage);
 	}
+
 
 	@Override
 	public void reactToOutOfInkEvent(ReceiptPrinter printer) {
-		// TODO Auto-generated method stub
-		
+		for (PrintReceiptObserver observer : observers) {
+			observer.requiresMaintance(station, currentMessage);
+		}	
+		CO.errorCall(currentMessage);
 	}
 
 	@Override
