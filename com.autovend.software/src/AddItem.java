@@ -101,17 +101,17 @@ public class AddItem implements BarcodeScannerObserver{
 
 	
 	public void AddItemByPLU (SelfCheckoutStation station) throws Exception {
-		  PLUCodedUnit copyOfUnit = (PLUCodedUnit) this.unit;
-		  PLUCodedProduct pluProduct = getProductFromPLUCode(copyOfUnit.getPLUCode());
+		  PriceLookUpCodedUnit copyOfUnit = (PriceLookUpCodedUnit) this.unit;
+		  PLUCodedProduct pluProduct = getProductFromPLU(copyOfUnit.getPLUCode());
 
-		
+		// *need alternative way to add PLU item, cant scan since no barcode* (cant implement the keyboard yet though)
         if (station.mainScanner.scan(copyOfUnit)) {
             // disable station
             addItemStationDisable();
 
             // get product/unit info
             double weightInGrams = copyOfUnit.getWeight();
-            BigDecimal pricePerKg = pluProduct.getPricePerKg();
+            BigDecimal pricePerKg = pluProduct.getPrice();
 
             // notify customer
             System.out.println("Please place your item in the bagging area");
@@ -127,9 +127,10 @@ public class AddItem implements BarcodeScannerObserver{
 
             // increment price total
             totalPrice.add(price);
-
+            
+            // *maybe need different event for adding PLU unit since no barcode*
             // react to barcode scanned event (adds PLUCodedUnit to BillList)
-            reactToBarcodeScannedEvent(station.mainScanner, copyOfUnit.getPLUCode());
+            // reactToBarcodeScannedEvent(station.mainScanner, copyOfUnit.getPLUCode());
         }
     }
 
