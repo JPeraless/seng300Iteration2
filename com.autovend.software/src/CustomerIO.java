@@ -1,6 +1,10 @@
 public class CustomerIO {
     private Boolean thanks = false; // Status for if the customer needs to be thanked
     private Boolean ready = false; // Status if ready for new customer session
+    
+//    private String name;
+//    private String password;
+    
 
     // Customer IO returns thank you message to screen ("Thank you for shopping with us today!") or
     // empty string if they shouldn't be thanked yet
@@ -34,5 +38,16 @@ public class CustomerIO {
     public String errorCall(String message) {
     	return message;
     }
+    
+    public boolean enterMembership(String number) {
+    	if (MemberDatabase.userExists(number)) {
+    		return true;
+    	} else {
+    		return false;
+    	}
+    }
+    
+     
+    
 
 }
