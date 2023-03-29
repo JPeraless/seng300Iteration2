@@ -66,16 +66,19 @@ import com.autovend.devices.SimulationException;
 
 public class WeightDiscrepancy {
 	
-	static SelfCheckoutStation station;
-	double expectedWeight;
-	//boolean customerNoBag;
-	boolean attendantApproved;
+	private static SelfCheckoutStation station;
+	private double expectedWeight;
+	private boolean customerNoBag;
+	private boolean attendantApproved;
 	
 	
-	public WeightDiscrepancy(boolean noBag, SelfCheckoutStation station) throws OverloadException {
+	public WeightDiscrepancy(SelfCheckoutStation station, boolean noBag, boolean attendantApproved) throws OverloadException {
 		
 		//this.customerNoBag = noBag;
+		
+		// CustomerIO and AttendantIO not implemented, 
 		this.attendantApproved = attendantApproved;
+		this.customerNoBag = noBag;
 		this.station = station;
 		this.expectedWeight = station.baggingArea.getCurrentWeight();
 		
@@ -86,6 +89,14 @@ public class WeightDiscrepancy {
 		
 	}
 	
+	
+	void setCustomerNoBag(boolean choice) {
+		this.customerNoBag = choice;
+	}
+	
+	void setAttendantApproval(boolean choice) {
+		this.attendantApproved = choice;
+	}
 
 	// return: true -> attendant is helping or approval was good, false -> weight change in response to customerIO
 	
@@ -93,7 +104,7 @@ public class WeightDiscrepancy {
 	 * TODO: 
 	 * 
 	 */
-	public void weightDiscrepancyOptions() throws OverloadException {
+	public void weightDiscrepancyOptions() throws OverloadException, SimulationException {
 		boolean discrepancyResolved = false;
 		
 		// case a: if the weight is back to expected weight 
@@ -111,6 +122,9 @@ public class WeightDiscrepancy {
 			station.handheldScanner.enable();
 			station.mainScanner.enable();
 			station.billInput.enable();
+		}
+		else {
+			throw new SimulationException("Attendant assistance required, please hold...\n");
 		}
 		
 	}
