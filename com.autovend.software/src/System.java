@@ -16,6 +16,9 @@ public class System {
 
 	private boolean printing;
 	
+	private boolean isMember = false;
+	private String memberNumber;
+	
 	private PrintReceipt receiptController;
 	private CustomerIO customerio;
 	private AttendentStub attendent;
@@ -35,6 +38,14 @@ public class System {
 		receiptController.registerAttendent(attendent);
 		
 		station.printer.register(receiptController);
+	}
+	
+	public void setMemberNumber(String number) {
+		memberNumber = number;
+	}
+	
+	public void memberStatus(boolean ism) {
+		isMember = ism;
 	}
 
 
@@ -64,19 +75,20 @@ public class System {
 	 * @throws OverloadException 
 	 */
 	public void startPrinting() throws EmptyException, OverloadException{
-		if(printing) {
-//		{
-//			try {
-////				PrintReceipt.print(station, billList);
-//				
-//			} catch (EmptyException e) {
-//
-//			}
-//		}
-			
+		if(printing) {			
 		receiptController.print(billList);
 		}
 	}
+	
+	public boolean takeMembership(String number) {
+		if (customerio.enterMembership(number)) {
+			memberNumber = number;
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 	
 	/**
 	 * Adds an item to the end of the current bill list

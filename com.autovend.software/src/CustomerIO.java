@@ -2,17 +2,21 @@ public class CustomerIO {
     private Boolean thanks = false; // Status for if the customer needs to be thanked
     private Boolean ready = false; // Status if ready for new customer session
     
+    private String message = "";
 //    private String name;
 //    private String password;
     
+    public String printToDisplay() {
+    	return message;
+    }
 
     // Customer IO returns thank you message to screen ("Thank you for shopping with us today!") or
     // empty string if they shouldn't be thanked yet
-    public String thankCustomer(){
+    public void thankCustomer(){
         if(thanks){
-            return "Thank you for shopping with us today!";
+        	message = "Thank you for shopping with us today!";
         }
-        return "";
+        printToDisplay();
     }
 
     // Sets if ready for new customer (at the start of new customer set to false, and once finished set to true)
@@ -35,8 +39,9 @@ public class CustomerIO {
         return thanks;
     }
     
-    public String errorCall(String message) {
-    	return message;
+    public void errorCall(String error) {
+    	message = error;
+        printToDisplay();
     }
     
     public boolean enterMembership(String number) {
@@ -47,6 +52,10 @@ public class CustomerIO {
     	}
     }
     
+     public void cancelMemberInput() {
+    	 message = "Cancelled Membership Number Input. Please scan item in your cart.";
+    	 printToDisplay();
+     }
      
     
 
