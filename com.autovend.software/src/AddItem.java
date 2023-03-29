@@ -96,6 +96,8 @@ public class AddItem implements BarcodeScannerObserver{
 			
 			//react to barcode scanned event (adds barcodedUnit to BillList)
 			reactToBarcodeScannedEvent(station.mainScanner, copyOfUnit.getBarcode());
+			
+			addItemStationEnable();
 		}
 	}
 
@@ -103,9 +105,14 @@ public class AddItem implements BarcodeScannerObserver{
 	public void AddItemByPLU (SelfCheckoutStation station) throws Exception {
 		  PriceLookUpCodedUnit copyOfUnit = (PriceLookUpCodedUnit) this.unit;
 		  PLUCodedProduct pluProduct = getProductFromPLU(copyOfUnit.getPLUCode());
+		  
+		  // no gui implementation but would have keyboard pop up for user here
+		  // prompt user to input PLU code
+		  System.out.println("Please enter the PLU code of the item you wish to add");
 
-		// *need alternative way to add PLU item, cant scan since no barcode* (cant implement the keyboard yet though)
-        if (station.mainScanner.scan(copyOfUnit)) {
+		// check if PLU code is in database (have to change from copyOfUnit.PLUCode() to the users raw
+		  // input then convert that to a PLU code)
+        if (ProductDatabases.PLU_PRODUCT_DATABASE.containsKey(copyOfUnit.getPLUCode())) {
             // disable station
             addItemStationDisable();
 
@@ -131,6 +138,8 @@ public class AddItem implements BarcodeScannerObserver{
             // *maybe need different event for adding PLU unit since no barcode*
             // react to barcode scanned event (adds PLUCodedUnit to BillList)
             // reactToBarcodeScannedEvent(station.mainScanner, copyOfUnit.getPLUCode());
+            
+            addItemStationEnable();
         }
     }
 
