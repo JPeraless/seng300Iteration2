@@ -1,46 +1,146 @@
-import java.util.List;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 
-import com.autovend.SellableUnit;
+import com.autovend.Barcode;
+import com.autovend.BarcodedUnit;
+import com.autovend.Numeral;
+import com.autovend.devices.DisabledException;
+import com.autovend.devices.OverloadException;
 import com.autovend.devices.SelfCheckoutStation;
-import com.autovend.products.BarcodedProduct;
+import com.autovend.devices.SimulationException;
+import com.autovend.external.ProductDatabases;
 
+/**
+ * Class that implements the "Purchase Bags" use case
+ * 
+ * 
+ * @author desmo
+ *
+ */
 public class PurchaseBagsController {
+// some public constants that define the properties of purchased bags, as well as the default bag dispenser capacity
+public static final int DEFAULT_NUMBER_OF_BAGS = 100;
+public static final double BAG_WEIGHT = 1f;
+public static final Barcode PURCHASEDBAGBARCODE = new Barcode(new Numeral[] {Numeral.six,Numeral.nine});
+public static final BigDecimal PURCHASED_BAG_PRICE = BigDecimal.valueOf(0.5);
+
+// user's desired number of bags
+
+private int desiredNumberOfBags;
+// system's self checkout station
+
+private SelfCheckoutStation station;
+ 
+// rolling count of current bags available in dispenser
+public int currentBagsAvailable;
+
+private SelfCheckoutSystemLogic system;
+
 	
-	private SelfCheckoutStation scs;
-	private CustomerIO customerIO;
-	
+
+
 	/**
-	 * Controls the purchasing of bags for a self checkout station and its current customer.
+	 * Constructor
 	 * 
-	 * @param scs: Self checkout station to add purchased bags to
-	 * @param customerIO: Simulation of IO with customer at self checkout station
+	 * @param station - station in use
+	 * @param numOfBags - customer's desired number of purchased bags
+	 * @throws OverloadException - in case of a baggiage area overload
 	 */
-	public PurchaseBagsController(SelfCheckoutStation scs, CustomerIO customerIO) {
-		this.scs = scs;
-		this.customerIO = customerIO;
+	public PurchaseBagsController(SelfCheckoutStation station, SelfCheckoutSystem system) throws OverloadException {
+		this.station = station;
+		this.system = system;
+		
+		// instantiate fields
+		this.station = station; 
+		this.desiredNumberOfBags = numOfBags;
+		this.currentBagsAvailable = DEFAULT_NUMBER_OF_BAGS;
+		
+		BarcodedUnit bag = new BarcodedUnit(PURCHASEDBAGBARCODE, BAG_WEIGHT);
+		// instantiate WeightDiscrepancy field
+		this.discrep = new WeightDiscrepancy(this.station, bag, true, true);
 	}
 	
 	/**
-	 * This method is called when CustomerIO has indicated that they would like to purchase bag(s)
+	 * Method that allows for the changing of WeightDiscrepency paramters in the absence
+	 * of AttendantIO and CustomerIO implementations.
 	 * 
-	 * @param bags: The barcoded product representation of the reusable bags
-	 * @param bag: The sellable unit representation of the reusable bags
+	 * This method will be obsolete in future iterations once IO has been developed,
+	 * until then this method will be useful for testing cases of different
+	 * weight discrepancy approvals
+	 * 
+	 * @param noBag - customer does not want to bag the item (bag)
+	 * @param attendantApproval - attendant does not approve the weight discrepancy that has been found
 	 */
-	public void purchaseBags(BarcodedProduct bags, SellableUnit bag) {
-		//Assume that this method is called when customerIO has indicated that they would like to purchase bag(s)
+	public void setDiscrepancyParameters(boolean noBag, boolean attendantApproval) {
+		this.discrep.setCustomerNoBag(noBag);
+		this.discrep.setAttendantApproval(attendantApproval);
 		
-		int numberOfBags = customerIO.getWantToPurchaseBags();
+	}
+	
+	/**
+	 * 	Method to fulfill "Purchase Bags" use case
+	 * 
+	 * @return - ArrayList of bags to add to bill. Calling code (System) can
+	 * iterate over bags, adding each as an item to bill. Bags are added to the bagging
+	 * area during this method call, so do not need to add bags again
+	 * @throws OverloadException  - If weight is overloaded in weight discrepancy
+	 * @throws SimulationException  - If attendand does not approve weight discrepancy
+	 */
+	public ArrayList<BarcodedUnit> purchaseBags() {
 		
-		//TODO: Add bags to the customer's bill
-		
-		//Signal to bag dispenser the number of bags to dispense
-		
-		for (int i=0; i < numberOfBags; i++) {
-			scs.baggingArea.add(bag); //Increase the expected weight of the bagging area by the number of bags purchased
+		if (this.station.baggingArea.isDisabled()) {
+			throw new DisabledException();
 		}
+		// instantiate an ArrayList of bags to be returned by method
+		ArrayList<BarcodedUnit> bags = new ArrayList<>();
 		
-		customerIO.addBagComplete();
-		
+		// dispense desired number of bags
+		for (int i = 0; i < this.desiredNumberOfBags; ++i) {
+			
+			// signal to bag dispenser number of bags to dispense
+			BarcodedUnit dispensedBag = dispenseBag();
+			
+			// adjust bagging area's expected weight to include weight of purchased bags
+			this.station.baggingArea.add(dispensedBag);
+			
+			// check for and handle weight discrepancy
+			if (dispensedBag.getWeight() != ProductDatabases.BARCODED_PRODUCT_DATABASE.get(dispensedBag.getBarcode()).getExpectedWeight()) {
+				this.discrep.checkDiscrepancy();
+			}
+			
+			// signals weight change TODO: Should this be done with an observer reaction?
+		}
+		// return arraylist of bags, calling code can then add these items to a bill
+		return bags;
 	}
+	
+	
+	
+	
+	/**
+	 * Stub for Bag Dispenser
+	 * This method will be obsolete when Bag Dispenser is implemented in hardware
+	 * but it is useful to simulate the rest of the use case implementation
+	 * as of this iteration
+	 * 
+	 * @return - If bags are still available in dispensers, return a new bage
+	 * 			otherwise, throw a simulation exception
+	 */
+	private BarcodedUnit dispenseBag() throws SimulationException {
+		// if bags are available, dispense a new bag
+		if (this.currentBagsAvailable > 0) {
+			BarcodedUnit bag = new BarcodedUnit(PURCHASEDBAGBARCODE, BAG_WEIGHT);
+			// decrement number of available bags
+			--this.currentBagsAvailable;
+			// dispense bag
+			return bag; 
+		}
+		// if no bags available, throw exception as per use case description
+		throw new SimulationException("Bag Dispenser is out of bags");
+	}
+	
+
+
+
 
 }
