@@ -1,4 +1,5 @@
 import java.math.BigDecimal;
+import java.util.ArrayList;
 
 import com.autovend.Barcode;
 import com.autovend.devices.AbstractDevice;
@@ -30,6 +31,7 @@ public class AddItem implements BarcodeScannerObserver{
 	//private BarcodedProduct barcodedProduct;
 	protected double totalWeight = 0;
 	protected BigDecimal totalPrice = BigDecimal.ZERO;
+	protected ArrayList<Product> products;
 	protected SellableUnit unit;
 	protected SelfCheckoutStation station;
 	

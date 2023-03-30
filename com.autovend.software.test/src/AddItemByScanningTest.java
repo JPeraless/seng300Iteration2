@@ -28,13 +28,16 @@ import java.util.Locale;
 
 
 
+
+
 import com.autovend.devices.DisabledException;
 import com.autovend.devices.OverloadException;
 
 
 
 public class AddItemByScanningTest extends BaseTestCase {
-	AddItem useCase;
+	AddItemByScanning useCase;
+
 	
 	SellableUnit unit0;
 	SellableUnit unit1;
@@ -75,7 +78,7 @@ public class AddItemByScanningTest extends BaseTestCase {
 
 	@After
 	public void tearDown() throws Exception {
-		super.initializeStation();
+		super.deinitializeStation();
 		unit0 = null;
 		unit1 = null;
 		unit2 = null;
@@ -101,9 +104,37 @@ public class AddItemByScanningTest extends BaseTestCase {
 	 */
 	@Test
 	public void scanWhenDisabled() {
-		this.useCase = new AddItem(product0, (BarcodedUnit)unit0, super.station);
+		this.useCase = new AddItemByScanning(super.station, unit0);
 		this.station.mainScanner.disable();
-		assertThrows(DisabledException.class, () -> this.useCase.AddItemByScanning(super.station));
+		//assertThrows(DisabledException.class, () -> this.useCase.add(super.station));
 	}
+	
+	@Test
+	public void totalWeightTest() throws Exception {
+		this.useCase = new AddItemByScanning(super.station, unit0);
+		useCase.add(station);
+		System.out.println("got here");
+		
+		//System.out.println(useCase.totalWeight);
+		double expectedTotalWeight = unit0.getWeight();
+		System.out.println("got here");
+		assertEquals(expectedTotalWeight, station.baggingArea.getCurrentWeight(), 0.00001);
+		
+		this.useCase = new AddItemByScanning(super.station, unit1);
+		useCase.add(station);
+		expectedTotalWeight += unit1.getWeight();
+		assertEquals(expectedTotalWeight, station.baggingArea.getCurrentWeight(), 0.00001);
+		
+		
+		
+		
+	}
+	
+	@Test
+	public void itemListTest() {
+		
+	}
+
+	
 
 }

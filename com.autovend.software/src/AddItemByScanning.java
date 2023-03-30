@@ -1,14 +1,17 @@
 import java.math.BigDecimal;
+import java.util.ArrayList;
 
 import com.autovend.BarcodedUnit;
 import com.autovend.SellableUnit;
 import com.autovend.devices.SelfCheckoutStation;
 import com.autovend.products.BarcodedProduct;
+import com.autovend.products.Product;
 
 public class AddItemByScanning extends AddItem {
 
 	public AddItemByScanning(SelfCheckoutStation station, SellableUnit currentUnit) {
 		super(station, currentUnit);
+		this.products = new ArrayList<BarcodedProduct>();
 	
 	}
 	
@@ -26,13 +29,15 @@ public class AddItemByScanning extends AddItem {
 			
 			//get product/unit info
 			double weightInGrams = copyOfUnit.getWeight();
-			BigDecimal price = barcodedProduct.getPrice();
+			
 			
 			//notify customer
 			System.out.println("Please place your item in the bagging area");
 			
 			//add item to the baggingArea ElectronicScale
 			station.baggingArea.add(copyOfUnit);
+			
+			products.add(barcodedProduct);
 			
 			//increment weight total
 			this.totalWeight += weightInGrams;
@@ -43,8 +48,7 @@ public class AddItemByScanning extends AddItem {
 			//	throw new SimulationException("User added or removed item in repsonse");
 			//}
 			
-			//increment price total
-			totalPrice.add(price);
+			
 			
 			//react to barcode scanned event (adds barcodedUnit to BillList)
 			reactToBarcodeScannedEvent(station.mainScanner, copyOfUnit.getBarcode());
