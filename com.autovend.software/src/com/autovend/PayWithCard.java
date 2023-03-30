@@ -9,6 +9,7 @@ import java.util.Scanner;
 
 import com.autovend.Card.CardData;
 import com.autovend.devices.*;
+import com.autovend.devices.observers.CardReaderObserver;
 import com.autovend.external.CardIssuer;
 import com.autovend.software.CustomerIO;
 
@@ -61,11 +62,16 @@ public class PayWithCard extends Pay<PayWithCardObserver> {
         reduceAmountDue(paymentMade);
 
         if (getAmountPaid() >= getTotalAmountDue()) {
-            // for (CardReaderObserver observer : observers) {
-            // observer.reactToCompletePaymentEvent(this);
-            // }
+            completePayment();
         }
     }
+
+    private void completePayment() {
+        // Perform any necessary actions to finalize the payment.
+        // For example, update the payment status in a database.
+        // This method is not visible outside this class.
+     }
+    
     
     public void payWithCard(Card card, double amount, String type) throws IOException {
     	
