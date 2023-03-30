@@ -137,6 +137,10 @@ public class SelfCheckoutSystemLogic {
 		pb.addBagsToBill();
 	}
 	
+	public void addItemByPlu() throws OverloadException{
+		
+		
+	}
 	
 	
 	

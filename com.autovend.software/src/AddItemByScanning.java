@@ -3,6 +3,7 @@ import java.util.ArrayList;
 
 import com.autovend.BarcodedUnit;
 import com.autovend.SellableUnit;
+import com.autovend.devices.ElectronicScale;
 import com.autovend.devices.SelfCheckoutStation;
 import com.autovend.products.BarcodedProduct;
 import com.autovend.products.Product;
@@ -14,6 +15,7 @@ public class AddItemByScanning extends AddItem<BarcodedProduct> {
 		//this.products = new ArrayList<BarcodedProduct>();
 	
 	}
+	
 	
 	public BarcodedProduct add(SelfCheckoutStation station) throws Exception {
 		BarcodedUnit copyOfUnit = (BarcodedUnit) this.unit;
@@ -64,5 +66,21 @@ public class AddItemByScanning extends AddItem<BarcodedProduct> {
 	}
 
 	
-	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
+
+

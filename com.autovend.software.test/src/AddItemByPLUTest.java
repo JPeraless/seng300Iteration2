@@ -1,4 +1,4 @@
-import static org.junit.Assert.*;
+ import static org.junit.Assert.*;
 
 import java.math.BigDecimal;
 
@@ -98,6 +98,17 @@ public class AddItemByPLUTest extends BaseTestCase {
 		double weight2 = useCase.totalWeight + weight;
 		assertEquals(weight2,station.baggingArea.getCurrentWeight(), 0.00001);
 	}
+	
+	@Test
+	public void testTotalPrice() throws Exception {
+	    AddItemByPLU useCase1 = new AddItemByPLU(station, unit0);
+	    useCase1.add(station);
+	    BigDecimal expectedTotalPrice1 = BigDecimal.valueOf(1f);
+	    assertEquals(expectedTotalPrice1, useCase1.totalPrice);
+
+	}
+	
+	
 	
 	@Test (expected = SimulationException.class)
 	public void AddingSameItem() throws Exception {

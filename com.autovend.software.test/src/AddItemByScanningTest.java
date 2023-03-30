@@ -96,7 +96,7 @@ public class AddItemByScanningTest extends BaseTestCase {
 	}
 
 	/**
-	 * Functionn to ensure a DisabledException is thrown
+	 * Function to ensure a DisabledException is thrown
 	 * when trying to scan while system not ready
 	 * to accept scanned items
 	 * 

@@ -13,7 +13,7 @@ public class AddItemByPLU extends AddItem {
 		super(station, unit);
 	}
 	
-	
+	 
 	public void add(SelfCheckoutStation station) throws Exception {
 		  PriceLookUpCodedUnit copyOfUnit = (PriceLookUpCodedUnit) this.unit;
 		  PLUCodedProduct pluProduct = getProductFromPLU(copyOfUnit.getPLUCode());

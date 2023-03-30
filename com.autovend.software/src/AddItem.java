@@ -34,8 +34,11 @@ public class AddItem<T extends Product> implements BarcodeScannerObserver{
 	//protected ArrayList<T> products;
 	protected SellableUnit unit;
 	protected SelfCheckoutStation station;
+	protected SelfCheckoutSystemLogic system;
+ 
 	
-
+	
+	
 	/**
 	 * 
 	 * 
