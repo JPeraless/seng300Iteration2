@@ -20,13 +20,10 @@ public class AddItemByScanning extends AddItem<BarcodedProduct> {
 	public BarcodedProduct add(SelfCheckoutStation station) throws Exception {
 		BarcodedUnit copyOfUnit = (BarcodedUnit) this.unit;
 		BarcodedProduct barcodedProduct = getProductFromBarcode(copyOfUnit.getBarcode());
-		
-		
 
 		
 		if(station.mainScanner.scan(copyOfUnit)) {
-			//WeightDiscrepancy wd = new WeightDiscrepancy(station);
-			
+		
 			//disable station
 			addItemStationDisable();
 			
@@ -41,7 +38,7 @@ public class AddItemByScanning extends AddItem<BarcodedProduct> {
 			//add item to the baggingArea ElectronicScale
 			station.baggingArea.add(copyOfUnit);
 			
-			//this.products.add(barcodedProduct);
+		
 			
 			//increment weight total
 			this.totalWeight += weightInGrams;
@@ -67,6 +64,8 @@ public class AddItemByScanning extends AddItem<BarcodedProduct> {
 		
 	}
 
+
+	
 	
 
 

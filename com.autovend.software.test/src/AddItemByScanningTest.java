@@ -115,15 +115,13 @@ public class AddItemByScanningTest extends BaseTestCase {
 	 * when items are added concurrently
 	 * @throws Exception
 	 */
+	
+	
 	@Test
 	public void totalWeightTest() throws Exception {
 		this.useCase = new AddItemByScanning(super.station, unit0);
-		//this.station.mainScanner.enable();
 		
 		this.useCase.add(station);
-		
-		
-		
 		
 		double expectedTotalWeight = unit0.getWeight();
 		
@@ -134,17 +132,22 @@ public class AddItemByScanningTest extends BaseTestCase {
 		expectedTotalWeight += unit1.getWeight();
 		assertEquals(expectedTotalWeight, station.baggingArea.getCurrentWeight(), 0.00001);
 		
-		
-		
-		
 	}
+		
+		
+	
 	
 	
 	@Test
-	public void returnCorrectProductTest() {
-		
-		
+	public void returnCorrectProductTest() throws Exception {
+	    this.useCase = new AddItemByScanning(super.station, unit0);
+
+	    BarcodedProduct expectedProduct = product0;
+	    assertEquals(expectedProduct, this.useCase.add(station));
+
+	
 	}
+
 	
 	
 	@Test
