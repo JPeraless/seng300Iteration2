@@ -120,6 +120,8 @@ private WeightDiscrepancy discrep;
 	/**
 	 * Stub for Bag Dispenser
 	 * This method will be obsolete when Bag Dispenser is implemented in hardware
+	 * but it is useful to simulate the rest of the use case implementation
+	 * as of this iteration
 	 * 
 	 * @return - If bags are still available in dispensers, return a new bage
 	 * 			otherwise, throw a simulation exception
