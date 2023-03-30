@@ -24,15 +24,15 @@ public class SelfCheckoutSystemLogic {
 	private CustomerIO customerio;
 	private AttendentStub attendent;
 
-	public SelfCheckoutSystemLogic(SelfCheckoutStation station) {
+	public SelfCheckoutSystemLogic(SelfCheckoutStation station, CustomerIO cs, AttendentStub att) {
 		this.station = station;
 		this.station.handheldScanner.disable();
 		this.station.mainScanner.disable();
 		this.station.billInput.disable();
 		
 		
-		customerio = new CustomerIO();
-		attendent = new AttendentStub(receiptController);
+		customerio = cs;
+		attendent = att;
 		
 		receiptController = new PrintReceipt(station);
 		receiptController.registerCustomerIO(customerio);
@@ -75,10 +75,8 @@ public class SelfCheckoutSystemLogic {
 	 * @throws EmptyException 
 	 * @throws OverloadException 
 	 */
-	public void startPrinting() throws EmptyException, OverloadException{
-		if(printing) {			
-		receiptController.print(billList);
-		}
+	public boolean startPrinting() throws EmptyException, OverloadException{
+		return receiptController.print(billList);
 	}
 	
 	public boolean takeMembership(String number) {

@@ -36,7 +36,6 @@ public class PrintReceipt implements ReceiptPrinterObserver {
 	private CustomerIO CO;
 //	private String currentBillPrinted;
 	private AttendentStub attendent;
-	private boolean added = false;
 
 //	
 	public PrintReceipt(SelfCheckoutStation stn) {
@@ -59,7 +58,7 @@ public class PrintReceipt implements ReceiptPrinterObserver {
 		return station.printer;
 	}
 	
-	public void print(List<BarcodedProduct> billList) throws EmptyException, OverloadException{
+	public boolean print(List<BarcodedProduct> billList) throws EmptyException, OverloadException{
 
 		// Tracks the total cost of the customers purchase
 		BigDecimal total = new BigDecimal(0);
@@ -89,6 +88,7 @@ public class PrintReceipt implements ReceiptPrinterObserver {
 				for(PrintReceiptObserver observer : observers) {
 					observer.requiresMaintance(station, oe.getMessage());
 				}
+				return false;
 			} catch (EmptyException e) {
 				if (e.getMessage().contains("There is no paper in the printer.")) {
 //					for(PrintReceiptObserver observer : observers) {
@@ -101,7 +101,7 @@ public class PrintReceipt implements ReceiptPrinterObserver {
 //					if (added) {
 //						station.printer.print(c);
 //					}
-					break;
+					return false;
 				} else {
 //					for(PrintReceiptObserver observer : observers) {
 //						observer.requiresMaintance(station, e.getMessage());
@@ -113,8 +113,7 @@ public class PrintReceipt implements ReceiptPrinterObserver {
 //					if (added) {
 //						station.printer.print(c);
 //					}
-					break;
-
+					return false;
 				}
 
 			}
@@ -123,6 +122,7 @@ public class PrintReceipt implements ReceiptPrinterObserver {
 		for (PrintReceiptObserver observer : observers) {
 			observer.sessionComplete(station);
 		}
+		return true;
 	}
 
 
@@ -144,7 +144,7 @@ public class PrintReceipt implements ReceiptPrinterObserver {
 			observer.requiresMaintance(station, currentMessage);
 		}
 		CO.errorCall(currentMessage);
-		added = attendent.addPaperToPrinter();
+		attendent.requiresMaintainence();
 	}
 
 
@@ -154,7 +154,7 @@ public class PrintReceipt implements ReceiptPrinterObserver {
 			observer.requiresMaintance(station, currentMessage);
 		}	
 		CO.errorCall(currentMessage);
-		added = attendent.addInkToPrinter();
+		attendent.requiresMaintainence();
 	
 	}
 

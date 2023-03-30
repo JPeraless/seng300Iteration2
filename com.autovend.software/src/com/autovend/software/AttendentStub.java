@@ -16,6 +16,7 @@ public class AttendentStub {
 	PrintReceipt observer;
 	ReceiptPrinter printer;
 	List<BarcodedProduct> duplicateBill;
+	private boolean maintainenceRequired;
 	
 	public AttendentStub(PrintReceipt ob) {
 		PrintReceipt observer = ob;
@@ -52,6 +53,14 @@ public class AttendentStub {
 	
 	public void printDuplicateReceipt() throws EmptyException, OverloadException {
 		observer.print(duplicateBill);
+	}
+		
+	public void requiresMaintainence() {
+		maintainenceRequired = true;
+	}
+	
+	public boolean isMaintainenceRequired() {
+		return maintainenceRequired;
 	}
 
 }
