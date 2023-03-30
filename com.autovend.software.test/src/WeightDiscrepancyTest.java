@@ -50,12 +50,14 @@ public class WeightDiscrepancyTest extends BaseTestCase {
 		BarcodedProduct product1 = new BarcodedProduct(new Barcode(new Numeral[] {Numeral.one}), "Test item 1", BigDecimal.valueOf(100f), 10f);
 		//ProductDatabases.BARCODED_PRODUCT_DATABASE.put(new Barcode(new Numeral[] {Numeral.one}), product1);
 		
-		this.system.weightDiscrepency(5f);
+		this.system.weightDiscrepency(10f);
 		this.system.setCustomerNoBag(true);
 		this.system.setAttendantApproval(false);
 		this.station.baggingArea.add(unit1);
+		System.out.println(this.station.baggingArea.getCurrentWeight());
 		
 		assertEquals(true, this.system.getUnApprovedDiscrepancy());
+		assertEquals(true, this.system.getDiscrepancyActive());
 		
 		
 	}
