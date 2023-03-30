@@ -26,12 +26,12 @@ purchase.
 //TODO: change constructor implementation, instead use barcode to create unit/product from database and pass into functions 
 
 
-public class AddItem implements BarcodeScannerObserver{
+public class AddItem<T extends Product> implements BarcodeScannerObserver{
 	//private BarcodedUnit barcodedUnit;
 	//private BarcodedProduct barcodedProduct;
 	protected double totalWeight = 0;
 	protected BigDecimal totalPrice = BigDecimal.ZERO;
-	protected ArrayList<Product> products;
+	//protected ArrayList<T> products;
 	protected SellableUnit unit;
 	protected SelfCheckoutStation station;
 	

@@ -7,15 +7,15 @@ import com.autovend.devices.SelfCheckoutStation;
 import com.autovend.products.BarcodedProduct;
 import com.autovend.products.Product;
 
-public class AddItemByScanning extends AddItem {
+public class AddItemByScanning extends AddItem<BarcodedProduct> {
 
 	public AddItemByScanning(SelfCheckoutStation station, SellableUnit currentUnit) {
 		super(station, currentUnit);
-		this.products = new ArrayList<BarcodedProduct>();
+		//this.products = new ArrayList<BarcodedProduct>();
 	
 	}
 	
-	public void add(SelfCheckoutStation station) throws Exception {
+	public BarcodedProduct add(SelfCheckoutStation station) throws Exception {
 		BarcodedUnit copyOfUnit = (BarcodedUnit) this.unit;
 		BarcodedProduct barcodedProduct = getProductFromBarcode(copyOfUnit.getBarcode());
 
@@ -37,7 +37,7 @@ public class AddItemByScanning extends AddItem {
 			//add item to the baggingArea ElectronicScale
 			station.baggingArea.add(copyOfUnit);
 			
-			products.add(barcodedProduct);
+			//this.products.add(barcodedProduct);
 			
 			//increment weight total
 			this.totalWeight += weightInGrams;
@@ -54,7 +54,13 @@ public class AddItemByScanning extends AddItem {
 			reactToBarcodeScannedEvent(station.mainScanner, copyOfUnit.getBarcode());
 			
 			addItemStationEnable();
+			
+			return barcodedProduct;
 		}
+		
+		return null;
+		
+		
 	}
 
 	

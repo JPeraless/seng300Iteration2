@@ -130,10 +130,19 @@ public class AddItemByScanningTest extends BaseTestCase {
 		
 	}
 	
+	
 	@Test
-	public void itemListTest() {
+	public void returnCorrectProductTest() {
 		
 	}
+	
+	
+	@Test
+	public void reEnabledTest() {
+		
+	}
+	
+	
 
 	
 
