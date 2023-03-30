@@ -25,6 +25,7 @@ public class SelfCheckoutSystemLogic {
 	private boolean paymentProcess = false;
 	
 	private double baggingAreaWeight;
+	private double expectedBagginAreaWeight;
 
 	private boolean printing;
 	
@@ -144,15 +145,15 @@ public class SelfCheckoutSystemLogic {
 		// weithDiscrep = true
 		WeightDiscrepancyController wd = new WeightDiscrepancyController(this.station, this);
 		this.station.baggingArea.register(wd);
-		this.baggingAreaWeight = this.station.baggingArea.getCurrentWeight();
+		this.expectedBagginAreaWeight = expectedWeight;
 	}
 	
 	
-	public void checkDiscrepancy(double expectedWeight) {
+	public void checkDiscrepancy(double actualWeight) {
 	
 		
 		// if no discrepancy is found, program can continue
-		if (expectedWeight == this.baggingAreaWeight) {
+		if (actualWeight == this.expectedBagginAreaWeight) {
 			station.handheldScanner.enable();
 			station.mainScanner.enable();
 			station.billInput.enable();
