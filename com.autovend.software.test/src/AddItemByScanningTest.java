@@ -21,6 +21,7 @@ import com.autovend.products.BarcodedProduct;
 
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 
 import java.util.Currency;
@@ -115,18 +116,16 @@ public class AddItemByScanningTest extends BaseTestCase {
 	 * when items are added concurrently
 	 * @throws Exception
 	 */
-	
-	
 	@Test
 	public void totalWeightTest() throws Exception {
+		
+		//testing when 1 item has been added
 		this.useCase = new AddItemByScanning(super.station, unit0);
-		
 		this.useCase.add(station);
-		
 		double expectedTotalWeight = unit0.getWeight();
-		
 		assertEquals(expectedTotalWeight, station.baggingArea.getCurrentWeight(), 0.00001);
 		
+		// testing when 2 items have been added
 		this.useCase = new AddItemByScanning(super.station, unit1);
 		useCase.add(station);
 		expectedTotalWeight += unit1.getWeight();
@@ -137,7 +136,11 @@ public class AddItemByScanningTest extends BaseTestCase {
 		
 	
 	
-	
+	/**
+	 * function to check if product returned by add() is 
+	 * correct
+	 * @throws Exception
+	 */
 	@Test
 	public void returnCorrectProductTest() throws Exception {
 	    this.useCase = new AddItemByScanning(super.station, unit0);
@@ -149,10 +152,19 @@ public class AddItemByScanningTest extends BaseTestCase {
 	}
 
 	
-	
+	/**
+	 * function to see if station is successfully reenabled after item has been added
+	 * @throws Exception
+	 */
 	@Test
-	public void reEnabledTest() {
+	public void reEnabledTest() throws Exception {
+		this.useCase = new AddItemByScanning(super.station, unit1);
 		
+		this.useCase.add(station);
+		
+		assertFalse(this.useCase.station.mainScanner.isDisabled());
+		assertFalse(this.useCase.station.handheldScanner.isDisabled());
+		assertFalse(this.useCase.station.billInput.isDisabled());
 	}
 	
 	
