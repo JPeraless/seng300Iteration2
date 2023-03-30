@@ -23,7 +23,7 @@ public class SelfCheckoutSystemLogic {
 
 	private boolean printing;
 	
-	private boolean isMember = false;
+	private boolean isMember;
 	private String memberNumber;
 	
 	private PrintReceipt receiptController;
@@ -44,6 +44,9 @@ public class SelfCheckoutSystemLogic {
 		receiptController.registerAttendent(attendent);
 		
 		station.printer.register(receiptController);
+		
+		memberNumber = "0";
+		isMember = false;
 	}
 	
 	public SelfCheckoutSystemLogic(SelfCheckoutStation station) {
@@ -54,9 +57,6 @@ public class SelfCheckoutSystemLogic {
 		this.station.coinSlot.disable();
 	}
 	
-	public void setMemberNumber(String number) {
-		memberNumber = number;
-	}
 	
 	public void memberStatus(boolean ism) {
 		isMember = ism;

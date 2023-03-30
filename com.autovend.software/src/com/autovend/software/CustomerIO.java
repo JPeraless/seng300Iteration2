@@ -49,6 +49,7 @@ public class CustomerIO implements PrintReceiptObserver {
     }
     
     public boolean enterMembership(String number) {
+    	displayKeyboard();
     	if (MemberDatabase.userExists(number)) {
     		return true;
     	} else {
@@ -56,11 +57,12 @@ public class CustomerIO implements PrintReceiptObserver {
     	}
     }
     
-     public void cancelMemberInput() {
-    	 message = "Cancelled Membership Number Input. Please scan item in your cart.";
-    	 printToDisplay();
-     }
-     
+    public String displayKeyboard() {
+    	message = "Please type in your membership number";
+    	return printToDisplay();
+    }
+    
+         
      public String sessionComplete() {
     	 message = "Payment Session Complete";
     	 return printToDisplay();
