@@ -1,41 +1,56 @@
-import static org.junit.Assert.*;
-
 import java.math.BigDecimal;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
-import com.autovend.Barcode;
 import com.autovend.BarcodedUnit;
-import com.autovend.Numeral;
 import com.autovend.SellableUnit;
 import com.autovend.devices.SelfCheckoutStation;
-import com.autovend.external.*;
 import com.autovend.products.BarcodedProduct;
-
-
-
-
-import static org.junit.Assert.assertThrows;
-import static org.junit.Assert.assertEquals;
-
-
-import java.util.Currency;
-import java.util.Locale;
-
-
-
-import com.autovend.devices.DisabledException;
-import com.autovend.devices.OverloadException;
 
 public class AddItemByScanning extends AddItem {
 
 	public AddItemByScanning(SelfCheckoutStation station, SellableUnit currentUnit) {
 		super(station, currentUnit);
 	
+	}
+	
+	public void add(SelfCheckoutStation station) throws Exception {
+		BarcodedUnit copyOfUnit = (BarcodedUnit) this.unit;
+		BarcodedProduct barcodedProduct = getProductFromBarcode(copyOfUnit.getBarcode());
+
+		
+		if(station.mainScanner.scan(copyOfUnit)) {
+			//WeightDiscrepancy wd = new WeightDiscrepancy(station);
+			
+			//disable station
+			addItemStationDisable();
+			
+			
+			//get product/unit info
+			double weightInGrams = copyOfUnit.getWeight();
+			BigDecimal price = barcodedProduct.getPrice();
+			
+			//notify customer
+			System.out.println("Please place your item in the bagging area");
+			
+			//add item to the baggingArea ElectronicScale
+			station.baggingArea.add(copyOfUnit);
+			
+			//increment weight total
+			this.totalWeight += weightInGrams;
+			
+			//boolean discrepancyCheck = wd.weightDiscrepancyOptions();
+			
+			//if (!discrepancyCheck) {
+			//	throw new SimulationException("User added or removed item in repsonse");
+			//}
+			
+			//increment price total
+			totalPrice.add(price);
+			
+			//react to barcode scanned event (adds barcodedUnit to BillList)
+			reactToBarcodeScannedEvent(station.mainScanner, copyOfUnit.getBarcode());
+			
+			addItemStationEnable();
+		}
 	}
 
 	
