@@ -10,38 +10,30 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.autovend.Bill;
+import com.autovend.Coin;
 import com.autovend.software.PayWithCashController;
-import com.autovend.software.System;
-
-
-    /*
-     * Members for Iteration 1:
-     * Michelle Loi (30019557)
-     * James Hayward (30149513)
-     * Caleb Cavilla (30145972)
-     * Amandeep Kaur (30153923)
-     * Ethan Oke(30142180)
-     * Winjoy Tiop (30069663)
-     */
+import com.autovend.software.SelfCheckoutSystemLogic;
 
 
     //Test for the PayWithCash software
     public class PayWithCashTest {
         private PayWithCashController controller;
         private Currency currency;
-        private Bill bill;
+        private Bill bill_5;
+        private Bill bill_10;
         private SelfCheckoutStation station;
-        private System system;
+        private SelfCheckoutSystemLogic system;
         private BillDispenser dispenser;
+		private Coin coin_2;
+		private Coin coin_025;
+		private Coin coin_005;
 
         //Default setup: standard self checkout station and a 5$ bill
         @Before
-        public void setup() {
+        public void setup() throws SimulationException, OverloadException {
 
-            //Create a 5$ bill
-            currency = Currency.getInstance(Locale.CANADA);
-            bill = new Bill(5, currency);
-
+        	currency = Currency.getInstance(Locale.CANADA);
+        	
             //Create self checkout station
             int[] billDenominations = {5, 10 , 15, 20, 50, 100};
             BigDecimal fiveCent = new BigDecimal("0.05");
@@ -52,16 +44,34 @@ import com.autovend.software.System;
             BigDecimal[] coinDenominations = {fiveCent, tenCent, twentyFiveCent, loonie, toonie};
             station = new SelfCheckoutStation(currency, billDenominations, coinDenominations,10,1);
 
-            system = new System(station);
+            system = new SelfCheckoutSystemLogic(station);
 
             dispenser = new BillDispenser(50);
+            
+            //Create a 5$ bill
+            bill_5 = new Bill(5, currency);
+            bill_10 = new Bill(10, currency);
+            //Create a toonie 
+            coin_2 = new Coin(toonie, currency);
+            coin_025 = new Coin(twentyFiveCent, currency);
+            coin_005 = new Coin(fiveCent, currency);
+            
+            for(int x : station.billDispensers.keySet()) {
+				Bill bill = new Bill(x, Currency.getInstance("CAD"));
+				station.billDispensers.get(x).load(bill, bill, bill, bill, bill);
+			}
+            
+            for(BigDecimal x : station.coinDispensers.keySet()) {
+				Coin coin = new Coin(x, Currency.getInstance("CAD"));
+				station.coinDispensers.get(x).load(coin, coin, coin, coin, coin);
+			}
         }
 
         //Reset the self checkout station and bill to null
         @After
         public void teardown() {
             station = null;
-            bill = null;
+            bill_5 = null;
             controller = null;
         }
 
@@ -71,14 +81,16 @@ import com.autovend.software.System;
             new PayWithCashController(null,system);
         }
 
-        //Test system's payWithCash() function
+        //Test system's payWithCash() function with a standard whole number dollar amount, no cents involved
         @SuppressWarnings("deprecation")
         @Test
-        public void testSystemPayWithCash() throws DisabledException,OverloadException {
-            system.setAmountDue(10.00);
+        public void SystemCalculateChangeWholeNumber() throws DisabledException,OverloadException {
+        	system.setAmountDue(22);
             system.payWithCash();
-            station.billValidator.accept(bill);
-            double expected = 5.00;
+            station.billValidator.accept(bill_10);
+            station.billValidator.accept(bill_10);
+            station.billValidator.accept(bill_5);
+            double expected = -3;
             double actual = system.getAmountDue();
             assertEquals(expected,actual,0.05);
         }
@@ -86,12 +98,13 @@ import com.autovend.software.System;
         //Test that deliver change works correctly within system
         @SuppressWarnings("deprecation")
         @Test
-        public void testSystemDeliverChange() throws DisabledException,OverloadException {
-            system.setAmountDue(7.99);
+        public void testSystemCalculateChangeDecimalNoRounding() throws DisabledException,OverloadException {
+            system.setAmountDue(22);
             system.payWithCash();
-            station.billValidator.accept(bill);
-            station.billValidator.accept(bill);
-            double expected = -2.01;
+            station.billValidator.accept(bill_10);
+            station.billValidator.accept(bill_10);
+            station.billValidator.accept(bill_5);
+            double expected = 3;
             double actual = system.getAmountDue();
             assertEquals(expected,actual,0.05);
         }
@@ -100,10 +113,10 @@ import com.autovend.software.System;
         @SuppressWarnings("deprecation")
         @Test
         public void testSystemDispenseChange() throws DisabledException, OverloadException {
-            system.setAmountDue(7.99);
+            system.setAmountDue(7.94);
             system.payWithCash();
-            station.billValidator.accept(bill);
-            station.billValidator.accept(bill);
+            station.billValidator.accept(bill_5);
+            station.billValidator.accept(bill_5);
             double expected = 5.0;
             double actual = system.getChangeDispensed();
             assertEquals(expected,actual,0.05);
@@ -160,19 +173,19 @@ import com.autovend.software.System;
         @Test
         public void dummyReactToBillAddedEvent(){
             controller = new PayWithCashController(station,system);
-            controller.reactToBillAddedEvent(dispenser,bill);
+            controller.reactToBillAddedEvent(dispenser,bill_5);
         }
 
         @Test
         public void dummyReactToBillsLoadedEvent(){
             controller = new PayWithCashController(station,system);
-            controller.reactToBillsLoadedEvent(dispenser,bill);
+            controller.reactToBillsLoadedEvent(dispenser,bill_5);
         }
 
         @Test
         public void dummyReactToBillsUnloadedEvent(){
             controller = new PayWithCashController(station,system);
-            controller.reactToBillsUnloadedEvent(dispenser,bill);
+            controller.reactToBillsUnloadedEvent(dispenser,bill_5);
         }
 
     }
