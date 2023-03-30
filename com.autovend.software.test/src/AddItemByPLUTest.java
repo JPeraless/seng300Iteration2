@@ -104,6 +104,7 @@ public class AddItemByPLUTest extends BaseTestCase {
 	    AddItemByPLU useCase1 = new AddItemByPLU(station, unit0);
 	    useCase1.add(station);
 	    BigDecimal expectedTotalPrice1 = BigDecimal.valueOf(1f);
+	    System.out.print(product0.getPrice());
 	    assertEquals(expectedTotalPrice1, useCase1.totalPrice);
 
 	}

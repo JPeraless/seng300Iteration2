@@ -5,6 +5,7 @@ import com.autovend.external.ProductDatabases;
 import com.autovend.products.PLUCodedProduct;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 
 
 public class AddItemByPLU extends AddItem {
@@ -31,21 +32,33 @@ public class AddItemByPLU extends AddItem {
           // get product/unit info
           double weightInGrams = copyOfUnit.getWeight();
           BigDecimal pricePerKg = pluProduct.getPrice();
+          
+          
 
           // notify customer
           System.out.println("Please place your item in the bagging area");
 
           // add item to the baggingArea ElectronicScale
           station.baggingArea.add(copyOfUnit);
+          
+          
 
           // increment weight total
           this.totalWeight += weightInGrams;
+          
+         
+          // mathcontext object to specify decimal precision
+          MathContext mc = new MathContext(2);
 
           // calculate price based on weight
-          BigDecimal price = pricePerKg.multiply(BigDecimal.valueOf(weightInGrams / 1000));
+          BigDecimal price = pricePerKg.multiply(BigDecimal.valueOf(weightInGrams), mc);
+          
+         
 
           // increment price total
-          totalPrice.add(price);
+          this.totalPrice = price.plus();
+          
+          //System.out.println(this.totalPrice);
           
           // *maybe need different event for adding PLU unit since no barcode*
           // react to barcode scanned event (adds PLUCodedUnit to BillList)
