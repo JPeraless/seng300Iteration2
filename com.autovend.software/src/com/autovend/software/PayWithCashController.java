@@ -13,6 +13,7 @@ import static java.lang.System.out;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Currency;
 import java.util.List;
@@ -171,7 +172,7 @@ public class PayWithCashController extends SelfCheckoutSystemLogic implements Bi
 		
 	}
 
-	@Override
+	@Override 
 	public void reactToInvalidCoinDetectedEvent(CoinValidator validator) {
 		// TODO Auto-generated method stub
 		
@@ -217,12 +218,24 @@ public class PayWithCashController extends SelfCheckoutSystemLogic implements Bi
 			amountDue = amountDue % i;
 			}
 		}
+		
+		System.out.println("amount Due Inbetween: " + amountDue);
 		// Split the remaining amount due into the least amount of coins possible
-		List<BigDecimal> coinKeyList = new ArrayList<BigDecimal>(station.coinDispensers.keySet());
+		
+		BigDecimal fiveCent = new BigDecimal("0.05");
+        BigDecimal tenCent = new BigDecimal("0.10");
+        BigDecimal twentyFiveCent = new BigDecimal("0.25");
+        BigDecimal loonie = new BigDecimal("1");
+        BigDecimal toonie = new BigDecimal("2");
+		List<BigDecimal> coinKeyList = new ArrayList<BigDecimal>(Arrays.asList(fiveCent, tenCent, twentyFiveCent, loonie, toonie));
 		Collections.reverse(coinKeyList);
 		for (BigDecimal i : coinKeyList) {
-			int numberOfBills = (int) (amountDue / i.doubleValue());
-			for (int j = 0; j < numberOfBills; j++) {
+			System.out.println("I = " + i);
+			System.out.println("amount Due before divison: " + amountDue);
+			System.out.println("Divisor: " + i.doubleValue());
+			int numberOfCoins = (int) (amountDue / i.doubleValue());
+			System.out.println("number of coins: "+ numberOfCoins);
+			for (int j = 0; j < numberOfCoins; j++) {
 					try {
 						station.coinDispensers.get(i).emit();
 					} catch (DisabledException | EmptyException | OverloadException e) {
