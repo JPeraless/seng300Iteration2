@@ -8,7 +8,7 @@ import com.autovend.devices.SelfCheckoutStation;
 import com.autovend.devices.observers.ReceiptPrinterObserver;
 import com.autovend.products.BarcodedProduct;
 
-public class AttendentStub {
+public class AttendentStub implements PrintReceiptObserver {
 	
 //	public void fillPrinterWithPaper() {
 //		
@@ -61,6 +61,18 @@ public class AttendentStub {
 	
 	public boolean isMaintainenceRequired() {
 		return maintainenceRequired;
+	}
+
+	@Override
+	public void sessionComplete(SelfCheckoutStation station) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void requiresMaintainence(SelfCheckoutStation station, String message) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

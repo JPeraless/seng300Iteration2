@@ -48,10 +48,12 @@ public class PrintReceipt implements ReceiptPrinterObserver {
 	
 	public void registerCustomerIO(CustomerIO anotherCO) {
 		CO = anotherCO;
+		observers.add(anotherCO);
 	}
 	
 	public void registerAttendent(AttendentStub att) {
 		attendent = att;
+		observers.add(att);
 	}
 	
 	public ReceiptPrinter getPrinter() {
@@ -65,6 +67,7 @@ public class PrintReceipt implements ReceiptPrinterObserver {
 
 		// Build the receipt to print
 		StringBuilder receiptOutput = new StringBuilder();
+		System.out.println(billList.getClass());
 		for (BarcodedProduct bp : billList) {
 			receiptOutput.append(bp.getDescription());
 			receiptOutput.append("      ");
@@ -86,7 +89,7 @@ public class PrintReceipt implements ReceiptPrinterObserver {
 				station.printer.print(c);
 			} catch (OverloadException oe){
 				for(PrintReceiptObserver observer : observers) {
-					observer.requiresMaintance(station, oe.getMessage());
+					observer.requiresMaintainence(station, oe.getMessage());
 				}
 				return false;
 			} catch (EmptyException e) {
@@ -141,7 +144,7 @@ public class PrintReceipt implements ReceiptPrinterObserver {
 	@Override
 	public void reactToOutOfPaperEvent(ReceiptPrinter printer) {
 		for (PrintReceiptObserver observer : observers) {
-			observer.requiresMaintance(station, currentMessage);
+			observer.requiresMaintainence(station, currentMessage);
 		}
 		CO.errorCall(currentMessage);
 		attendent.requiresMaintainence();
@@ -151,7 +154,7 @@ public class PrintReceipt implements ReceiptPrinterObserver {
 	@Override
 	public void reactToOutOfInkEvent(ReceiptPrinter printer) {
 		for (PrintReceiptObserver observer : observers) {
-			observer.requiresMaintance(station, currentMessage);
+			observer.requiresMaintainence(station, currentMessage);
 		}	
 		CO.errorCall(currentMessage);
 		attendent.requiresMaintainence();

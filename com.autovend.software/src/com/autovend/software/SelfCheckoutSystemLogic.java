@@ -95,7 +95,7 @@ public class SelfCheckoutSystemLogic {
 	 * @throws EmptyException 
 	 * @throws OverloadException 
 	 */
-	public boolean startPrinting() throws EmptyException, OverloadException{
+	public boolean startPrinting(List<BarcodedProduct> billList) throws EmptyException, OverloadException{
 		return receiptController.print(billList);
 	}
 	

@@ -1,5 +1,8 @@
 package com.autovend.software;
-public class CustomerIO {
+
+import com.autovend.devices.SelfCheckoutStation;
+
+public class CustomerIO implements PrintReceiptObserver {
     private Boolean thanks = false; // Status for if the customer needs to be thanked
     private Boolean ready = false; // Status if ready for new customer session
     
@@ -57,6 +60,24 @@ public class CustomerIO {
     	 message = "Cancelled Membership Number Input. Please scan item in your cart.";
     	 printToDisplay();
      }
+     
+     public String sessionComplete() {
+    	 message = "Payment Session Complete";
+    	 return printToDisplay();
+     }
+
+
+	@Override
+	public void requiresMaintainence(SelfCheckoutStation station, String message) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void sessionComplete(SelfCheckoutStation station) {
+		// TODO Auto-generated method stub
+		
+	}
      
     
 

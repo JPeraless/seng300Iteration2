@@ -126,7 +126,7 @@ public class PrintReceiptTest {
     public void testPrintingOutOfPaper() throws OverloadException, EmptyException{
         station_1.printer.addInk(MAX_INK); // Fill with a lot of ink so this can't be what goes empty
         station_1.printer.addPaper(1);
-        print(station_1, billList);
+        print(billList);
     }
 
     // Test that a new line is written if the line is too long and the remainder goes to the next line
