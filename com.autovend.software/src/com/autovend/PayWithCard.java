@@ -1,5 +1,9 @@
 package com.autovend;
 
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.Scanner;
+
 import com.autovend.devices.*;
 
 /**
@@ -11,6 +15,8 @@ public class PayWithCard extends Pay<PayWithCardObserver> {
         super(checkoutStation, controller);
     }
 
+    
+    CardReader reader = new CardReader();
     /**
      * Make a payment for paymentMade amount, and update toBePaid and amountPaid
      * accordingly
@@ -24,5 +30,22 @@ public class PayWithCard extends Pay<PayWithCardObserver> {
             // observer.reactToCompletePaymentEvent(this);
             // }
         }
+    }
+    
+    public void payWithCard(Card card, double amount) throws IOException {
+    	
+    	
+    	Scanner scan = new Scanner(System.in);
+    	BufferedImage image = new BufferedImage(null, null, false, null);
+    	String pin = scan.nextLine();
+    	
+    	reader.swipe(card, image);
+    	
+    	
+    	reader.insert(card, pin);
+    	
+    	System.out.println("PIN: " + pin);
+    	
+    	reader.tap(card);
     }
 }
