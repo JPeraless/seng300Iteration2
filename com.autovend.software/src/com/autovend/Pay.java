@@ -23,6 +23,10 @@ public abstract class Pay<T extends AbstractDeviceObserver> {
         this.checkoutStation = checkoutStation;
         this.controller = controller;
 
+        PayWithCardObserver cardObserver = new PayWithCardObserver(checkoutStation, this);
+        
+        checkoutStation.cardReader.register(cardObserver);
+        
         amountPaid = 0;
     }
 
