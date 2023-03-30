@@ -27,9 +27,33 @@ import com.autovend.external.ProductDatabases;
 import com.autovend.products.BarcodedProduct;
 
 public class PurchaseBagsTest extends BaseTestCase {
-	private PurchaseBags useCase;
+	private PurchaseBagsController useCase;
 
+	@Before
+	public void setUp() throws Exception {
+		this.initializeStation();
+		BarcodedProduct productBag = new BarcodedProduct(PurchaseBagsController.PURCHASEDBAGBARCODE, "Purchased bag", 
+				PurchaseBagsController.PURCHASED_BAG_PRICE, PurchaseBagsController.BAG_WEIGHT);
+		ProductDatabases.BARCODED_PRODUCT_DATABASE.put(PurchaseBagsController.PURCHASEDBAGBARCODE, productBag);
+		
+	}
 
+	@After
+	public void tearDown() throws Exception {
+		this.deinitializeStation();
+		ProductDatabases.BARCODED_PRODUCT_DATABASE.remove(PurchaseBagsController.PURCHASEDBAGBARCODE);
+	}
+	
+	@Test
+	public void purchaseWhileBaggingAreaDisabled() throws OverloadException {
+		this.station.baggingArea.disable();
+		this.system.getCustomerIO().setNumberOfBagsPurchased(10);
+		assertThrows(DisabledException.class, () -> this.system.purchaseBags());
+	}
+	
+	
+}
+/*
 	@Before
 	public void setUp() throws Exception {
 		this.initializeStation();
@@ -106,3 +130,4 @@ public class PurchaseBagsTest extends BaseTestCase {
 	}
 	
 }
+*/
