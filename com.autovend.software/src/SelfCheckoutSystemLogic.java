@@ -165,7 +165,7 @@ public class SelfCheckoutSystemLogic {
 		station.mainScanner.disable();
 		station.billInput.disable();
 		
-		this.weightDiscrepancyOptions(expectedWeight);
+		this.weightDiscrepancyOptions();
 	}
 	
 	
@@ -179,7 +179,7 @@ public class SelfCheckoutSystemLogic {
 	 * @throws OverloadException - if weight limit in bagging area is exceeded
 	 * @throws SimulationException - if attendant does not approve of discrepancy
 	 */
-	private void weightDiscrepancyOptions(double expectedWeight) {
+	private void weightDiscrepancyOptions() {
 
 		
 		// attendant is not approving of discrepancy, will have to go take a look manually
