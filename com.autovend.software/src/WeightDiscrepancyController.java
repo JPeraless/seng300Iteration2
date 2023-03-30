@@ -1,12 +1,14 @@
 import com.autovend.Barcode;
 import com.autovend.BarcodedUnit;
 import com.autovend.SellableUnit;
+import com.autovend.devices.AbstractDevice;
 import com.autovend.devices.ElectronicScale;
 import com.autovend.devices.OverloadException;
 import com.autovend.devices.SelfCheckoutStation;
 import com.autovend.devices.SimulationException;
+import com.autovend.devices.observers.AbstractDeviceObserver;
+import com.autovend.devices.observers.ElectronicScaleObserver;
 import com.autovend.external.ProductDatabases;
-import com.autovend.software.CustomerIO;
 
 
 
@@ -21,7 +23,7 @@ import com.autovend.software.CustomerIO;
  * @author desmo
  *
  */
-public class WeightDiscrepancy {
+public class WeightDiscrepancyController implements ElectronicScaleObserver {
 	
 	// declare fields
 	private SelfCheckoutStation station;
@@ -29,7 +31,7 @@ public class WeightDiscrepancy {
 	private CustomerIO customerStub;
 	private AttendentStub attendantStub;
 	private BarcodedUnit currentItem;
-	boolean thisIsABoolean;
+	private SelfCheckoutSystemLogic system;
 	
 	/**
 	 * Constructor
@@ -41,21 +43,20 @@ public class WeightDiscrepancy {
 	 * @param attendantApproved - boolean condition of attendant approval
 	 * @throws OverloadException - if current weight of scale is too high
 	 */
-	public WeightDiscrepancy(SelfCheckoutStation station, BarcodedUnit item, CustomerIO customerStub, AttendentStub attendantStub) throws OverloadException {
+	public WeightDiscrepancyController (SelfCheckoutStation station, SelfCheckoutSystemLogic system) {
 		
-		// CustomerIO and AttendantIO not implemented, 
-		this.attendantStub = attendantStub;
-		this.customerStub = customerStub;
+
+
+		
 		this.station = station;
-		this.expectedWeight = station.baggingArea.getCurrentWeight();
-		
+		this.system = system;
 		
 		//disable the selfcheckout system since a weight discrepancy is detected
 		station.handheldScanner.disable();
 		station.mainScanner.disable();
 		station.billInput.disable();
 		
-		this.currentItem = item;
+		
 	}
 	
 	
@@ -116,7 +117,7 @@ public class WeightDiscrepancy {
 		
 		// this case will have to react with the "Do Not Bag Item" use case in the future,
 		// so let's leave this here for now but just pretend it is resolved by returning true
-		if (this.customerStub.getDoNotBagItem()) {
+		if (this.customerStub != null) {
 			// THE DO NOT PLACE ITEM IN BAGGING AREA SHOULD BE IMPLEMENTED HERE
 			// FOR NOW WE WILL ASSUME THAT SUCH A CASE IS HANDLED AS EXPECTED
 			// WILL HAVE TO CHANGE FOR FUTURE ITERATION
@@ -142,6 +143,41 @@ public class WeightDiscrepancy {
 	// TODO make sure that each check is only carried out if signalled by system for options a, b, and c
 	public boolean baggingAreaDiscrepancy(ElectronicScale baggingArea) throws OverloadException {
 		return baggingArea.getCurrentWeight() == expectedWeight;
+	}
+
+
+	@Override
+	public void reactToEnabledEvent(AbstractDevice<? extends AbstractDeviceObserver> device) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void reactToDisabledEvent(AbstractDevice<? extends AbstractDeviceObserver> device) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void reactToWeightChangedEvent(ElectronicScale scale, double weightInGrams) {
+		this.system.checkDiscrepancy(weightInGrams);
+		
+	}
+
+
+	@Override
+	public void reactToOverloadEvent(ElectronicScale scale) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void reactToOutOfOverloadEvent(ElectronicScale scale) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	
