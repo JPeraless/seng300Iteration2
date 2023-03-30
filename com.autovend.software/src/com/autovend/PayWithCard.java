@@ -98,7 +98,7 @@ public class PayWithCard extends Pay<PayWithCardObserver> {
     	}
     	
     	if (reader.remove()) {
-    		customer.paymentSessionComplete();
+    		customer.sessionComplete();
     	}
     	
     	int res = totalBill.compareTo(new BigDecimal("0")); 
@@ -113,7 +113,7 @@ public class PayWithCard extends Pay<PayWithCardObserver> {
     	}
     	
     }
-    
+        
     public void setPin(String num) {
     	pin = num;
     }
