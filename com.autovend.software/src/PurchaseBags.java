@@ -1,8 +1,10 @@
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 import com.autovend.Barcode;
 import com.autovend.BarcodedUnit;
 import com.autovend.Numeral;
+import com.autovend.devices.DisabledException;
 import com.autovend.devices.OverloadException;
 import com.autovend.devices.SelfCheckoutStation;
 import com.autovend.devices.SimulationException;
@@ -20,6 +22,7 @@ public class PurchaseBags {
 public static final int DEFAULT_NUMBER_OF_BAGS = 100;
 public static final double BAG_WEIGHT = 1f;
 public static final Barcode PURCHASEDBAGBARCODE = new Barcode(new Numeral[] {Numeral.six,Numeral.nine});
+public static final BigDecimal PURCHASED_BAG_PRICE = BigDecimal.valueOf(0.5);
 
 // user's desired number of bags
 
@@ -29,7 +32,7 @@ private int desiredNumberOfBags;
 private SelfCheckoutStation station;
  
 // rolling count of current bags available in dispenser
-private int currentBagsAvailable;
+public int currentBagsAvailable;
 
 // when adding the weight of bags, USE CASE DESCRIPTION EXCEPTIONS SHOW THAT 
 // THE SYSTEM WILL HAVE TO CHECK A WEIGHT DISCREPENCY
@@ -83,7 +86,11 @@ private WeightDiscrepancy discrep;
 	 * @throws OverloadException  - If weight is overloaded in weight discrepancy
 	 * @throws SimulationException  - If attendand does not approve weight discrepancy
 	 */
-	public ArrayList<BarcodedUnit> purchaseBags() throws SimulationException, OverloadException {
+	public ArrayList<BarcodedUnit> purchaseBags() throws SimulationException, OverloadException, DisabledException {
+		
+		if (this.station.baggingArea.isDisabled()) {
+			throw new DisabledException();
+		}
 		// instantiate an ArrayList of bags to be returned by method
 		ArrayList<BarcodedUnit> bags = new ArrayList<>();
 		
@@ -130,7 +137,6 @@ private WeightDiscrepancy discrep;
 		throw new SimulationException("Bag Dispenser is out of bags");
 	}
 	
-
 
 
 
