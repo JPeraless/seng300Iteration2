@@ -11,9 +11,6 @@ import com.autovend.devices.observers.ElectronicScaleObserver;
 import com.autovend.external.ProductDatabases;
 
 
-
-
-
 /**
  * 
  * Class to implement the "Weight Discrepancy" use case
@@ -27,10 +24,6 @@ public class WeightDiscrepancyController implements ElectronicScaleObserver {
 	
 	// declare fields
 	private SelfCheckoutStation station;
-	private double expectedWeight;
-	private CustomerIO customerStub;
-	private AttendentStub attendantStub;
-	private BarcodedUnit currentItem;
 	private SelfCheckoutSystemLogic system;
 	
 	/**
@@ -38,15 +31,9 @@ public class WeightDiscrepancyController implements ElectronicScaleObserver {
 	 * 
 	 * 
 	 * @param station - SelfCheckoutStation used by system
-	 * @param item - item that has to be checked
-	 * @param noBag - choice of customer to bag or not bag item
-	 * @param attendantApproved - boolean condition of attendant approval
-	 * @throws OverloadException - if current weight of scale is too high
+	 * @param system - System that controls the selfcheckout station's logic
 	 */
 	public WeightDiscrepancyController (SelfCheckoutStation station, SelfCheckoutSystemLogic system) {
-		
-
-
 		
 		this.station = station;
 		this.system = system;
@@ -55,8 +42,6 @@ public class WeightDiscrepancyController implements ElectronicScaleObserver {
 		station.handheldScanner.disable();
 		station.mainScanner.disable();
 		station.billInput.disable();
-		
-		
 	}
 
 	@Override
@@ -75,7 +60,7 @@ public class WeightDiscrepancyController implements ElectronicScaleObserver {
 
 	@Override
 	public void reactToWeightChangedEvent(ElectronicScale scale, double weightInGrams) {
-		this.system.checkDiscrepancy(weightInGrams);
+		this.system.checkDiscrepancy(weightInGrams); //every time there is a weight change, check for a weight discrepancy
 		
 	}
 
@@ -92,16 +77,5 @@ public class WeightDiscrepancyController implements ElectronicScaleObserver {
 		// TODO Auto-generated method stub
 		
 	}
-	
-	
-
-	
-	
-		
-	
-	
-	
-	
-	
 	
 }
