@@ -1,3 +1,4 @@
+package com.autovend.software;
 import java.util.List;
 
 import com.autovend.devices.EmptyException;
@@ -16,7 +17,7 @@ public class AttendentStub {
 	ReceiptPrinter printer;
 	List<BarcodedProduct> duplicateBill;
 	
-	AttendentStub(PrintReceipt ob) {
+	public AttendentStub(PrintReceipt ob) {
 		PrintReceipt observer = ob;
 		printer = observer.getPrinter();
 	}

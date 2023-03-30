@@ -1,3 +1,4 @@
+package com.autovend.software;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +41,10 @@ public class PrintReceipt implements ReceiptPrinterObserver {
 //	
 	public PrintReceipt(SelfCheckoutStation stn) {
 		station = stn;
+	}
+	
+	public void registerObserver(PrintReceiptObserver observer) {
+		observers.add(observer);
 	}
 	
 	public void registerCustomerIO(CustomerIO anotherCO) {

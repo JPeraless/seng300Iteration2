@@ -1,3 +1,4 @@
+package com.autovend.software;
 import java.util.ArrayList;
 
 public class MemberDatabase {

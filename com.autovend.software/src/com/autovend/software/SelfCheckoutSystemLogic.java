@@ -1,3 +1,4 @@
+package com.autovend.software;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +8,7 @@ import com.autovend.devices.SelfCheckoutStation;
 import com.autovend.products.BarcodedProduct;
 
 
-public class System {
+public class SelfCheckoutSystemLogic {
 
 	private SelfCheckoutStation station;
 	private List<BarcodedProduct> billList = new ArrayList<BarcodedProduct>();
@@ -23,7 +24,7 @@ public class System {
 	private CustomerIO customerio;
 	private AttendentStub attendent;
 
-	public System(SelfCheckoutStation station) {
+	public SelfCheckoutSystemLogic(SelfCheckoutStation station) {
 		this.station = station;
 		this.station.handheldScanner.disable();
 		this.station.mainScanner.disable();

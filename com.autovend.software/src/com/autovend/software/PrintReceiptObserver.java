@@ -1,3 +1,4 @@
+package com.autovend.software;
 import com.autovend.devices.SelfCheckoutStation;
 
 public interface  PrintReceiptObserver {

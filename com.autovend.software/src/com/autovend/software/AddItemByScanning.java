@@ -1,3 +1,4 @@
+package com.autovend.software;
 import com.autovend.Barcode;
 import com.autovend.devices.AbstractDevice;
 import com.autovend.devices.BarcodeScanner;
@@ -14,7 +15,7 @@ purchase.
  */
 
 
-public class AddItemByScanning extends System implements BarcodeScannerObserver{
+public class AddItemByScanning extends SelfCheckoutSystemLogic implements BarcodeScannerObserver{
 
 	private BarcodedProduct barcodedProduct;
 

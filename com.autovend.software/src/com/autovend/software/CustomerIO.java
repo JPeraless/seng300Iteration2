@@ -1,3 +1,4 @@
+package com.autovend.software;
 public class CustomerIO {
     private Boolean thanks = false; // Status for if the customer needs to be thanked
     private Boolean ready = false; // Status if ready for new customer session
