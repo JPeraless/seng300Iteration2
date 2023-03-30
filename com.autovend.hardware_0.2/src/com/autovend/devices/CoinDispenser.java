@@ -181,7 +181,7 @@ public final class CoinDispenser extends AbstractDevice<CoinDispenserObserver>
 			for(CoinDispenserObserver observer1 : observers)
 				observer1.reactToCoinsEmptyEvent(this);
 
-		return true;
+		return true; 
 	}
 
 	/**

@@ -82,9 +82,12 @@ public class SelfCheckoutSystemLogic {
 		
 		public void changeAmountDue(double d, PayWithCashController controller) {
 			amountDue -= d;
-			if (amountDue <= 0) {
+			if (amountDue <= 0 && paymentProcess) {
 				paymentProcess = false; // exits the system out of payment
 				station.billInput.disable();
+				station.billValidator.disable();
+				station.coinSlot.disable();
+				station.coinValidator.disable();
 				controller.deliverChange(amountDue);
 				printing = true; // Set boolean to signal receipt printer to print
 			}

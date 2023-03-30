@@ -274,6 +274,8 @@ public class SelfCheckoutStation {
 		for(int i = 0; i < coinDenominations.length; i++)
 			coinDispensers.put(coinDenominations[i], new CoinDispenser(COIN_DISPENSER_CAPACITY));
 
+		
+		
 		// Hook up everything.
 		interconnect(billInput, billValidator);
 		interconnect(billValidator, billStorage);
