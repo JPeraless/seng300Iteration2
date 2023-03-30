@@ -1,12 +1,14 @@
+package com.autovend.software;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.autovend.devices.EmptyException;
+import com.autovend.devices.OverloadException;
 import com.autovend.devices.SelfCheckoutStation;
 import com.autovend.products.BarcodedProduct;
 
 
-public class System {
+public class SelfCheckoutSystemLogic {
 
 	private SelfCheckoutStation station;
 	private List<BarcodedProduct> billList = new ArrayList<BarcodedProduct>();
@@ -14,12 +16,37 @@ public class System {
 	private boolean paymentProcess = false;
 
 	private boolean printing;
+	
+	private boolean isMember = false;
+	private String memberNumber;
+	
+	private PrintReceipt receiptController;
+	private CustomerIO customerio;
+	private AttendentStub attendent;
 
-	public System(SelfCheckoutStation station) {
+	public SelfCheckoutSystemLogic(SelfCheckoutStation station, CustomerIO cs, AttendentStub att) {
 		this.station = station;
 		this.station.handheldScanner.disable();
 		this.station.mainScanner.disable();
 		this.station.billInput.disable();
+		
+		
+		customerio = cs;
+		attendent = att;
+		
+		receiptController = new PrintReceipt(station);
+		receiptController.registerCustomerIO(customerio);
+		receiptController.registerAttendent(attendent);
+		
+		station.printer.register(receiptController);
+	}
+	
+	public void setMemberNumber(String number) {
+		memberNumber = number;
+	}
+	
+	public void memberStatus(boolean ism) {
+		isMember = ism;
 	}
 
 
@@ -45,16 +72,22 @@ public class System {
 
 	/**
 	 * Prints the receipt and notifies attendant of problems
+	 * @throws EmptyException 
+	 * @throws OverloadException 
 	 */
-	public void startPrinting(){
-		if(printing){
-			try {
-				PrintReceipt.print(station, billList);
-			} catch (EmptyException e) {
-
-			}
+	public boolean startPrinting() throws EmptyException, OverloadException{
+		return receiptController.print(billList);
+	}
+	
+	public boolean takeMembership(String number) {
+		if (customerio.enterMembership(number)) {
+			memberNumber = number;
+			return true;
+		} else {
+			return false;
 		}
 	}
+	
 	
 	/**
 	 * Adds an item to the end of the current bill list
@@ -107,6 +140,7 @@ public class System {
 	public void setPrinting(boolean printing) {
 		this.printing = printing;
 	}
+	
 }
 
 

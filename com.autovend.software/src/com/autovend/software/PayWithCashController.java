@@ -1,3 +1,4 @@
+package com.autovend.software;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Currency;
@@ -14,7 +15,7 @@ import com.autovend.devices.observers.AbstractDeviceObserver;
 import com.autovend.devices.observers.BillSlotObserver;
 import com.autovend.devices.observers.BillValidatorObserver;
 
-public class PayWithCashController extends System implements BillSlotObserver, BillValidatorObserver {
+public class PayWithCashController extends SelfCheckoutSystemLogic implements BillSlotObserver, BillValidatorObserver {
 	
 	double amountDue;
 	SelfCheckoutStation station;

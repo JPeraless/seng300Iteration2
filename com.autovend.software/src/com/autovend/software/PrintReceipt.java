@@ -1,4 +1,6 @@
+package com.autovend.software;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.autovend.devices.AbstractDevice;
@@ -27,7 +29,36 @@ public class PrintReceipt implements ReceiptPrinterObserver {
 	 * @return A string representing the receipt
 	 * @throws EmptyException Receipt printer contains no ink
 	 */
-	public static void print(SelfCheckoutStation station, List<BarcodedProduct> billList) throws EmptyException{
+	
+	private ArrayList<PrintReceiptObserver> observers = new ArrayList<>();
+	private SelfCheckoutStation station;
+	private String currentMessage;
+	private CustomerIO CO;
+//	private String currentBillPrinted;
+	private AttendentStub attendent;
+
+//	
+	public PrintReceipt(SelfCheckoutStation stn) {
+		station = stn;
+	}
+	
+	public void registerObserver(PrintReceiptObserver observer) {
+		observers.add(observer);
+	}
+	
+	public void registerCustomerIO(CustomerIO anotherCO) {
+		CO = anotherCO;
+	}
+	
+	public void registerAttendent(AttendentStub att) {
+		attendent = att;
+	}
+	
+	public ReceiptPrinter getPrinter() {
+		return station.printer;
+	}
+	
+	public boolean print(List<BarcodedProduct> billList) throws EmptyException, OverloadException{
 
 		// Tracks the total cost of the customers purchase
 		BigDecimal total = new BigDecimal(0);
@@ -51,15 +82,47 @@ public class PrintReceipt implements ReceiptPrinterObserver {
 		char[] receipt = receiptOutput.toString().toCharArray();
 		for (char c : receipt) {
 			try{
+//				currentBillPrinted += c;
 				station.printer.print(c);
 			} catch (OverloadException oe){
-				try {
-					station.printer.print('\n');
-				} catch (OverloadException ignored) {}
+				for(PrintReceiptObserver observer : observers) {
+					observer.requiresMaintance(station, oe.getMessage());
+				}
+				return false;
+			} catch (EmptyException e) {
+				if (e.getMessage().contains("There is no paper in the printer.")) {
+//					for(PrintReceiptObserver observer : observers) {
+//						observer.requiresMaintance(station, e.getMessage());
+//					}
+					station.printer.cutPaper(); // Cut the paper
+
+					currentMessage = e.getMessage();
+					reactToOutOfPaperEvent(station.printer);
+//					if (added) {
+//						station.printer.print(c);
+//					}
+					return false;
+				} else {
+//					for(PrintReceiptObserver observer : observers) {
+//						observer.requiresMaintance(station, e.getMessage());
+//					}
+					station.printer.cutPaper(); // Cut the paper
+
+					currentMessage = e.getMessage();
+					reactToOutOfInkEvent(station.printer);
+//					if (added) {
+//						station.printer.print(c);
+//					}
+					return false;
+				}
+
 			}
 		}
-
 		station.printer.cutPaper(); // Cut the paper
+		for (PrintReceiptObserver observer : observers) {
+			observer.sessionComplete(station);
+		}
+		return true;
 	}
 
 
@@ -77,14 +140,22 @@ public class PrintReceipt implements ReceiptPrinterObserver {
 
 	@Override
 	public void reactToOutOfPaperEvent(ReceiptPrinter printer) {
-		// TODO Auto-generated method stub
-		
+		for (PrintReceiptObserver observer : observers) {
+			observer.requiresMaintance(station, currentMessage);
+		}
+		CO.errorCall(currentMessage);
+		attendent.requiresMaintainence();
 	}
+
 
 	@Override
 	public void reactToOutOfInkEvent(ReceiptPrinter printer) {
-		// TODO Auto-generated method stub
-		
+		for (PrintReceiptObserver observer : observers) {
+			observer.requiresMaintance(station, currentMessage);
+		}	
+		CO.errorCall(currentMessage);
+		attendent.requiresMaintainence();
+	
 	}
 
 	@Override
