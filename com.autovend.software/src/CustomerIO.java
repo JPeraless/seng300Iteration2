@@ -3,6 +3,8 @@ public class CustomerIO {
     private Boolean ready = false; // Status if ready for new customer session
     private boolean customerNoBag;
     
+    private int numberOfBagsPurchased;
+    
     private String message = "";
 //    private String name;
 //    private String password;
@@ -64,6 +66,14 @@ public class CustomerIO {
     
     public void setCustomerNoBag(boolean val) {
     	this.customerNoBag = val;
+    }
+    
+    public int getNumberOfBagsPurchased() {
+    	return this.numberOfBagsPurchased;
+    }
+    
+    public void setNumberOfBagsPurchased(int val) {
+    	this.numberOfBagsPurchased = val;
     }
 
 }

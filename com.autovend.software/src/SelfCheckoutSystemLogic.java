@@ -3,9 +3,11 @@ import java.util.ArrayList;
 import java.util.Currency;
 import java.util.List;
 
+import com.autovend.BarcodedUnit;
 import com.autovend.Bill;
 import com.autovend.devices.BillDispenser;
 import com.autovend.devices.CoinDispenser;
+import com.autovend.devices.DisabledException;
 import com.autovend.devices.EmptyException;
 import com.autovend.devices.OverloadException;
 import com.autovend.devices.SelfCheckoutStation;
@@ -37,6 +39,8 @@ public class SelfCheckoutSystemLogic {
 	private PrintReceipt receiptController;
 	private CustomerIO customerio;
 	private AttendentStub attendent;
+	private BagDispenserStub bagDispenser;
+	private final int BAG_DISPENSER_DEFAULT_LIMIT = 100;
 
 	
 	public SelfCheckoutSystemLogic(SelfCheckoutStation station, CustomerIO cs, AttendentStub att) {
@@ -65,6 +69,7 @@ public class SelfCheckoutSystemLogic {
 		
 		this.customerio = new CustomerIO();
 		this.attendent = new AttendentStub();
+		this.bagDispenser = new BagDispenserStub(BAG_DISPENSER_DEFAULT_LIMIT);
 	}
 	
 	public void setMemberNumber(String number) {
@@ -124,6 +129,14 @@ public class SelfCheckoutSystemLogic {
 		}
 	}
 	*/
+	
+	
+	public void purchaseBags() throws OverloadException {
+		PurchaseBagsController pb = new PurchaseBagsController(this.station, this);
+		this.baggingAreaWeight = this.station.baggingArea.getCurrentWeight();
+		pb.addBagsToBill();
+	}
+	
 	
 	
 	
@@ -292,6 +305,21 @@ public class SelfCheckoutSystemLogic {
 	}
 	
 
+	public CustomerIO getCustomerIO() {
+		return this.customerio;
+	}
+	
+	public AttendentStub getAttendentStub() {
+		return this.attendent;
+	}
+	
+	public BagDispenserStub getBagDispenser() {
+		return this.bagDispenser;
+	}
+	
+	public double getBaggingAreaWeight() {
+		return this.baggingAreaWeight;
+	}
 	
 }
 

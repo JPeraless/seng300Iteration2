@@ -4,11 +4,16 @@ import java.util.ArrayList;
 import com.autovend.Barcode;
 import com.autovend.BarcodedUnit;
 import com.autovend.Numeral;
+import com.autovend.devices.AbstractDevice;
 import com.autovend.devices.DisabledException;
+import com.autovend.devices.ElectronicScale;
 import com.autovend.devices.OverloadException;
 import com.autovend.devices.SelfCheckoutStation;
 import com.autovend.devices.SimulationException;
+import com.autovend.devices.observers.AbstractDeviceObserver;
+import com.autovend.devices.observers.ElectronicScaleObserver;
 import com.autovend.external.ProductDatabases;
+import com.autovend.products.BarcodedProduct;
 
 /**
  * Class that implements the "Purchase Bags" use case
@@ -46,36 +51,12 @@ private SelfCheckoutSystemLogic system;
 	 * @param numOfBags - customer's desired number of purchased bags
 	 * @throws OverloadException - in case of a baggiage area overload
 	 */
-	public PurchaseBagsController(SelfCheckoutStation station, SelfCheckoutSystem system) throws OverloadException {
+	public PurchaseBagsController(SelfCheckoutStation station, SelfCheckoutSystemLogic system) {
 		this.station = station;
 		this.system = system;
 		
-		// instantiate fields
-		this.station = station; 
-		this.desiredNumberOfBags = numOfBags;
-		this.currentBagsAvailable = DEFAULT_NUMBER_OF_BAGS;
-		
-		BarcodedUnit bag = new BarcodedUnit(PURCHASEDBAGBARCODE, BAG_WEIGHT);
-		// instantiate WeightDiscrepancy field
-		this.discrep = new WeightDiscrepancy(this.station, bag, true, true);
 	}
-	
-	/**
-	 * Method that allows for the changing of WeightDiscrepency paramters in the absence
-	 * of AttendantIO and CustomerIO implementations.
-	 * 
-	 * This method will be obsolete in future iterations once IO has been developed,
-	 * until then this method will be useful for testing cases of different
-	 * weight discrepancy approvals
-	 * 
-	 * @param noBag - customer does not want to bag the item (bag)
-	 * @param attendantApproval - attendant does not approve the weight discrepancy that has been found
-	 */
-	public void setDiscrepancyParameters(boolean noBag, boolean attendantApproval) {
-		this.discrep.setCustomerNoBag(noBag);
-		this.discrep.setAttendantApproval(attendantApproval);
-		
-	}
+
 	
 	/**
 	 * 	Method to fulfill "Purchase Bags" use case
@@ -86,58 +67,38 @@ private SelfCheckoutSystemLogic system;
 	 * @throws OverloadException  - If weight is overloaded in weight discrepancy
 	 * @throws SimulationException  - If attendand does not approve weight discrepancy
 	 */
-	public ArrayList<BarcodedUnit> purchaseBags() {
+	public void addBagsToBill() throws OverloadException {
 		
 		if (this.station.baggingArea.isDisabled()) {
 			throw new DisabledException();
 		}
 		// instantiate an ArrayList of bags to be returned by method
-		ArrayList<BarcodedUnit> bags = new ArrayList<>();
 		
 		// dispense desired number of bags
-		for (int i = 0; i < this.desiredNumberOfBags; ++i) {
+		for (int i = 0; i < this.system.getCustomerIO().getNumberOfBagsPurchased(); ++i) {
 			
 			// signal to bag dispenser number of bags to dispense
-			BarcodedUnit dispensedBag = dispenseBag();
+			BarcodedUnit dispensedBag = this.system.getBagDispenser().dispenseBag();
+			BarcodedProduct bagProduct = ProductDatabases.BARCODED_PRODUCT_DATABASE.get(dispensedBag.getBarcode());
 			
-			// adjust bagging area's expected weight to include weight of purchased bags
+			// add price of bag to ammount due
+			this.system.setAmountDue(this.system.getAmountDue()+ bagProduct.getPrice().doubleValue());
+			
+			// add item to bill
+			this.system.addBillList(bagProduct);
+			
+			// add bag to weight, check weight discrepancy by registering weightDiscrepancy listener
+			double expectedWeight = this.system.getBaggingAreaWeight() + bagProduct.getExpectedWeight();
+			this.system.weightDiscrepency(expectedWeight);
 			this.station.baggingArea.add(dispensedBag);
-			
-			// check for and handle weight discrepancy
-			if (dispensedBag.getWeight() != ProductDatabases.BARCODED_PRODUCT_DATABASE.get(dispensedBag.getBarcode()).getExpectedWeight()) {
-				this.discrep.checkDiscrepancy();
-			}
-			
-			// signals weight change TODO: Should this be done with an observer reaction?
 		}
-		// return arraylist of bags, calling code can then add these items to a bill
-		return bags;
 	}
+
+
+
 	
-	
-	
-	
-	/**
-	 * Stub for Bag Dispenser
-	 * This method will be obsolete when Bag Dispenser is implemented in hardware
-	 * but it is useful to simulate the rest of the use case implementation
-	 * as of this iteration
-	 * 
-	 * @return - If bags are still available in dispensers, return a new bage
-	 * 			otherwise, throw a simulation exception
-	 */
-	private BarcodedUnit dispenseBag() throws SimulationException {
-		// if bags are available, dispense a new bag
-		if (this.currentBagsAvailable > 0) {
-			BarcodedUnit bag = new BarcodedUnit(PURCHASEDBAGBARCODE, BAG_WEIGHT);
-			// decrement number of available bags
-			--this.currentBagsAvailable;
-			// dispense bag
-			return bag; 
-		}
-		// if no bags available, throw exception as per use case description
-		throw new SimulationException("Bag Dispenser is out of bags");
-	}
+
+
 	
 
 
