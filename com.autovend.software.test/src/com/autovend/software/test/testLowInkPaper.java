@@ -94,4 +94,5 @@ public class testLowInkPaper {
 		boolean actual = logic.startPrinting();
 		assertEquals("this test case should pass", expected, actual);
 	}
+	
 }
