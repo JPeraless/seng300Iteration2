@@ -6,6 +6,7 @@ import com.autovend.devices.OverloadException;
 import com.autovend.devices.SelfCheckoutStation;
 import com.autovend.devices.SimulationException;
 import com.autovend.external.ProductDatabases;
+import com.autovend.software.CustomerIO;
 
 
 
@@ -25,8 +26,8 @@ public class WeightDiscrepancy {
 	// declare fields
 	private SelfCheckoutStation station;
 	private double expectedWeight;
-	private boolean customerNoBag;
-	private boolean attendantApproved;
+	private CustomerIO customerStub;
+	private AttendentStub attendantStub;
 	private BarcodedUnit currentItem;
 	boolean thisIsABoolean;
 	
@@ -40,11 +41,11 @@ public class WeightDiscrepancy {
 	 * @param attendantApproved - boolean condition of attendant approval
 	 * @throws OverloadException - if current weight of scale is too high
 	 */
-	public WeightDiscrepancy(SelfCheckoutStation station, BarcodedUnit item, boolean noBag, boolean attendantApproved) throws OverloadException {
+	public WeightDiscrepancy(SelfCheckoutStation station, BarcodedUnit item, CustomerIO customerStub, AttendentStub attendantStub) throws OverloadException {
 		
 		// CustomerIO and AttendantIO not implemented, 
-		this.attendantApproved = attendantApproved;
-		this.customerNoBag = noBag;
+		this.attendantStub = attendantStub;
+		this.customerStub = customerStub;
 		this.station = station;
 		this.expectedWeight = station.baggingArea.getCurrentWeight();
 		
@@ -86,34 +87,8 @@ public class WeightDiscrepancy {
 	}
 	
 	
+
 	
-	/**
-	 * Essentially a stub for getting the customer's decision
-	 * on on bagging the item or not
-	 * 
-	 * This method will be deleted when CustomerIO is implemented,
-	 * but for now it is effective especially for testing
-	 * 
-	 * @param choice - customer's decision to bag or not
-	 */
-	void setCustomerNoBag(boolean choice) {
-		this.customerNoBag = choice;
-	}
-	
-	
-	
-	/**
-	 * Essentially a stub for getting the attendant's decision
-	 * on on bagging the item or not
-	 * 
-	 * This method will be deleted when AttendantIO is implemented,
-	 * but for now it is effective especially for testing
-	 * 
-	 * @param choice - attendant's decision to approve or disapprove discrepancy
-	 */
-	void setAttendantApproval(boolean choice) {
-		this.attendantApproved = choice;
-	}
 
 	
 	
@@ -135,13 +110,13 @@ public class WeightDiscrepancy {
 		}
 		
 		// attendant is not approving of discrepancy, will have to go take a look manually
-		else if (!attendantApproved) {
+		else if (!this.attendantStub.getDiscrepancyApproved()) {
 			throw new SimulationException("Attendant assistance required, please hold...\n");
 		}
 		
 		// this case will have to react with the "Do Not Bag Item" use case in the future,
 		// so let's leave this here for now but just pretend it is resolved by returning true
-		if (this.customerNoBag) {
+		if (this.customerStub.getDoNotBagItem()) {
 			// THE DO NOT PLACE ITEM IN BAGGING AREA SHOULD BE IMPLEMENTED HERE
 			// FOR NOW WE WILL ASSUME THAT SUCH A CASE IS HANDLED AS EXPECTED
 			// WILL HAVE TO CHANGE FOR FUTURE ITERATION
