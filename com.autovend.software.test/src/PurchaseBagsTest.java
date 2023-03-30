@@ -89,8 +89,20 @@ public class PurchaseBagsTest extends BaseTestCase {
 		// a weight discrepency here SHOULD cause any issue, the attendant does not approve
 		this.useCase = new PurchaseBags(this.station, 10);
 		this.useCase.setDiscrepancyParameters(true, false);
-		assertThrows(SimulationException.class, () -> this.useCase.purchaseBags());
+		assertThrows(SimulationException.class, () -> this.useCase.purchaseBags());	
+	}
+	
+	@Test
+	public void baggingAreaWeightUpdated() throws OverloadException {
+		this.useCase = new PurchaseBags(this.station, 10);
+		double weightBefore = this.station.baggingArea.getCurrentWeight();
 		
+		this.useCase.purchaseBags();
+		
+		double expected = weightBefore + (10 * PurchaseBags.BAG_WEIGHT);
+		double actual = this.station.baggingArea.getCurrentWeight();
+		
+		assertEquals(expected, actual, 0.00001);
 	}
 	
 }
