@@ -1,28 +1,53 @@
+/*
+ * Members for Iteration 1:
+ * Michelle Loi (30019557)
+ * James Hayward (30149513)
+ * Caleb Cavilla (30145972)
+ * Amandeep Kaur (30153923)
+ * Ethan Oke (30142180)
+ * Winjoy Tiop (30069663)
+ */
 package com.autovend.software;
+
+import static java.lang.System.out;
+
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Currency;
 import java.util.List;
 
+import com.autovend.Bill;
+import com.autovend.Coin;
 import com.autovend.devices.AbstractDevice;
+import com.autovend.devices.BillDispenser;
 import com.autovend.devices.BillSlot;
 import com.autovend.devices.BillValidator;
+import com.autovend.devices.CoinDispenser;
+import com.autovend.devices.CoinSlot;
+import com.autovend.devices.CoinValidator;
 import com.autovend.devices.DisabledException;
 import com.autovend.devices.EmptyException;
 import com.autovend.devices.OverloadException;
 import com.autovend.devices.SelfCheckoutStation;
 import com.autovend.devices.observers.AbstractDeviceObserver;
+import com.autovend.devices.observers.BillDispenserObserver;
 import com.autovend.devices.observers.BillSlotObserver;
 import com.autovend.devices.observers.BillValidatorObserver;
+import com.autovend.devices.observers.CoinDispenserObserver;
+import com.autovend.devices.observers.CoinSlotObserver;
+import com.autovend.devices.observers.CoinValidatorObserver;
 
-public class PayWithCashController extends SelfCheckoutSystemLogic implements BillSlotObserver, BillValidatorObserver {
+public class PayWithCashController extends SelfCheckoutSystemLogic implements BillSlotObserver, BillValidatorObserver, BillDispenserObserver, CoinSlotObserver, CoinValidatorObserver, CoinDispenserObserver {
 	
+	SelfCheckoutSystemLogic system;
 	double amountDue;
 	SelfCheckoutStation station;
 	
-	public PayWithCashController(SelfCheckoutStation station) {
+	public PayWithCashController(SelfCheckoutStation station, SelfCheckoutSystemLogic system) {
 		super(station);
-		station = super.getStation();
+		this.system = system;
+		this.station = station;
 		amountDue = super.getAmountDue();
 	}
 
@@ -58,7 +83,104 @@ public class PayWithCashController extends SelfCheckoutSystemLogic implements Bi
 
 	@Override
 	public void reactToValidBillDetectedEvent(BillValidator validator, Currency currency, int value) {
-		changeAmountDue(value, this);	
+		system.changeAmountDue(value, this);	
+	}
+
+	
+	@Override
+	public void reactToInvalidBillDetectedEvent(BillValidator validator) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void reactToBillsFullEvent(BillDispenser dispenser) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void reactToBillsEmptyEvent(BillDispenser dispenser) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void reactToBillAddedEvent(BillDispenser dispenser, Bill bill) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void reactToBillRemovedEvent(BillDispenser dispenser, Bill bill) {
+		system.setChangeDispensed(system.getChangeDispensed() + bill.getValue());
+		
+	}
+
+	@Override
+	public void reactToBillsLoadedEvent(BillDispenser dispenser, Bill... bills) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void reactToBillsUnloadedEvent(BillDispenser dispenser, Bill... bills) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void reactToCoinsFullEvent(CoinDispenser dispenser) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void reactToCoinsEmptyEvent(CoinDispenser dispenser) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void reactToCoinAddedEvent(CoinDispenser dispenser, Coin coin) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void reactToCoinRemovedEvent(CoinDispenser dispenser, Coin coin) {
+		system.setChangeDispensed(system.getChangeDispensed() +  coin.getValue().doubleValue());
+		
+	}
+
+	@Override
+	public void reactToCoinsLoadedEvent(CoinDispenser dispenser, Coin... coins) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void reactToCoinsUnloadedEvent(CoinDispenser dispenser, Coin... coins) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void reactToValidCoinDetectedEvent(CoinValidator validator, BigDecimal value) {
+		system.changeAmountDue(value.doubleValue(), this);
+		
+	}
+
+	@Override
+	public void reactToInvalidCoinDetectedEvent(CoinValidator validator) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void reactToCoinInsertedEvent(CoinSlot slot) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	/**
@@ -75,10 +197,14 @@ public class PayWithCashController extends SelfCheckoutSystemLogic implements Bi
 	 * @throws InterruptedException 
 	 */
 	public void deliverChange(double amountDue)  {
-		amountDue = ((amountDue + 4) / 5) * 5;; // round up to the nearest multiple of 5 to avoid under paying customer
-		List<Integer> keyList = new ArrayList<Integer>(station.billDispensers.keySet());
-		Collections.reverse(keyList);
-		for (int i : keyList) {
+		System.out.println("amount Due: " + amountDue);
+		amountDue = (int) Math.ceil((-1*amountDue)/0.05) * 0.05; // round up to the nearest multiple of 5 to avoid under paying customer
+		System.out.println("amount Due: " + amountDue);
+		
+		// Split the amount due down into the least amount of bills possible
+		List<Integer> billKeyList = new ArrayList<Integer>(station.billDispensers.keySet());
+		Collections.reverse(billKeyList);
+		for (int i : billKeyList) {
 			int numberOfBills = (int) (amountDue / i);
 			for (int j = 0; j < numberOfBills; j++) {
 					try {
@@ -86,17 +212,28 @@ public class PayWithCashController extends SelfCheckoutSystemLogic implements Bi
 					} catch (DisabledException | EmptyException | OverloadException e) {
 						e.printStackTrace();
 					}		
-
+					
 				
 			amountDue = amountDue % i;
 			}
 		}
+		// Split the remaining amount due into the least amount of coins possible
+		List<BigDecimal> coinKeyList = new ArrayList<BigDecimal>(station.coinDispensers.keySet());
+		Collections.reverse(coinKeyList);
+		for (BigDecimal i : coinKeyList) {
+			int numberOfBills = (int) (amountDue / i.doubleValue());
+			for (int j = 0; j < numberOfBills; j++) {
+					try {
+						station.coinDispensers.get(i).emit();
+					} catch (DisabledException | EmptyException | OverloadException e) {
+						e.printStackTrace();
+					}		
+					
+				
+			amountDue = amountDue % i.doubleValue();
+			}
+		}
 	}
 	
-	@Override
-	public void reactToInvalidBillDetectedEvent(BillValidator validator) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	
 }
