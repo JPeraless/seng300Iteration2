@@ -18,7 +18,7 @@ public interface  PrintReceiptObserver {
 	     *            The device who requires Maintances.
 	     *            tasks for iteration 2: signals attendent stub that printer requires maintainence
 	     */
-	    void requiresMaintance(SelfCheckoutStation station, String message);
+	    void requiresMaintainence(SelfCheckoutStation station, String message);
 	    
 
 }

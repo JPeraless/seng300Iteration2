@@ -43,7 +43,7 @@ public class testLowInkPaper {
 	BarcodedProduct product2 = new BarcodedProduct(barcode, "Eggs", new BigDecimal("5"), 2.5);
 	BarcodedUnit unit2 = new BarcodedUnit(barcode2, 2.5);
 	
-	ArrayList<BarcodedProduct> shoppingCart = new ArrayList<BarcodedProduct>();
+	ArrayList<BarcodedProduct> shoppingCart;
 	
 	Bill bill5 = new Bill(5, c1);
 	Bill bill20 = new Bill(20, c1);
@@ -55,9 +55,6 @@ public class testLowInkPaper {
 	SelfCheckoutSystemLogic logic;
 	
 	PrintReceipt printercontroller;
-	PrintReceiptObserver controllerObserver1;
-	PrintReceiptObserver controllerObserver2;
-	PrintReceiptObserver controllerObserver3;
 
 	// Setup: AttendantStub and CustomerStub are created, and two products are added to the product database.
 	// SelfCheckoutStation object is created.
@@ -66,9 +63,11 @@ public class testLowInkPaper {
 		scs = new SelfCheckoutStation(c1, billdenominations, coindenominations, 20, 1);
 
 		printercontroller = new PrintReceipt(scs);
-		printercontroller.registerObserver(controllerObserver1);
-		printercontroller.registerObserver(controllerObserver2);
-		printercontroller.registerObserver(controllerObserver3);
+		
+		
+//		printercontroller.registerObserver(controllerObserver1);
+//		printercontroller.registerObserver(controllerObserver2);
+//		printercontroller.registerObserver(controllerObserver3);
 		
 		attendantStub = new AttendentStub(printercontroller);
 		customerStub = new CustomerIO();
@@ -81,8 +80,10 @@ public class testLowInkPaper {
 		ProductDatabases.BARCODED_PRODUCT_DATABASE.put(barcode, product);
 		ProductDatabases.BARCODED_PRODUCT_DATABASE.put(barcode2, product2);
 		
+		shoppingCart = new ArrayList<BarcodedProduct>();
 		shoppingCart.add(product);
 		shoppingCart.add(product2);
+
 	}
 	
 	@Test
@@ -91,17 +92,16 @@ public class testLowInkPaper {
 		scs.printer.addPaper(1<<9);
 		
 		boolean expected = true;
-		boolean actual = logic.startPrinting();
+		boolean actual = logic.startPrinting(shoppingCart);
 		assertEquals("this test case should pass", expected, actual);
 	}
 	
 	@Test
 	public void testlowpaper() throws EmptyException, OverloadException {
 		scs.printer.addInk(1<<9);
-	
 		
 		boolean expected = false;
-		boolean actual = logic.startPrinting();
+		boolean actual = logic.startPrinting(shoppingCart);
 		assertEquals("this test case should pass", expected, actual);
 	}
 	
@@ -112,7 +112,7 @@ public class testLowInkPaper {
 	    scs.printer.addPaper(1<<9);
 		
 		boolean expected = false;
-		boolean actual = logic.startPrinting();
+		boolean actual = logic.startPrinting(shoppingCart);
 		assertEquals("this test case should pass", expected, actual);
 	}
 

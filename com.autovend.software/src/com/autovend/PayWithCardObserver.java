@@ -46,4 +46,8 @@ public class PayWithCardObserver implements CardReaderObserver {
     public void reactToCompletePaymentEvent(PayWithCard payWithCard) {
 
     }
+
+	public void reactToNotEnouighFunds() {
+		
+	}
 }
