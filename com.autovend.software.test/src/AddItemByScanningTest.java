@@ -106,18 +106,27 @@ public class AddItemByScanningTest extends BaseTestCase {
 	public void scanWhenDisabled() {
 		this.useCase = new AddItemByScanning(super.station, unit0);
 		this.station.mainScanner.disable();
-		//assertThrows(DisabledException.class, () -> this.useCase.add(super.station));
+		assertThrows(DisabledException.class, () -> this.useCase.add(super.station));
+		
 	}
 	
+	/**
+	 * Test to ensure totalWeight variable is incremented properly 
+	 * when items are added concurrently
+	 * @throws Exception
+	 */
 	@Test
 	public void totalWeightTest() throws Exception {
 		this.useCase = new AddItemByScanning(super.station, unit0);
-		useCase.add(station);
-		System.out.println("got here");
+		//this.station.mainScanner.enable();
 		
-		//System.out.println(useCase.totalWeight);
+		this.useCase.add(station);
+		
+		
+		
+		
 		double expectedTotalWeight = unit0.getWeight();
-		System.out.println("got here");
+		
 		assertEquals(expectedTotalWeight, station.baggingArea.getCurrentWeight(), 0.00001);
 		
 		this.useCase = new AddItemByScanning(super.station, unit1);
@@ -133,6 +142,7 @@ public class AddItemByScanningTest extends BaseTestCase {
 	
 	@Test
 	public void returnCorrectProductTest() {
+		
 		
 	}
 	

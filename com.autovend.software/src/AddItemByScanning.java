@@ -12,7 +12,7 @@ public class AddItemByScanning extends AddItem<BarcodedProduct> {
 
 	public AddItemByScanning(SelfCheckoutStation station, SellableUnit currentUnit) {
 		super(station, currentUnit);
-		//this.products = new ArrayList<BarcodedProduct>();
+		this.station.mainScanner.enable();
 	
 	}
 	
@@ -20,6 +20,8 @@ public class AddItemByScanning extends AddItem<BarcodedProduct> {
 	public BarcodedProduct add(SelfCheckoutStation station) throws Exception {
 		BarcodedUnit copyOfUnit = (BarcodedUnit) this.unit;
 		BarcodedProduct barcodedProduct = getProductFromBarcode(copyOfUnit.getBarcode());
+		
+		
 
 		
 		if(station.mainScanner.scan(copyOfUnit)) {
