@@ -84,12 +84,6 @@ public class AddItemByPLUTest extends BaseTestCase {
 		this.useCase = new AddItemByPLU(super.station, unit0);
 		useCase.add(station);
 		double weight = useCase.totalWeight;
-		
-		// CURRENTLY CANT FIND WAY TO GET PRICE OF ITEMS IN CART
-//		BigDecimal price = useCase.totalPrice;
-//		System.out.println(price);
-//		assertEquals(price, station.);
-		
 		assertEquals(weight,station.baggingArea.getCurrentWeight(), 0.00001);
 		
 		// Testing after adding a second item
@@ -114,8 +108,6 @@ public class AddItemByPLUTest extends BaseTestCase {
 	public void AddingSameItem() throws Exception {
 		this.useCase = new AddItemByPLU(super.station, unit0);
 		useCase.add(station);
-		double weight = useCase.totalWeight;
-		
 		this.useCase = new AddItemByPLU(super.station, unit0);
 		useCase.add(station);
 	
