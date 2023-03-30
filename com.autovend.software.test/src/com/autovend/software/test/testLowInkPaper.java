@@ -94,4 +94,27 @@ public class testLowInkPaper {
 		boolean actual = logic.startPrinting();
 		assertEquals("this test case should pass", expected, actual);
 	}
+	
+	@Test
+	public void testlowpaper() throws EmptyException, OverloadException {
+		scs.printer.addInk(1<<9);
+	
+		
+		boolean expected = false;
+		boolean actual = logic.startPrinting();
+		assertEquals("this test case should pass", expected, actual);
+	}
+	
+	
+	@Test
+	public void testLowInk() throws EmptyException, OverloadException {
+		
+	    scs.printer.addPaper(1<<9);
+		
+		boolean expected = false;
+		boolean actual = logic.startPrinting();
+		assertEquals("this test case should pass", expected, actual);
+	}
+
 }
+
