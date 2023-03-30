@@ -55,9 +55,9 @@ private WeightDiscrepancy discrep;
 		this.desiredNumberOfBags = numOfBags;
 		this.currentBagsAvailable = DEFAULT_NUMBER_OF_BAGS;
 		
-		
+		BarcodedUnit bag = new BarcodedUnit(PURCHASEDBAGBARCODE, BAG_WEIGHT);
 		// instantiate WeightDiscrepancy field
-		this.discrep = new WeightDiscrepancy(this.station, true, true);
+		this.discrep = new WeightDiscrepancy(this.station, bag, true, true);
 	}
 	
 	/**
@@ -105,7 +105,7 @@ private WeightDiscrepancy discrep;
 			
 			// check for and handle weight discrepancy
 			if (dispensedBag.getWeight() != ProductDatabases.BARCODED_PRODUCT_DATABASE.get(dispensedBag.getBarcode()).getExpectedWeight()) {
-				this.discrep.weightDiscrepancyOptions();
+				this.discrep.checkDiscrepancy();
 			}
 			
 			// signals weight change TODO: Should this be done with an observer reaction?
