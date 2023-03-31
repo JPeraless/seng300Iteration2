@@ -14,9 +14,9 @@ public class AddItemByPLUController extends AddItem {
 		super(station, system);
 	}
 	
-	 
+	
 	public void add(SellableUnit currentSelectedItem) throws Exception {
-		  PriceLookUpCodedUnit copyOfUnit = (PriceLookUpCodedUnit) this.unit;
+		  PriceLookUpCodedUnit copyOfUnit = (PriceLookUpCodedUnit) currentSelectedItem;
 		  PLUCodedProduct pluProduct = getProductFromPLU(copyOfUnit.getPLUCode());
 		  
 		  // no gui implementation but would have keyboard pop up for user here
@@ -47,7 +47,7 @@ public class AddItemByPLUController extends AddItem {
 
 
           // increment weight total
-          this.system.setBaggingAreaWeight(this.system.getAmountDue());
+          this.system.setBaggingAreaWeight(this.system.getBaggingAreaWeight()+copyOfUnit.getWeight());
           
          
           // mathcontext object to specify decimal precision
