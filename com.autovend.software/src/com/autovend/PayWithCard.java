@@ -9,6 +9,7 @@ import java.util.Scanner;
 
 import com.autovend.Card.CardData;
 import com.autovend.devices.*;
+import com.autovend.devices.observers.CardReaderObserver;
 import com.autovend.external.CardIssuer;
 import com.autovend.software.CustomerIO;
 
@@ -60,55 +61,60 @@ public class PayWithCard extends Pay<PayWithCardObserver> {
     public void makePayment(double paymentMade) {
         reduceAmountDue(paymentMade);
 
-        if (getAmountPaid() > getTotalAmountDue()) {
-            // for (CardReaderObserver observer : observers) {
-            // observer.reactToCompletePaymentEvent(this);
-            // }
+        if (getAmountPaid() >= getTotalAmountDue()) {
+            completePayment();
         }
     }
+
+    private void completePayment() {
+        // Perform any necessary actions to finalize the payment.
+        // For example, update the payment status in a database.
+        // This method is not visible outside this class.
+     }
+    
     
     public void payWithCard(Card card, double amount, String type) throws IOException {
     	
     	reader.enable();
-    	BufferedImage image = new BufferedImage(null, null, false, null);
-    	CardData data;
+    	// BufferedImage image = new BufferedImage(null, null, false, null);
+    	// CardData data;
     	
-    	if (type.equals("insert")) {
-        	data = reader.insert(card,  pin);
-    	} else if (type.equals("tap")) {
-        	data = reader.tap(card);
-    	} else {
-        	data = reader.swipe(card, image);
-    	}
+    	//if (type.equals("insert")) {
+        //	data = reader.insert(card,  pin);
+    	//} else if (type.equals("tap")) {
+        //	data = reader.tap(card);
+    	//} else {
+        //	data = reader.swipe(card, image);
+    	//}
     	
-    	bank.addCardData(data.getNumber(), data.getCardholder(), expiry, data.getCVV(), amountPaid);
-    	int holdNumber = bank.authorizeHold(data.getNumber(), amountPaid);
+    	//bank.addCardData(data.getNumber(), data.getCardholder(), expiry, data.getCVV(), amountPaid);
+    	//int holdNumber = bank.authorizeHold(data.getNumber(), amountPaid);
     	//something to do with system. see usecase scenario number 7 and 8
     	
-    	boolean transactionComplete = bank.postTransaction(data.getNumber(), holdNumber, amountPaid);
+    	//boolean transactionComplete = bank.postTransaction(data.getNumber(), holdNumber, amountPaid);
     	
-    	if (!transactionComplete) {
-    		for (PayWithCardObserver observer : observers) {
-        		observer.reactToNotEnouighFunds();
-    		}
-    	} else {
-        	boolean holdreleased = bank.releaseHold(data.getNumber(), holdNumber);
-        	
-        	totalBill = totalBill.subtract(amountPaid);
-    	}
+    	//if (!transactionComplete) {
+    	//	for (PayWithCardObserver observer : observers) {
+        //		observer.reactToNotEnouighFunds();
+    	//	}
+    	//} else {
+        //	boolean holdreleased = bank.releaseHold(data.getNumber(), holdNumber);
+        //	
+        //	totalBill = totalBill.subtract(amountPaid);
+    	//}
     	
-    	if (reader.remove()) {
-    		customer.sessionComplete();
-    	}
+    	//if (reader.remove()) {
+    	//	customer.sessionComplete();
+    	//}
     	
     	int res = totalBill.compareTo(new BigDecimal("0")); 
     	
     	if (res == 1) {
     		totalBillPaid = false;
-    	} else if (res == 2) {
+    	} else if (res == 0) {
     		totalBillPaid = true;
-    		//requires change
-    	} else {
+    		//requires change (should never happen)
+    	} else { // -1
     		totalBillPaid = true;
     	}
     	

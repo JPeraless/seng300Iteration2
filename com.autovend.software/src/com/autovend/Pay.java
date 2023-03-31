@@ -10,7 +10,6 @@ import com.autovend.devices.observers.AbstractDeviceObserver;
 public abstract class Pay<T extends AbstractDeviceObserver> {
     protected final SelfCheckoutStation checkoutStation;
     protected final T controller;
-
     private double totalAmountDue;
     private double amountPaid;
 
@@ -23,6 +22,10 @@ public abstract class Pay<T extends AbstractDeviceObserver> {
         this.checkoutStation = checkoutStation;
         this.controller = controller;
 
+        PayWithCardObserver cardObserver = new PayWithCardObserver(checkoutStation, this);
+        
+        checkoutStation.cardReader.register(cardObserver);
+        
         amountPaid = 0;
     }
 
