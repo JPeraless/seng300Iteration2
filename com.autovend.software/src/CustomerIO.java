@@ -4,6 +4,7 @@ public class CustomerIO {
     private boolean customerNoBag;
     
     private int numberOfBagsPurchased;
+    private int numberOfPersonalBags;
     
     private String message = "";
 //    private String name;
@@ -74,6 +75,14 @@ public class CustomerIO {
     
     public void setNumberOfBagsPurchased(int val) {
     	this.numberOfBagsPurchased = val;
+    }
+    
+    public int getNumberOfPersonalBags() {
+    	return this.numberOfPersonalBags;
+    }
+    
+    public void setNumberOfPersonalBags(int val) {
+    	this.numberOfPersonalBags = val;
     }
 
 }

@@ -24,14 +24,13 @@ import com.autovend.devices.SelfCheckoutStation;
 
 
 public class AddOwnBagsTest extends BaseTestCase {
-	private AddOwnBags useCase;
+	private AddOwnBagsController useCase;
 	
 
 	// INITIALIZE STATION IS EXTENDED FROM BaseTestCase.java
 	@Before
 	public void setUp() throws Exception {
-		this.initializeStation();
-		this.useCase = new AddOwnBags();
+
 		
 	}
 
