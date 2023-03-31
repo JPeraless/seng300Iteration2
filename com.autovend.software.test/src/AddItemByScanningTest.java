@@ -1,144 +1,109 @@
-
-
-//Group Members Iteration 1:
-//Amandeep Kaur: 30153923
-//Winjoy Tiop: 30019557
-//Michelle Loi: 30019557
-//Ethan Oke: 30142180
-//James Hayward: 30149513
-
 import static org.junit.Assert.*;
 
-import com.autovend.devices.SimulationException;
-import org.junit.Test;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Currency;
-import java.util.List;
 
-import org.junit.Assert;
+import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.autovend.Barcode;
+import com.autovend.BarcodedUnit;
 import com.autovend.Numeral;
-import com.autovend.devices.AbstractDevice;
-import com.autovend.devices.BarcodeScanner;
+import com.autovend.SellableUnit;
 import com.autovend.devices.SelfCheckoutStation;
-import com.autovend.software.System;
-import com.autovend.devices.observers.AbstractDeviceObserver;
-import com.autovend.devices.observers.BarcodeScannerObserver;
+import com.autovend.external.*;
 import com.autovend.products.BarcodedProduct;
-import com.autovend.software.AddItemByScanning;
-
-public class AddItemByScanningTest {
-
-    private BarcodedProduct Apple;
-    private BarcodedProduct Orange;
-
-    private AddItemByScanning Item;
-    private AddItemByScanning Item2;
-
-    private Barcode barcode;
-    private Barcode barcode2;
-    private BarcodeScanner Scanner;
-    private SelfCheckoutStation Station;
-
-    List<BarcodedProduct> Itemlist = new ArrayList<BarcodedProduct>();
-
-    //This is a general setup for the test cases.
-    @Before
-    public void generalSetup() {
-        this.barcode = new Barcode(Numeral.five, Numeral.three, Numeral.two, Numeral.eight);
-        this.Apple = new BarcodedProduct(barcode, "Apple", new BigDecimal("10.6"), 15.0);
-
-        this.barcode2 = new Barcode(Numeral.two, Numeral.six, Numeral.five, Numeral.nine);
-        this.Orange = new BarcodedProduct(barcode2, "Orange", new BigDecimal("19.2"), 23.0);
 
 
-        this.Scanner = new BarcodeScanner();
-
-        int[] billDenominations = {5, 10 , 15, 20, 50, 100};
-        int ScaleMaxWeight = 50;
-        int ScaleSens = 10;
-        BigDecimal fiveCent = new BigDecimal("0.05");
-        BigDecimal tenCent = new BigDecimal("0.10");
-        BigDecimal twentyFiveCent = new BigDecimal("0.25");
-        BigDecimal loonie = new BigDecimal("1");
-        BigDecimal toonie = new BigDecimal("2");
-        BigDecimal[] coinDenominations = {fiveCent, tenCent, twentyFiveCent, loonie, toonie};
-
-        this.Station = new SelfCheckoutStation(Currency.getInstance("CAD"), billDenominations, coinDenominations, ScaleMaxWeight, ScaleSens);
-
-        this.Item = new AddItemByScanning(Apple, Station);
-        this.Item2 = new AddItemByScanning(Orange, Station);
-
-    }
-
-    //This test checks if a single item has been scanned and added.
-    @Test
-    public void testAddItemByScanning()
-    {
-        Scanner.enable();
-        AddItemByScanning addItem = new AddItemByScanning(Apple, Station);
-        addItem.addBillList(Apple);
-        assertEquals(1, addItem.getBillList().size());
-
-    }
-
-    //This test checks if multiple items can be scanned and added to the list.
-    @Test
-    public void testAddMultipleItems() {
-
-        Scanner.enable();
-        AddItemByScanning addItem = new AddItemByScanning(Apple, Station);
-
-        addItem.addBillList(Apple);
-        addItem.addBillList(Orange);
-        addItem.addBillList(Apple);
-        assertEquals(3, addItem.getBillList().size());
-    }
-
-    //This test checks if we are able to remove the Item from the bill list.
-    @Test
-    public void testRemoveItem() {
-        Scanner.enable();
-        AddItemByScanning addItem = new AddItemByScanning(Apple, Station);
-        addItem.addBillList(Apple);
-        addItem.addBillList(Orange);
-        addItem.removeBillList(1);
-
-        assertEquals(1, addItem.getBillList().size());
-    }
-
-    //This test throws an error when an item without a barcode is added to the station.
-    @Test(expected = SimulationException.class)
-    public void testItemWithNullBarcode() {
-        Barcode nullBarcode = null;
-        BarcodedProduct nullProduct = new BarcodedProduct(null, "Null Product", new BigDecimal("0"), 0.0);
-        AddItemByScanning addItem = new AddItemByScanning(nullProduct, Station);
-    }
 
 
-    // This method doesn't do anything.
-    @Test
-    public void testreactToEnableEvent() {
-        Item.reactToEnabledEvent(Scanner);
-    }
+import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertEquals;
 
-    // This method doesn't do anything.
-    @Test
-    public void testreactToDisabledEvent() {
-        Item.reactToDisabledEvent(Scanner);
-    }
 
-    // This method doesn't do anything.
-    @Test
-    public void testReactToBarcodeScannedEvent() {
-        Item.reactToBarcodeScannedEvent(Scanner, barcode);
-    }
+import java.util.Currency;
+import java.util.Locale;
+
+
+
+import com.autovend.devices.DisabledException;
+import com.autovend.devices.OverloadException;
+
+
+
+public class AddItemByScanningTest extends BaseTestCase {
+	AddItem useCase;
+
+	SellableUnit unit0;
+	SellableUnit unit1;
+	SellableUnit unit2;
+	SellableUnit unit3;
+
+	BarcodedProduct product0;
+	BarcodedProduct product1;
+	BarcodedProduct product2;
+	BarcodedProduct product3;
+
+
+
+	static final Barcode BARCODE_0 = new Barcode(new Numeral[] {Numeral.zero, Numeral.zero});
+	static final Barcode BARCODE_1 = new Barcode(new Numeral[] {Numeral.zero, Numeral.one});
+	static final Barcode BARCODE_2 = new Barcode(new Numeral[] {Numeral.one, Numeral.zero});
+	static final Barcode BARCODE_3 = new Barcode(new Numeral[] {Numeral.one, Numeral.one});
+
+	@Before
+	public void setUp() throws Exception {
+		super.initializeStation();
+		unit0 = new BarcodedUnit(BARCODE_0, 1f);
+		unit1 = new BarcodedUnit(BARCODE_1, 2f);
+		unit2 = new BarcodedUnit(BARCODE_2, 3f);
+		unit3 = new BarcodedUnit(BARCODE_3, 4f);
+
+		product0 = new BarcodedProduct(BARCODE_0, "Item 0", BigDecimal.valueOf(1f), unit0.getWeight());
+		product1 = new BarcodedProduct(BARCODE_1, "Item 1", BigDecimal.valueOf(2f), unit1.getWeight());
+		product2 = new BarcodedProduct(BARCODE_2, "Item 2", BigDecimal.valueOf(3f), unit2.getWeight());
+		product3 = new BarcodedProduct(BARCODE_3, "Item 3", BigDecimal.valueOf(4f), unit3.getWeight());
+
+		ProductDatabases.BARCODED_PRODUCT_DATABASE.put(BARCODE_0, product0);
+		ProductDatabases.BARCODED_PRODUCT_DATABASE.put(BARCODE_1, product1);
+		ProductDatabases.BARCODED_PRODUCT_DATABASE.put(BARCODE_2, product2);
+		ProductDatabases.BARCODED_PRODUCT_DATABASE.put(BARCODE_3, product3);
+
+	}
+
+	@After
+	public void tearDown() throws Exception {
+		super.initializeStation();
+		unit0 = null;
+		unit1 = null;
+		unit2 = null;
+		unit3 = null;
+
+		product0 = null;
+		product1 = null;
+		product2 = null;
+		product3 = null;
+		ProductDatabases.BARCODED_PRODUCT_DATABASE.remove(BARCODE_0);
+		ProductDatabases.BARCODED_PRODUCT_DATABASE.remove(BARCODE_1);
+		ProductDatabases.BARCODED_PRODUCT_DATABASE.remove(BARCODE_2);
+		ProductDatabases.BARCODED_PRODUCT_DATABASE.remove(BARCODE_3);
+
+	}
+
+	/**
+	 * Functionn to ensure a DisabledException is thrown
+	 * when trying to scan while system not ready
+	 * to accept scanned items
+	 *
+	 *
+	 */
+	@Test
+	public void scanWhenDisabled() {
+		this.useCase = new AddItem(product0, (BarcodedUnit)unit0, super.station);
+		this.station.mainScanner.disable();
+		assertThrows(DisabledException.class, () -> this.useCase.AddItemByScanning(super.station));
+	}
 
 }
-
