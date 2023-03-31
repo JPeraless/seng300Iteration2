@@ -34,32 +34,53 @@ public class PrintReceipt implements ReceiptPrinterObserver {
 	private SelfCheckoutStation station;
 	private String currentMessage;
 	private CustomerIO CO;
-//	private String currentBillPrinted;
 	private AttendentStub attendent;
 
-//	
 	public PrintReceipt(SelfCheckoutStation stn) {
 		station = stn;
 	}
 	
+	/**
+	 * registers any external observers to the list of observers
+	 * @param observer: Observer to be registered to the list
+	 */
 	public void registerObserver(PrintReceiptObserver observer) {
 		observers.add(observer);
 	}
 	
+	/**
+	 * registers a customer as an observer 
+	 * @param anotherCO: Customer to be registered
+	 */
 	public void registerCustomerIO(CustomerIO anotherCO) {
 		CO = anotherCO;
 		observers.add(anotherCO);
 	}
 	
+	/**
+	 * registers an attendant as an observer 
+	 * @param att: attendant to be registered 
+	 */
 	public void registerAttendent(AttendentStub att) {
 		attendent = att;
 		observers.add(att);
 	}
 	
+	/**
+	 * returns the printer used for receipt printing
+	 * @return
+	 */
 	public ReceiptPrinter getPrinter() {
 		return station.printer;
 	}
 	
+	/**
+	 * Prints a receipt given a bill list. If receipt cannot be printed, attendant is called, and all observers are informed
+	 * @param billList: List of items in the final bill
+	 * @return true if a full receipt has been successfully printed, false otherwise
+	 * @throws EmptyException
+	 * @throws OverloadException
+	 */
 	public boolean print(List<BarcodedProduct> billList) throws EmptyException, OverloadException{
 
 		// Tracks the total cost of the customers purchase
@@ -85,7 +106,6 @@ public class PrintReceipt implements ReceiptPrinterObserver {
 		char[] receipt = receiptOutput.toString().toCharArray();
 		for (char c : receipt) {
 			try{
-//				currentBillPrinted += c;
 				station.printer.print(c);
 			} catch (OverloadException oe){
 				for(PrintReceiptObserver observer : observers) {
@@ -94,28 +114,22 @@ public class PrintReceipt implements ReceiptPrinterObserver {
 				return false;
 			} catch (EmptyException e) {
 				if (e.getMessage().contains("There is no paper in the printer.")) {
-//					for(PrintReceiptObserver observer : observers) {
-//						observer.requiresMaintance(station, e.getMessage());
-//					}
+					for(PrintReceiptObserver observer : observers) {
+						observer.requiresMaintainence(station, e.getMessage());
+					}
 					station.printer.cutPaper(); // Cut the paper
 
 					currentMessage = e.getMessage();
 					reactToOutOfPaperEvent(station.printer);
-//					if (added) {
-//						station.printer.print(c);
-//					}
 					return false;
 				} else {
-//					for(PrintReceiptObserver observer : observers) {
-//						observer.requiresMaintance(station, e.getMessage());
-//					}
+					for(PrintReceiptObserver observer : observers) {
+						observer.requiresMaintainence(station, e.getMessage());
+					}
 					station.printer.cutPaper(); // Cut the paper
 
 					currentMessage = e.getMessage();
 					reactToOutOfInkEvent(station.printer);
-//					if (added) {
-//						station.printer.print(c);
-//					}
 					return false;
 				}
 

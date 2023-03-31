@@ -32,7 +32,6 @@ public class testLowInkPaper {
 	Currency c1 = Currency.getInstance(Locale.CANADA);
 	Currency c2 = Currency.getInstance(Locale.ITALY);
 	int[] billdenominations = {5, 10, 15, 20, 50};
-//	BigDecimal[] coindenominations = {new BigDecimal("0"), new BigDecimal("1"), new BigDecimal("2")};
 	BigDecimal[] coindenominations = {BigDecimal.ONE};
 	
 	Barcode barcode = new Barcode(Numeral.eight,Numeral.one,Numeral.two,Numeral.three);
@@ -64,11 +63,7 @@ public class testLowInkPaper {
 
 		printercontroller = new PrintReceipt(scs);
 		
-		
-//		printercontroller.registerObserver(controllerObserver1);
-//		printercontroller.registerObserver(controllerObserver2);
-//		printercontroller.registerObserver(controllerObserver3);
-		
+			
 		attendantStub = new AttendentStub(printercontroller);
 		customerStub = new CustomerIO();
 		logic = new SelfCheckoutSystemLogic(scs, customerStub, attendantStub);
@@ -86,6 +81,7 @@ public class testLowInkPaper {
 
 	}
 	
+	//tests a valid case with enough ink and paper to print the given receipt
 	@Test
 	public void testValidReceipt() throws EmptyException, OverloadException {
 		scs.printer.addInk(1<<9);
@@ -96,6 +92,7 @@ public class testLowInkPaper {
 		assertEquals("this test case should pass", expected, actual);
 	}
 	
+	//tests an invalid case where printer has low paper
 	@Test
 	public void testlowpaper() throws EmptyException, OverloadException {
 		scs.printer.addInk(1<<9);
@@ -105,7 +102,7 @@ public class testLowInkPaper {
 		assertEquals("this test case should pass", expected, actual);
 	}
 	
-	
+	//tests an invalid case where printer has low ink
 	@Test
 	public void testLowInk() throws EmptyException, OverloadException {
 		
@@ -115,6 +112,5 @@ public class testLowInkPaper {
 		boolean actual = logic.startPrinting(shoppingCart);
 		assertEquals("this test case should pass", expected, actual);
 	}
-
 }
 

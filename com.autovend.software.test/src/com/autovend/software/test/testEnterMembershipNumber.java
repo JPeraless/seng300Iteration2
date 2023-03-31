@@ -44,11 +44,7 @@ public class testEnterMembershipNumber {
 	ArrayList<String> membershipTrys;
 	
 	
-	
-
-	// Setup: AttendantStub and CustomerStub are created, and two products are added to the product database.
-	// SelfCheckoutStation object is created.
-	@Before
+		@Before
 	public void Setup(){
 		scs = new SelfCheckoutStation(c1, billdenominations, coindenominations, 20, 1);
 
@@ -64,6 +60,7 @@ public class testEnterMembershipNumber {
 		membershipTrys = new ArrayList<String>();
 	}
 	
+		//tests a valid membership attempt
 	@Test
 	public void testValidMembershipOneTry() {
 		String number = "123456";
@@ -72,6 +69,7 @@ public class testEnterMembershipNumber {
 		assertEquals(expected, actual);
 	}
 	
+	//tests a valid membership attempt after multiple incorrect attempts
 	@Test
 	public void testValidMembershipMultipleTries() {
 		boolean cancel = false;
@@ -96,7 +94,7 @@ public class testEnterMembershipNumber {
 
 	
 
-	
+	//tests an invalid attempt in one try
 	@Test
 	public void testInvalidMembershipOneTry() {
 		boolean cancel = false;
@@ -118,6 +116,7 @@ public class testEnterMembershipNumber {
 		assertEquals(expected, actual);
 	}
 	
+	//tests an invalid attempt for multiple tries, then cancel
 	@Test
 	public void testInvalidMembershipMultipleTries() {
 		boolean cancel = false;
@@ -137,7 +136,6 @@ public class testEnterMembershipNumber {
 			}
 			cancel = true;
 		}
-
 		assertEquals(expected, actual);
 	}
 
