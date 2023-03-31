@@ -1,0 +1,762 @@
+commit b7c29a453e8d77a72b2d8819feeab8997206f243
+Author: saadman2001rahman <saadman.rahman1@ucalgary.ca>
+Date:   Fri Mar 31 00:39:41 2023 -0600
+
+    fixed some tests
+
+commit 6e47f5bb7db899728c0de84f42a7a1ab79b5ef7d
+Merge: 4553269 110b0d5
+Author: saadman2001rahman <saadman.rahman1@ucalgary.ca>
+Date:   Thu Mar 30 23:15:40 2023 -0600
+
+    Merge branch 'reorganized' of https://github.com/JPeraless/seng300Iteration2 into reorganized
+
+commit 455326977cce92732c35c5e36ae4efeff3546abf
+Author: saadman2001rahman <saadman.rahman1@ucalgary.ca>
+Date:   Thu Mar 30 23:15:30 2023 -0600
+
+    added documentation for print receipt and tests
+
+commit 110b0d519cb4205a7d46f2264e120214e8e0f4f0
+Author: desobob11 <desmond.obrien@ucalgary.ca>
+Date:   Thu Mar 30 23:06:30 2023 -0600
+
+    added headers
+
+commit 5660ec1cffbd678b6f7598ccda3c062af62a40ec
+Author: desobob11 <desmond.obrien@ucalgary.ca>
+Date:   Thu Mar 30 22:57:30 2023 -0600
+
+    first push to this branch
+
+commit c73c9a2d77fe838b5155abf5a1e71d33ea5a375f
+Author: desobob11 <desmond.obrien@ucalgary.ca>
+Date:   Thu Mar 30 22:14:41 2023 -0600
+
+    updated test case
+
+commit c7b1e13fe16bc1c4b8d584f72fefcf8465e6de8a
+Merge: 1185c48 87fc0a9
+Author: desobob11 <desmond.obrien@ucalgary.ca>
+Date:   Thu Mar 30 22:08:46 2023 -0600
+
+    Merge branch 'main' of https://github.com/JPeraless/seng300Iteration2
+
+commit 1185c489724cba4e461fa11611dd87952d2aa869
+Author: desobob11 <desmond.obrien@ucalgary.ca>
+Date:   Thu Mar 30 22:08:20 2023 -0600
+
+    pushing weightdiscrepancy stuff
+
+commit 87fc0a9300c6502ac3d1f6fe8f11fc0ca2374d39
+Author: Caleb Cavilla <caleb.cavilla@gmail.com>
+Date:   Thu Mar 30 22:07:05 2023 -0600
+
+    updated errors
+
+commit 81e463debdc7d9230ecce14037719bcb48e3aaca
+Author: Caleb Cavilla <caleb.cavilla@gmail.com>
+Date:   Thu Mar 30 22:00:11 2023 -0600
+
+    Resolved errors with code after merge
+
+commit 5355e38fe8f67a8f4daff7e161c871f2b529ec15
+Merge: edea80d 46fae0f
+Author: Omar Tejada <tejada.omar03@gmail.com>
+Date:   Thu Mar 30 21:52:18 2023 -0600
+
+    Merge branch 'main' of github.com:JPeraless/seng300Iteration2
+
+commit edea80dc2702dfb7061f957e214cf2d957574532
+Merge: 4b1a1d5 a885f2a
+Author: Omar Tejada <tejada.omar03@gmail.com>
+Date:   Thu Mar 30 21:47:53 2023 -0600
+
+    Merge branch 'weightdiscrepancy'
+
+commit 4b1a1d5be2866c77d0a5b69c1cc7095daf7702dd
+Merge: 733a288 c7240d8
+Author: Omar Tejada <tejada.omar03@gmail.com>
+Date:   Thu Mar 30 21:37:27 2023 -0600
+
+    Merge branch 'payment'
+
+commit c7240d849fa6a183a206f3eebc9d677ce35c906e
+Author: Jose Perales <113497808+JPeraless@users.noreply.github.com>
+Date:   Thu Mar 30 20:11:49 2023 -0600
+
+    Fix a static error
+
+commit 6d22a4f5e0077a7d423c8286af9a93def46a1720
+Author: JPeraless <jalfperi@hotmail.com>
+Date:   Thu Mar 30 19:40:27 2023 -0600
+
+    Update tests
+
+commit 6d089f5c077de3443da159b1581a300b2f04c84f
+Author: JPeraless <jalfperi@hotmail.com>
+Date:   Thu Mar 30 18:15:53 2023 -0600
+
+    Update on tests
+
+commit df36363aa64a270678b2d1c99f3e02d3778d7c12
+Author: tanvirahamed2001 <127472391+tanvirahamed2001@users.noreply.github.com>
+Date:   Thu Mar 30 17:16:07 2023 -0600
+
+    Update PayWithCard.java
+    
+    Made final changes to pay w cards
+
+commit bfa0e564c44d4148444945eee226784b374d943e
+Author: Caleb Cavilla <caleb.cavilla@gmail.com>
+Date:   Thu Mar 30 15:00:53 2023 -0600
+
+    Changes to how pay with card software works.
+
+commit cae2c6dba277b48ab7a36dcb24a8aa155fdb0f0b
+Merge: d4e1493 076d58b
+Author: JPeraless <jalfperi@hotmail.com>
+Date:   Thu Mar 30 12:21:32 2023 -0600
+
+    Merge remote-tracking branch 'origin/payment' into localPayment
+
+commit d4e1493a3d3f4ef36a8cb87b569f96c90c8f0a4f
+Author: JPeraless <jalfperi@hotmail.com>
+Date:   Thu Mar 30 12:21:15 2023 -0600
+
+    Blueprint for all the required test cases
+
+commit 076d58b182d8e02b98c7a7bd809daa2e9b31182c
+Author: saadman2001rahman <saadman.rahman1@ucalgary.ca>
+Date:   Thu Mar 30 11:42:53 2023 -0600
+
+    added test cases for enter membership number by typing, test coverage
+    full where methods implemented
+
+commit a44995a00e06fec69d0c62087fe54b9c458360d6
+Merge: c7deecb 8c2322a
+Author: saadman2001rahman <saadman.rahman1@ucalgary.ca>
+Date:   Thu Mar 30 10:20:24 2023 -0600
+
+    added more test coverage for printreceipt
+
+commit c7deecb7312e26ed9261dbf04c1257b40fe0d9f4
+Author: saadman2001rahman <saadman.rahman1@ucalgary.ca>
+Date:   Thu Mar 30 10:18:40 2023 -0600
+
+    added more test coverage for lowinkpaper tests
+
+commit 8c2322a3f86cc168f757c20d38c39f02e496f80b
+Merge: 5d27b7f 42c3330
+Author: tanvirahamed2001 <127472391+tanvirahamed2001@users.noreply.github.com>
+Date:   Thu Mar 30 02:15:43 2023 -0600
+
+    Merge branch 'payment' of https://github.com/JPeraless/seng300Iteration2 into payment
+
+commit 5d27b7fa7325bcd67a82cebf88e744d8e23d4e00
+Author: tanvirahamed2001 <127472391+tanvirahamed2001@users.noreply.github.com>
+Date:   Thu Mar 30 02:15:40 2023 -0600
+
+    Update PayWithCard.java
+    
+    pay with credit card
+
+commit 42c3330c41bf112d6d99eaf4bee0171655541664
+Author: Caleb Cavilla <caleb.cavilla@gmail.com>
+Date:   Thu Mar 30 02:02:56 2023 -0600
+
+    PayWithCash fully tested and ready to hand in
+
+commit c92ea7e2f4a5a9dc972e295d656f80fe6382abee
+Merge: 87449a5 826e4ad
+Author: saadman2001rahman <saadman.rahman1@ucalgary.ca>
+Date:   Thu Mar 30 00:27:46 2023 -0600
+
+    Merge branch 'payment' of https://github.com/JPeraless/seng300Iteration2 into payment
+
+commit 87449a50084f27dab586dbec91b9249c0dcf380e
+Merge: f4c7f0b 12916e8
+Author: saadman2001rahman <saadman.rahman1@ucalgary.ca>
+Date:   Thu Mar 30 00:20:21 2023 -0600
+
+    Merge branch 'payment' of https://github.com/JPeraless/seng300Iteration2
+    into payment
+
+commit 826e4ad8267b1bd16bba17fbbee5b77c396478ac
+Author: Caleb Cavilla <caleb.cavilla@gmail.com>
+Date:   Wed Mar 29 23:16:57 2023 -0600
+
+    System and PaywithCashController now work with coins as well
+
+commit 6b8d9a54432c2efe7e9452a956775a8c654398e9
+Merge: 9f8c7a9 12916e8
+Author: Caleb Cavilla <caleb.cavilla@gmail.com>
+Date:   Wed Mar 29 21:37:58 2023 -0600
+
+    Merge branch 'payment' of https://github.com/JPeraless/seng300Iteration2 into payment
+
+commit f4c7f0b4ac1eba75b062aa9ef866a27b0c7b39fe
+Author: saadman2001rahman <saadman.rahman1@ucalgary.ca>
+Date:   Wed Mar 29 21:25:25 2023 -0600
+
+    test commit
+
+commit 12916e87df3a997dde428edd0a698f0255e1329b
+Author: muhtadialam <muhtadialam@localhost>
+Date:   Wed Mar 29 21:23:20 2023 -0600
+
+    added test cases for lowInk and low Paper
+
+commit 317cb2d352361eb537132373bf80f0a32279f0cd
+Author: saadman2001rahman <saadman.rahman1@ucalgary.ca>
+Date:   Wed Mar 29 20:15:31 2023 -0600
+
+    added initial test for low paper/ink, test passed, need to change args
+    for main central system
+
+commit 8d3b126460bc707073bd14953de7b3756023a743
+Merge: 8ba122b e502346
+Author: saadman2001rahman <saadman.rahman1@ucalgary.ca>
+Date:   Wed Mar 29 19:10:34 2023 -0600
+
+    Merge branch 'payment' of https://github.com/JPeraless/seng300Iteration2 into payment
+
+commit 8ba122bd3068a70efefd7488f6fcafcca78b14f4
+Author: saadman2001rahman <saadman.rahman1@ucalgary.ca>
+Date:   Wed Mar 29 19:09:11 2023 -0600
+
+    added @before class for test cases low paper ink
+
+commit e5023464e2fc6de901a9d9660a33e2b08d768c17
+Merge: c47fdea dd6147b
+Author: tanvirahamed2001 <127472391+tanvirahamed2001@users.noreply.github.com>
+Date:   Wed Mar 29 18:59:36 2023 -0600
+
+    Merge branch 'payment' of https://github.com/JPeraless/seng300Iteration2 into payment
+
+commit c47fdea84bc668e2f04b798810fd7a4559faf0c3
+Author: tanvirahamed2001 <127472391+tanvirahamed2001@users.noreply.github.com>
+Date:   Wed Mar 29 18:59:14 2023 -0600
+
+    Update PayWithCard.java
+    
+    changes to pay card for credit?debit payment
+
+commit dd6147bcdd1add878100e77f11930c7be7f4dc08
+Author: saadman2001rahman <saadman.rahman1@ucalgary.ca>
+Date:   Wed Mar 29 18:52:33 2023 -0600
+
+    test commit
+
+commit 963608f1ff858ae60c0e914644905cb1bfc6f19b
+Author: saadman2001rahman <saadman.rahman1@ucalgary.ca>
+Date:   Wed Mar 29 18:48:40 2023 -0600
+
+    added source folder to test project
+
+commit d6c52b02e05f7561dd67e3da3bd51de9dac8b0a7
+Merge: b5f98f3 dbd53ee
+Author: saadman2001rahman <saadman.rahman1@ucalgary.ca>
+Date:   Wed Mar 29 11:56:13 2023 -0600
+
+    Merge branch 'payment' of https://github.com/JPeraless/seng300Iteration2 into payment
+
+commit b5f98f3922a76efa242275cdbe450e6a3082976b
+Author: saadman2001rahman <saadman.rahman1@ucalgary.ca>
+Date:   Wed Mar 29 11:55:55 2023 -0600
+
+    added Enter Membership Number functionality. Tests required
+
+commit dbd53eeab1a828545cb9f16657ec35a90895283c
+Author: Omar Tejada <tejada.omar03@gmail.com>
+Date:   Wed Mar 29 03:16:57 2023 -0600
+
+    Extract Pay with Credit into generic Pay use case
+    
+    Abstraction to also be used with Pay with Cash in System
+
+commit da964182ce2cf763da9d9f71f021f622b97df53a
+Author: saadman2001rahman <saadman.rahman1@ucalgary.ca>
+Date:   Wed Mar 29 02:55:06 2023 -0600
+
+    added database class storing membership details
+
+commit 9c441f13f3378027ede11df1dc3d20b806813c55
+Author: saadman2001rahman <saadman.rahman1@ucalgary.ca>
+Date:   Wed Mar 29 01:22:56 2023 -0600
+
+    implemented low ink/ low paper functionality. tests needed
+
+commit 3cf05b9d16b06e8a7df82deaaed8661ceb6bea23
+Author: saadman2001rahman <saadman.rahman1@ucalgary.ca>
+Date:   Tue Mar 28 22:50:40 2023 -0600
+
+    added low ink and low paper functionality. action to abort print still
+    required
+
+commit a885f2a06e19ecd2845c51f1448d7b3d496baa2c
+Author: seantan88 <seanhonourtan@gmail.com>
+Date:   Tue Mar 28 20:35:20 2023 -0600
+
+    small edit to AddItemByPLU
+    
+    need to figure out how to handle user input for PLU code, copyOfUnit.getPLU() is placeholder for now
+
+commit ad5ab95117f1309b7cca9edf6e5652f5fca4ea07
+Author: seantan88 <seanhonourtan@gmail.com>
+Date:   Tue Mar 28 20:17:07 2023 -0600
+
+    small changes to AddItemByPLU
+    
+    need to reformat method a bit since no barcode
+
+commit f3b3806af53026f45ea78b058c460456e6aa99ad
+Author: victor0campos <victor.campos@ucalgary.ca>
+Date:   Tue Mar 28 18:35:30 2023 -0600
+
+    Created a stub for bag dispenser and a constructor for Purchased bags
+
+commit 9f8c7a98ecff113b0ec2bbc27bf1f3189697d0c5
+Author: Caleb Cavilla <caleb.cavilla@gmail.com>
+Date:   Tue Mar 28 17:32:28 2023 -0600
+
+    Old test files from first iterations
+
+commit c382eed7557b39873b8e8b095e88a76d65fd46db
+Merge: 196d98f f5a4a56
+Author: victor0campos <victor.campos@ucalgary.ca>
+Date:   Tue Mar 28 17:23:38 2023 -0600
+
+    Merge branch 'weightdiscrepancy' of https://github.com/JPeraless/seng300iteration2 into weightdiscrepancy
+
+commit 196d98f57605cf198dc8259952509a03319b9d62
+Author: victor0campos <victor.campos@ucalgary.ca>
+Date:   Tue Mar 28 17:22:58 2023 -0600
+
+    Created the Purchase bags class n comments
+
+commit f5a4a56fc33b50659355cd170feadd1b484b7e2f
+Author: desobob11 <desmond.obrien@ucalgary.ca>
+Date:   Tue Mar 28 17:15:21 2023 -0600
+
+    idk
+
+commit a8d768fc162f5cd823bcbe05398b122ad047756b
+Author: desobob11 <desmond.obrien@ucalgary.ca>
+Date:   Tue Mar 28 17:09:16 2023 -0600
+
+    syncing with victor
+
+commit d2caad14adc0f3b33bdabeaadf7fbce01d3bd4f4
+Author: victor0campos <victor.campos@ucalgary.ca>
+Date:   Tue Mar 28 17:08:52 2023 -0600
+
+    added the add item by plu into AddItem
+
+commit 1b6fdb97fd4dcda4ff41576865e7b4b63a9ede9d
+Author: desobob11 <desmond.obrien@ucalgary.ca>
+Date:   Tue Mar 28 16:27:16 2023 -0600
+
+    redid AddItem
+
+commit e3ae400d774b8165bb8038a81f80aace0a61d1c3
+Author: desobob11 <desmond.obrien@ucalgary.ca>
+Date:   Tue Mar 28 15:19:34 2023 -0600
+
+    reworked AddItem
+
+commit ca87d4174b975c65c5740a6392ddb2d7b13460b3
+Author: desobob11 <desmond.obrien@ucalgary.ca>
+Date:   Tue Mar 28 14:33:01 2023 -0600
+
+    more test cases for additembyscanning
+
+commit 35f5889933c0a727f75c79403d3e39abc75e3203
+Author: desobob11 <desmond.obrien@ucalgary.ca>
+Date:   Tue Mar 28 14:15:12 2023 -0600
+
+    generalized testing and starting to test additembyscannin
+
+commit 91ea55306affc147d99db1dd3f2b6a4935072ab8
+Author: desobob11 <desmond.obrien@ucalgary.ca>
+Date:   Tue Mar 28 13:46:35 2023 -0600
+
+    sync
+
+commit 59246df3d84f9c695f9ef5bb0d8e49813685ad20
+Author: desobob11 <desmond.obrien@ucalgary.ca>
+Date:   Tue Mar 28 12:05:25 2023 -0600
+
+    all of the test cases that i can think of for add own bags are done
+
+commit 0201bbcb8bfba8780fc0d5880945c4813b00d98e
+Merge: 5924fc1 49e65ee
+Author: seantan88 <seanhonourtan@gmail.com>
+Date:   Tue Mar 28 11:40:32 2023 -0600
+
+    Merge branch 'weightdiscrepancy' of https://github.com/JPeraless/seng300Iteration2 into weightdiscrepancy
+
+commit 5924fc1d3b0ad9e545546d88b9f94918f321578d
+Author: seantan88 <seanhonourtan@gmail.com>
+Date:   Tue Mar 28 11:40:20 2023 -0600
+
+    functions to get units and products from database
+    
+    not 100% sure of implementation yet
+
+commit 49e65eeec816a6f7400459812726ff735f7d3d74
+Author: desobob11 <desmond.obrien@ucalgary.ca>
+Date:   Tue Mar 28 11:34:51 2023 -0600
+
+    attendant approved test case
+
+commit c55334947be743b4dd104b12b500da7392b09eb4
+Author: desobob11 <desmond.obrien@ucalgary.ca>
+Date:   Tue Mar 28 11:30:07 2023 -0600
+
+    another test case done for weight discrepancy
+
+commit ce7fd4209f36319c7ec308d7f15e45f95c29d6d6
+Author: desobob11 <desmond.obrien@ucalgary.ca>
+Date:   Tue Mar 28 11:20:30 2023 -0600
+
+    Redid some stuff in weight discrepancy. Main change was refactoring the
+    "addBag" function to "getBag", and making it so that if an attendant
+    disproves of bags, the simulation continues without those bags present
+    on the scale
+
+commit 28a822dd5971f425b3c803c9b8f8c5252fb56c17
+Author: desobob11 <desmond.obrien@ucalgary.ca>
+Date:   Tue Mar 28 10:54:47 2023 -0600
+
+    found minor bug in AddOwnBags, fixed bug in testing
+
+commit 55745c65c2d010c57eaab24e4ac228511d9f9c62
+Author: desobob11 <desmond.obrien@ucalgary.ca>
+Date:   Tue Mar 28 10:22:05 2023 -0600
+
+    creating test
+
+commit 90b963cf98b125b35b8c3dac1993165f7c9191d0
+Author: matt200500 <124231840+matt200500@users.noreply.github.com>
+Date:   Mon Mar 27 23:06:52 2023 -0600
+
+    removed customer io from adding bags
+
+commit 3fcf2b061fd7ca966e3f60e0941f2034930ab180
+Author: seantan88 <seanhonourtan@gmail.com>
+Date:   Mon Mar 27 23:05:38 2023 -0600
+
+    more changes and added TODO
+
+commit 400035867de544ba60b12c7af54616057a60c46c
+Author: seantan88 <seanhonourtan@gmail.com>
+Date:   Mon Mar 27 23:01:01 2023 -0600
+
+    trying something out
+
+commit 899e802f9eba608e6fbc4b640ef744eb1f392c9d
+Author: seantan88 <seanhonourtan@gmail.com>
+Date:   Mon Mar 27 22:54:21 2023 -0600
+
+    progress and tiny fix to VendingSystem
+
+commit bf0fc56b60290a5e63a5e66db9c4dcdf9d5788de
+Author: seantan88 <seanhonourtan@gmail.com>
+Date:   Mon Mar 27 22:49:25 2023 -0600
+
+    Update AddItem.java
+
+commit 3d68b04bcd619c87e4e488288333341f66b825fa
+Merge: dcda24a 9148f03
+Author: anna-jeongah <annajlee28@gmail.com>
+Date:   Mon Mar 27 22:48:20 2023 -0600
+
+    Merge branch 'weightdiscrepancy' of github.com:JPeraless/seng300Iteration2 into weightdiscrepancy
+
+commit dcda24a013dbed6d737b3bd7ed46edcce3e102bb
+Author: anna-jeongah <annajlee28@gmail.com>
+Date:   Mon Mar 27 22:45:32 2023 -0600
+
+    Edited weight discrepancy and called it from the main system.
+
+commit 9148f03a8606b94e5f6f008d72a65f9b1e3bc476
+Author: seantan88 <seanhonourtan@gmail.com>
+Date:   Mon Mar 27 22:42:53 2023 -0600
+
+    small change
+
+commit f77c7ab80c38073ecff8a42c76038bd3ec1db79c
+Author: seantan88 <seanhonourtan@gmail.com>
+Date:   Mon Mar 27 22:39:22 2023 -0600
+
+    Started on AddItem.java
+
+commit 3ce1faf4be83f11a8a59f8784c31b54bfb78ba49
+Merge: d63998a a866fae
+Author: seantan88 <seanhonourtan@gmail.com>
+Date:   Mon Mar 27 21:55:05 2023 -0600
+
+    Merge branch 'weightdiscrepancy' of https://github.com/JPeraless/seng300Iteration2 into weightdiscrepancy
+
+commit d63998aa2ee11b9d0e99c250ff24789f5f6292c1
+Author: seantan88 <seanhonourtan@gmail.com>
+Date:   Mon Mar 27 21:54:51 2023 -0600
+
+    Update AddItem.java
+
+commit a866fae0863a8df605f7b50884b7f3edcd1c681b
+Merge: ed919b8 d902cb8
+Author: desobob11 <desmond.obrien@ucalgary.ca>
+Date:   Mon Mar 27 21:46:03 2023 -0600
+
+    Merge branch 'weightdiscrepancy' of https://github.com/JPeraless/seng300Iteration2 into weightdiscrepancy
+
+commit ed919b84ecb422d76dc465880d8ac5ca8fd1a457
+Author: desobob11 <desmond.obrien@ucalgary.ca>
+Date:   Mon Mar 27 21:45:39 2023 -0600
+
+    delete pay with credit
+
+commit d902cb80c261aae7ebf38906cc25b87a37ebe622
+Merge: d0d13ce e45919f
+Author: anna-jeongah <annajlee28@gmail.com>
+Date:   Mon Mar 27 21:44:21 2023 -0600
+
+    Merge branch 'weightdiscrepancy' of github.com:JPeraless/seng300Iteration2 into weightdiscrepancy
+
+commit d0d13ce32ff6986be32ba4d75ffdde35ca34c7f7
+Merge: 10d9a04 936bbb9
+Author: anna-jeongah <annajlee28@gmail.com>
+Date:   Mon Mar 27 21:44:16 2023 -0600
+
+    Merge branch 'weightdiscrepancy' of git@github.com:JPeraless/seng300Iteration2.git into weightdiscrepancy
+
+commit 0293d36d6d4c84009fd9f581f56d7de350c63b13
+Author: JPeraless <jalfperi@hotmail.com>
+Date:   Mon Mar 27 21:38:56 2023 -0600
+
+    Initial implementation of payment with cards (credit/debit)
+
+commit e45919f77fd7fc440bf1f254e20b7898080a2423
+Author: desobob11 <desmond.obrien@ucalgary.ca>
+Date:   Mon Mar 27 21:38:17 2023 -0600
+
+    deleted system
+
+commit 90e08568081fc2168b6d65dd3c4eecfe4a32935a
+Merge: a29d746 936bbb9
+Author: seantan88 <seanhonourtan@gmail.com>
+Date:   Mon Mar 27 21:37:21 2023 -0600
+
+    Merge branch 'weightdiscrepancy' of https://github.com/JPeraless/seng300Iteration2 into weightdiscrepancy
+
+commit 936bbb907859477de610f7fb548d8423ffe8a26e
+Author: desobob11 <desmond.obrien@ucalgary.ca>
+Date:   Mon Mar 27 21:33:22 2023 -0600
+
+    finally fixed
+
+commit a29d7466b0fa752163c9f0724bb7521f0b4ba08e
+Merge: 10d9a04 1c1543f
+Author: seantan88 <seanhonourtan@gmail.com>
+Date:   Mon Mar 27 21:25:44 2023 -0600
+
+    Merge branch 'weightdiscrepancy' of https://github.com/JPeraless/seng300Iteration2 into weightdiscrepancy
+
+commit 1c1543feffb868ec23c9d2dc30d5b04e78bc5f04
+Author: desobob11 <desmond.obrien@ucalgary.ca>
+Date:   Mon Mar 27 21:24:31 2023 -0600
+
+    tried to bring it back over
+
+commit 10d9a0408b031ccca14e3c055161b59841a39f14
+Author: desobob11 <desmond.obrien@ucalgary.ca>
+Date:   Mon Mar 27 21:00:45 2023 -0600
+
+    refactored again
+
+commit c79a5f548f59e7ec058fb81453834ecf4111e0a4
+Author: desobob11 <desmond.obrien@ucalgary.ca>
+Date:   Mon Mar 27 21:00:02 2023 -0600
+
+    refactor
+
+commit 6701a6e7cba7859d63b3c9c1f681f23842076d29
+Author: desobob11 <desmond.obrien@ucalgary.ca>
+Date:   Mon Mar 27 19:57:23 2023 -0600
+
+    stuff from payemtn
+
+commit e9c9ff7536232a46db560c093fdf4bb1c6782e53
+Author: desobob11 <desmond.obrien@ucalgary.ca>
+Date:   Mon Mar 27 19:56:28 2023 -0600
+
+    changed software name
+
+commit eef3b1d53233e09a87cbd9c2db8ea5879816ab2b
+Author: desobob11 <desmond.obrien@ucalgary.ca>
+Date:   Mon Mar 27 19:53:48 2023 -0600
+
+    idk
+
+commit 46fae0f33e2c1e377c3e5102a719801714fef743
+Merge: 733a288 b9c8fb3
+Author: matt200500 <124231840+matt200500@users.noreply.github.com>
+Date:   Mon Mar 27 17:22:30 2023 -0600
+
+    Merge pull request #2 from JPeraless/weightdiscrepancy
+    
+    Weightdiscrepancy
+
+commit acbe2b01014a1d97624931739b6f57f4367ffe20
+Author: Omar Tejada <tejada.omar03@gmail.com>
+Date:   Mon Mar 27 03:59:28 2023 -0600
+
+    Move improperly named scr/ to src/
+
+commit b9c8fb37bf3794d813a6b165d320e380d45f6cb2
+Merge: 14276fd fc8296c
+Author: desobob11 <desmond.obrien@ucalgary.ca>
+Date:   Sun Mar 26 19:40:58 2023 -0600
+
+    Merge branch 'weightdiscrepancy' of https://github.com/JPeraless/seng300Iteration2 into weightdiscrepancy
+
+commit 14276fd7a73f29d22f6d31bb747f7802d91ec55b
+Author: desobob11 <desmond.obrien@ucalgary.ca>
+Date:   Sun Mar 26 19:40:36 2023 -0600
+
+    implemented observer for AddOwnBags
+
+commit 84e6e6e70503464d64479ccfaeb9d9a98a60ae50
+Author: Caleb Cavilla <caleb.cavilla@gmail.com>
+Date:   Sun Mar 26 17:48:50 2023 -0600
+
+    Added files from first iteration of the project
+
+commit fc8296c503d6c01dd1c1617203a25c94a9df6cc6
+Author: anna-jeongah <annajlee28@gmail.com>
+Date:   Sun Mar 26 17:45:02 2023 -0600
+
+    Added javadoc comments to PurchaseBagsController
+
+commit adae2e1aa59f4f973239d2b7f0f0b8d3a0e7d33d
+Author: anna-jeongah <annajlee28@gmail.com>
+Date:   Sun Mar 26 17:38:26 2023 -0600
+
+    Created controller for purchase bags use case. Added methods to
+    CustomerIO class.
+
+commit d70fb394c9909f323f279deb0ed0a18471409b7e
+Author: Omar Tejada <tejada.omar03@gmail.com>
+Date:   Sun Mar 26 04:21:17 2023 -0600
+
+    Setup directory structure
+    
+    Directory structure mirrors provided `com.autovend.hardware_0.2` zip
+    file
+    
+    `PayWithCredit` is an empty file that exists only for git to start
+    tracking the folder structure
+
+commit 733a288b6803e12f86a7f1102ca69bff0a63dce2
+Author: Omar Tejada <tejada.omar03@gmail.com>
+Date:   Sun Mar 26 04:07:23 2023 -0600
+
+    Setup classpath and project files
+
+commit 73bed9094efa4ad92dd84a246a2fd61d6caa75aa
+Author: Omar Tejada <tejada.omar03@gmail.com>
+Date:   Sun Mar 26 01:09:22 2023 -0600
+
+    Normalize all line endings
+
+commit 092febf77b2b43b56ab3ec2c1a3b70285e1d16c2
+Author: Omar Tejada <tejada.omar03@gmail.com>
+Date:   Sun Mar 26 01:05:17 2023 -0600
+
+    Add gitattributes
+    
+    Currently only removes carriage returns (keeping line feeds) to avoid
+    unnecessary changes to files
+
+commit 1375a76ef45fbb5e1d45572a36e1ca8ad7c99f14
+Author: Omar Tejada <tejada.omar03@gmail.com>
+Date:   Sun Mar 26 00:44:17 2023 -0600
+
+    Revert "adding software to main';"
+    
+    This reverts commit 8b3d32fda80e80a9f2e73dff2deab9e5f22cadf1.
+    
+    Accidentally adds code to software package instead of hardware
+
+commit 265857b0e6d0726260eebd474cc8abb945d42701
+Author: desobob11 <desmond.obrien@ucalgary.ca>
+Date:   Sat Mar 25 14:40:46 2023 -0600
+
+    First rough draft for Add Own Bags.
+    
+    Also included a CustomerIO dummy class with a function that can add bags
+    to scale for the Add Own Bags use case
+
+commit f854811366b6e4af747ffb0e752ef645c5ea6f86
+Author: desobob11 <desmond.obrien@ucalgary.ca>
+Date:   Sat Mar 25 14:18:55 2023 -0600
+
+    first draft of weight discrepancy dealt with'
+
+commit 963b439416e82cbe04062db012add9e13a8d8d60
+Author: seantan88 <seanhonourtan@gmail.com>
+Date:   Sat Mar 25 13:16:38 2023 -0600
+
+    small changes
+    
+    spitballin
+
+commit edcafbde43b76d35b396f06642c40467495a6638
+Author: unknown <victor.campos@ucalgary.ca>
+Date:   Sat Mar 25 12:53:33 2023 -0600
+
+    Inital committ of membershipcard, alot of comments
+
+commit 9dc4abf95b97df95139c9da40f5451770a0058fa
+Author: desobob11 <desmond.obrien@ucalgary.ca>
+Date:   Sat Mar 25 12:34:15 2023 -0600
+
+    some more code
+
+commit ae7abc3b8b28556411d5338b075bd316cf9fc036
+Author: desobob11 <desmond.obrien@ucalgary.ca>
+Date:   Sat Mar 25 12:17:35 2023 -0600
+
+    weight discrepancy skeleton
+
+commit 8d7ed1651977d6dc881d0e0b8a627b9e7d636930
+Author: desobob11 <desmond.obrien@ucalgary.ca>
+Date:   Sat Mar 25 11:49:41 2023 -0600
+
+    deleted hardware
+
+commit 8b3d32fda80e80a9f2e73dff2deab9e5f22cadf1
+Author: desobob11 <desmond.obrien@ucalgary.ca>
+Date:   Sat Mar 25 11:48:04 2023 -0600
+
+    adding software to main';
+
+commit c9d460e58e0699f29b662ada3b64f46ecc683fd9
+Author: desobob11 <desmond.obrien@ucalgary.ca>
+Date:   Sat Mar 25 11:45:54 2023 -0600
+
+    made software
+
+commit 15ef455d70dc0668254e064db1ae4863bab8a3f3
+Author: Omar Tejada <tejada.omar03@gmail.com>
+Date:   Fri Mar 24 16:49:35 2023 -0600
+
+    Add gitignore
+
+commit 8e3a192791d83262362e3d21f5aa781fd886a396
+Author: JPeraless <jalfperi@hotmail.com>
+Date:   Fri Mar 24 16:32:43 2023 -0600
+
+    Starting code
