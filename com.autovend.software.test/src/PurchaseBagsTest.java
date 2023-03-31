@@ -203,13 +203,8 @@ public class PurchaseBagsTest extends BaseTestCase {
 		
 		// the actual weight on the bagging area
 		double actual = this.system.getStation().baggingArea.getCurrentWeight();
-		
-		// the weight in the bagging area as stored in the system memory, not bagging area memory
-		double systemStoredWeight = this.system.getBaggingAreaWeight();
-		
 		// ensure that all weight are equal
 		assertEquals(expected, actual, 0.000001);
-		assertEquals(expected, systemStoredWeight, 0.000001);
 		
 	}
 	

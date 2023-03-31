@@ -3,6 +3,7 @@ import java.math.BigDecimal;
 import com.autovend.Barcode;
 import com.autovend.BarcodedUnit;
 import com.autovend.Numeral;
+import com.autovend.devices.EmptyException;
 import com.autovend.devices.SimulationException;
 
 public class BagDispenserStub {
@@ -27,8 +28,9 @@ public class BagDispenserStub {
 	 * 
 	 * @return - If bags are still available in dispensers, return a new bage
 	 * 			otherwise, throw a simulation exception
+	 * @throws EmptyException 
 	 */
-	public BarcodedUnit dispenseBag() throws SimulationException {
+	public BarcodedUnit dispenseBag() throws SimulationException, EmptyException {
 		// if bags are available, dispense a new bag
 		if (this.currentBagsAvailable > 0) {
 			BarcodedUnit bag = new BarcodedUnit(PURCHASEDBAGBARCODE, BAG_WEIGHT);
@@ -38,7 +40,7 @@ public class BagDispenserStub {
 			return bag; 
 		}
 		// if no bags available, throw exception as per use case description
-		throw new SimulationException("Bag Dispenser is out of bags");
+		throw new EmptyException("Bag Dispenser is out of bags");
 	}
 
 

@@ -7,6 +7,7 @@ import com.autovend.Numeral;
 import com.autovend.devices.AbstractDevice;
 import com.autovend.devices.DisabledException;
 import com.autovend.devices.ElectronicScale;
+import com.autovend.devices.EmptyException;
 import com.autovend.devices.OverloadException;
 import com.autovend.devices.SelfCheckoutStation;
 import com.autovend.devices.SimulationException;
@@ -67,7 +68,7 @@ private SelfCheckoutSystemLogic system;
 	 * @throws OverloadException  - If weight is overloaded in weight discrepancy
 	 * @throws SimulationException  - If attendand does not approve weight discrepancy
 	 */
-	public void addBagsToBill() throws OverloadException {
+	public void addBagsToBill() throws OverloadException, EmptyException {
 		
 		if (this.station.baggingArea.isDisabled()) {
 			throw new DisabledException();

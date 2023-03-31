@@ -132,7 +132,7 @@ public class SelfCheckoutSystemLogic {
 	*/
 	
 	
-	public void purchaseBags() throws OverloadException {
+	public void purchaseBags() throws OverloadException, EmptyException {
 		PurchaseBagsController pb = new PurchaseBagsController(this.station, this);
 		this.baggingAreaWeight = this.station.baggingArea.getCurrentWeight();
 		pb.addBagsToBill();
