@@ -70,14 +70,14 @@ public class PayWithCard extends Pay<PayWithCardObserver> {
      * Make a payment for paymentMade amount, and update toBePaid and amountPaid
      * accordingly
      */
-    @Override
-    public void makePayment(double paymentMade) {
-        reduceAmountDue(paymentMade);
-
-        if (getAmountPaid() >= getTotalAmountDue()) {
-            completePayment();
-        }
-    }
+//    @Override
+//    public void makePayment(double paymentMade) {
+//        reduceAmountDue(paymentMade);
+//
+//        if (getAmountPaid() >= getTotalAmountDue()) {
+//            completePayment();
+//        }
+//    }
 
     private void completePayment() {
         // Perform any necessary actions to finalize the payment.
@@ -89,36 +89,37 @@ public class PayWithCard extends Pay<PayWithCardObserver> {
     public void payWithCard(Card card, double amount, String type) throws IOException {
     	
     	reader.enable();
-    	// BufferedImage image = new BufferedImage(null, null, false, null);
-    	// CardData data;
-    	
-    	//if (type.equals("insert")) {
-        //	data = reader.insert(card,  pin);
-    	//} else if (type.equals("tap")) {
-        //	data = reader.tap(card);
-    	//} else {
-        //	data = reader.swipe(card, image);
-    	//}
-    	
-    	//bank.addCardData(data.getNumber(), data.getCardholder(), expiry, data.getCVV(), amountPaid);
-    	//int holdNumber = bank.authorizeHold(data.getNumber(), amountPaid);
-    	//something to do with system. see usecase scenario number 7 and 8
-    	
-    	//boolean transactionComplete = bank.postTransaction(data.getNumber(), holdNumber, amountPaid);
-    	
-    	//if (!transactionComplete) {
-    	//	for (PayWithCardObserver observer : observers) {
-        //		observer.reactToNotEnouighFunds();
-    	//	}
-    	//} else {
-        //	boolean holdreleased = bank.releaseHold(data.getNumber(), holdNumber);
-        //	
-        //	totalBill = totalBill.subtract(amountPaid);
-    	//}
-    	
-    	//if (reader.remove()) {
-    	//	customer.sessionComplete();
-    	//}
+		 BufferedImage image = new BufferedImage(null, null, false, null);
+		 CardData data;
+		
+		if (type.equals("insert")) {
+			data = reader.insert(card,  pin);
+		} else if (type.equals("tap")) {
+				data = reader.tap(card);
+		}
+		 else {
+			data = reader.swipe(card, image);
+		}
+		
+		bank.addCardData(data.getNumber(), data.getCardholder(), expiry, data.getCVV(), amountPaid);
+		int holdNumber = bank.authorizeHold(data.getNumber(), amountPaid);
+		//something to do with system. see usecase scenario number 7 and 8
+		
+		boolean transactionComplete = bank.postTransaction(data.getNumber(), holdNumber, amountPaid);
+		
+		if (!transactionComplete) {
+			for (PayWithCardObserver observer : observers) {
+				observer.reactToNotEnouighFunds();
+			}
+		} else {
+			boolean holdreleased = bank.releaseHold(data.getNumber(), holdNumber);
+			
+			totalBill = totalBill.subtract(amountPaid);
+		}
+		
+		if (reader.remove()) {
+			customer.sessionComplete();
+		}
     	
     	int res = totalBill.compareTo(new BigDecimal("0")); 
     	
@@ -136,4 +137,10 @@ public class PayWithCard extends Pay<PayWithCardObserver> {
     public void setPin(String num) {
     	pin = num;
     }
+
+	@Override
+	public void makePayment(double paymentMade) {
+		// TODO Auto-generated method stub
+		
+	}
 }

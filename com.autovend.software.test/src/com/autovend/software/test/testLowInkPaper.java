@@ -126,4 +126,3 @@ public class testLowInkPaper {
 		assertEquals("this test case should pass", expected, actual);
 	}
 }
-

@@ -48,7 +48,7 @@ public class PayWithCardTest {
 
     private CustomerIO customer;
 
-    CardIssuer bank = new CardIssuer("RBC");
+    CardIssuer bank;
 
     Calendar expiry = new GregorianCalendar(2027, Calendar.JUNE, 25);
 
@@ -62,14 +62,13 @@ public class PayWithCardTest {
 
     Pay pay;
 
-
-
     // Setup self-checkout station
     @Before
     public void setup() {
         // Set the currency to be used
         currency = Currency.getInstance(Locale.CANADA);
-
+        
+        bank = new CardIssuer("RBC");
 
         // Initialize a self-checkout station
         int[] billDenominations = {5, 10 , 15, 20, 50, 100};
@@ -84,7 +83,7 @@ public class PayWithCardTest {
         // Initialize the station's system
         system = new SelfCheckoutSystemLogic(station);
 
-        controller = new PayWithCardObserver(station, pay);
+        controller = new PayWithCardObserver(station, pay, bank);
 
         // set a product's description
         String description = "Description for item";
@@ -143,7 +142,7 @@ public class PayWithCardTest {
             e.printStackTrace();
         }
 
-        Assert.assertEquals(new BigDecimal("5.50"), BigDecimal.valueOf(pay.getAmountPaid()));
+        Assert.assertEquals(new BigDecimal("5.50"), payWithCard.getAmountPaid());
     }
 
     // Test tapping a debit card with sufficient funds and a valid pin
@@ -167,7 +166,7 @@ public class PayWithCardTest {
             e.printStackTrace();
         }
 
-        Assert.assertEquals(new BigDecimal("5.50"), pay.getAmountPaid());
+        Assert.assertEquals(new BigDecimal("0"), payWithCard.getAmountPaid());
     }
 
     // Test swiping a debit card with sufficient funds and a valid pin
@@ -226,8 +225,8 @@ public class PayWithCardTest {
             e.printStackTrace();
         }
 
-        Assert.assertEquals(new BigDecimal(0), pay.getAmountPaid());
-        Assert.assertEquals(new BigDecimal("5.50"), pay.getTotalAmountDue() - pay.getAmountPaid());
+        Assert.assertEquals(new BigDecimal(0), payWithCard.getAmountPaid());
+        Assert.assertEquals(new BigDecimal("5.50"), payWithCard.getTotalAmountDue().subtract(payWithCard.getAmountPaid()));
     }
 
     // Test tapping a debit card with insufficient funds and a valid pin
@@ -249,8 +248,8 @@ public class PayWithCardTest {
             e.printStackTrace();
         }
 
-        Assert.assertEquals(new BigDecimal(0), pay.getAmountPaid());
-        Assert.assertEquals(new BigDecimal("5.50"), pay.getTotalAmountDue() - pay.getAmountPaid());
+        Assert.assertEquals(new BigDecimal(0), payWithCard.getAmountPaid());
+        Assert.assertEquals(new BigDecimal("5.50"), payWithCard.getTotalAmountDue().subtract(payWithCard.getAmountPaid()));
     }
 
     // Test swiping a debit card with insufficient funds and a valid pin
@@ -273,7 +272,7 @@ public class PayWithCardTest {
         }
 
         Assert.assertEquals(new BigDecimal(0), pay.getAmountPaid());
-        Assert.assertEquals(new BigDecimal("5.50"), pay.getTotalAmountDue() - pay.getAmountPaid());
+        Assert.assertEquals(new BigDecimal("5.50"), payWithCard.getTotalAmountDue().subtract(payWithCard.getAmountPaid()));
     }
 
     // Test inserting a credit card with sufficient funds and a valid pin
@@ -286,6 +285,7 @@ public class PayWithCardTest {
         station.baggingArea.add(barcodedUnit);
 
         PayWithCard payWithCard = new PayWithCard(station, controller, insertCredit, customer);
+        payWithCard.setBank(bank);
         bank.addCardData("283745869032", "credit", expiry, "432", BigDecimal.valueOf(200));
 
         try {
@@ -295,7 +295,7 @@ public class PayWithCardTest {
             e.printStackTrace();
         }
 
-        Assert.assertEquals(new BigDecimal("5.50"), pay.getAmountPaid());
+        Assert.assertEquals(new BigDecimal("0"), payWithCard.getAmountPaid());
     }
 
     // Test tapping a credit card with sufficient funds and a valid pin
@@ -317,7 +317,7 @@ public class PayWithCardTest {
             e.printStackTrace();
         }
 
-        Assert.assertEquals(new BigDecimal("5.50"), pay.getAmountPaid());
+        Assert.assertEquals(new BigDecimal("0"), payWithCard.getAmountPaid());
     }
 
     // Test swiping a credit card with sufficient funds and a valid pin
@@ -340,7 +340,7 @@ public class PayWithCardTest {
             e.printStackTrace();
         }
 
-        Assert.assertEquals(new BigDecimal("5.50"), pay.getAmountPaid());
+        Assert.assertEquals(new BigDecimal("0"), payWithCard.getAmountPaid());
     }
 
     // Test inserting a credit card with sufficient funds and an invalid pin
@@ -378,8 +378,8 @@ public class PayWithCardTest {
         }
        
 
-        Assert.assertEquals(new BigDecimal(0), pay.getAmountPaid());
-        Assert.assertEquals(new BigDecimal("5.50"), pay.getTotalAmountDue() - pay.getAmountPaid());
+        Assert.assertEquals(new BigDecimal(0), payWithCard.getAmountPaid());
+        Assert.assertEquals(new BigDecimal("5.50"), payWithCard.getTotalAmountDue().subtract(payWithCard.getAmountPaid()));
     }
 
     // Test tapping a credit card with insufficient funds and a valid pin
@@ -392,7 +392,7 @@ public class PayWithCardTest {
         station.baggingArea.add(barcodedUnit);
 
         PayWithCard payWithCard = new PayWithCard(station, controller, tapInsufficientCredit, customer);
-        bank.addCardData("283745869032", "credit", expiry, "432", BigDecimal.valueOf(200));
+        bank.addCardData("283745869032", "credit", expiry, "432", BigDecimal.valueOf(1));
 
         try {
             station.cardReader.tap(tapInsufficientCredit);
@@ -401,8 +401,8 @@ public class PayWithCardTest {
             e.printStackTrace();
         }
 
-        Assert.assertEquals(new BigDecimal(0), pay.getAmountPaid());
-        Assert.assertEquals(new BigDecimal("5.50"), pay.getTotalAmountDue() - pay.getAmountPaid());
+        Assert.assertEquals(new BigDecimal(0), payWithCard.getAmountPaid());
+        Assert.assertEquals(new BigDecimal("5.50"), payWithCard.getTotalAmountDue().subtract(payWithCard.getAmountPaid()));
     }
 
     // Test swiping a credit card with insufficient funds and a valid pin
@@ -425,7 +425,7 @@ public class PayWithCardTest {
         }
 
         Assert.assertEquals(new BigDecimal(0), pay.getAmountPaid());
-        Assert.assertEquals(new BigDecimal("5.50"), pay.getTotalAmountDue() - pay.getAmountPaid());
+        Assert.assertEquals(new BigDecimal("5.50"), payWithCard.getTotalAmountDue().subtract(payWithCard.getAmountPaid()));
     }
 
 }

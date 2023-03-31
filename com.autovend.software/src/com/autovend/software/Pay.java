@@ -1,8 +1,11 @@
 package com.autovend.software;
 
+import java.math.BigDecimal;
+
 import com.autovend.devices.SelfCheckoutStation;
 import com.autovend.devices.SimulationException;
 import com.autovend.devices.observers.AbstractDeviceObserver;
+import com.autovend.external.CardIssuer;
 
 /**
 Desmond O'Brien: 30064340
@@ -23,7 +26,8 @@ public abstract class Pay<T extends AbstractDeviceObserver> {
     protected final T controller;
     private double totalAmountDue;
     private double amountPaid;
-
+    CardIssuer bank;
+    
     public Pay(SelfCheckoutStation checkoutStation, T controller) {
         if (checkoutStation == null)
             throw new SimulationException("Station cannot not be null");
@@ -33,7 +37,7 @@ public abstract class Pay<T extends AbstractDeviceObserver> {
         this.checkoutStation = checkoutStation;
         this.controller = controller;
 
-        PayWithCardObserver cardObserver = new PayWithCardObserver(checkoutStation, this);
+		PayWithCardObserver cardObserver = new PayWithCardObserver(checkoutStation, this, bank);
         
         checkoutStation.cardReader.register(cardObserver);
         
@@ -49,11 +53,13 @@ public abstract class Pay<T extends AbstractDeviceObserver> {
         amountPaid += paymentMadeAmount;
     }
 
-    public double getTotalAmountDue() {
-        return totalAmountDue;
+    public BigDecimal getTotalAmountDue() {
+    	BigDecimal res = new BigDecimal(totalAmountDue);
+        return res;
     }
 
-    public double getAmountPaid() {
-        return amountPaid;
+    public BigDecimal getAmountPaid() {
+    	BigDecimal res = new BigDecimal(amountPaid);
+        return res;
     }
 }

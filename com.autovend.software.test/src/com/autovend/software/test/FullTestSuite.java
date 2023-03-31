@@ -18,7 +18,7 @@ Jose Perales: 30143354
 Anna Lee: 30137463
  */
 @RunWith(Suite.class)
-@SuiteClasses({ AddItemByPLUTest.class, AddItemByScanningTest.class, AddOwnBagsTest.class, PayWithCardTest.class,
+@SuiteClasses({ AddItemByPLUTest.class, AddItemByScanningTest.class, AddOwnBagsTest.class, PayWithCardTest.class, 
 		PayWithCashTest.class, PurchaseBagsTest.class, testEnterMembershipNumber.class, testLowInkPaper.class,
 		WeightDiscrepancyTest.class })
 public class FullTestSuite {

@@ -43,10 +43,11 @@ public class PayWithCardObserver extends SelfCheckoutSystemLogic implements Card
     private CustomerIO customer;
     
     boolean totalBillPaid = false;
-	public PayWithCardObserver(SelfCheckoutStation station, Pay system) {
+	public PayWithCardObserver(SelfCheckoutStation station, Pay system, CardIssuer cd) {
 		super(station);
 		this.system = system;
 		this.station = station;
+		bank = cd;
 		amountDue = super.getAmountDue();
 	}
 
