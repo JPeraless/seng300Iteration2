@@ -37,6 +37,8 @@ public class SelfCheckoutSystemLogic {
 	private boolean discrepancyActive = false;
 	private boolean doNotBagItemActive = false;
 	
+	private boolean attendantApprovedOwnBags;
+	
 	// FROM PLU
 	private SellableUnit currentSelectedUnit;
 	
@@ -142,6 +144,7 @@ public class SelfCheckoutSystemLogic {
 	*/
 	
 	
+	
 	public void addItemByScanning() throws Exception {
 		AddItemByScanningController controller = new AddItemByScanningController(this.station, this);
 		controller.add(this.currentSelectedUnit);
@@ -153,7 +156,10 @@ public class SelfCheckoutSystemLogic {
 	}
 	
 	
-	
+	public void addOwnBags() {
+		AddOwnBagsController controller = new AddOwnBagsController(this.station, this);
+		controller.addOwnBags();
+	}
 	
 	
 	public void purchaseBags() throws OverloadException, EmptyException {
@@ -162,10 +168,7 @@ public class SelfCheckoutSystemLogic {
 		pb.addBagsToBill();
 	}
 	
-	public void addItemByPlu() throws OverloadException{
-		
-		
-	}
+
 	
 	
 	
@@ -370,8 +373,9 @@ public class SelfCheckoutSystemLogic {
 		return this.currentBarcode;
 	}
 	
-
-	
+	public void setDiscrepancyActive(boolean val) {
+		this.discrepancyActive = val;
+	}
 
 }
 
