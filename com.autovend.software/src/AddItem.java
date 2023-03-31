@@ -53,7 +53,7 @@ public class AddItem<T extends Product> implements BarcodeScannerObserver{
 
 	}
 
-	public BarcodedProduct getProductFromBarcode(Barcode barcode) {
+	public static BarcodedProduct getProductFromBarcode(Barcode barcode) {
 		return ProductDatabases.BARCODED_PRODUCT_DATABASE.get(barcode);
 	}
 	

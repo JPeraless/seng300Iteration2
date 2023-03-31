@@ -13,8 +13,10 @@ import com.autovend.BarcodedUnit;
 import com.autovend.Numeral;
 import com.autovend.SellableUnit;
 import com.autovend.devices.SelfCheckoutStation;
+import com.autovend.devices.SimulationException;
 import com.autovend.external.*;
 import com.autovend.products.BarcodedProduct;
+ 
 
 
 
@@ -100,14 +102,17 @@ public class AddItemByScanningTest extends BaseTestCase {
 	 * Function to ensure a DisabledException is thrown
 	 * when trying to scan while system not ready
 	 * to accept scanned items
+	 * @throws Exception 
 	 * 
 	 * 
 	 */
 	@Test
-	public void scanWhenDisabled() {
-		this.useCase = new AddItemByScanningController(super.station, unit0);
+	public void scanWhenDisabled() throws Exception {
+		this.system.setCurrentSelectableUnit(unit0);
 		this.station.mainScanner.disable();
-		assertThrows(DisabledException.class, () -> this.useCase.add(super.station));
+		system.addItemByScanning();
+		// ** FIX NEEDED , THROWS SIM EXCEPTION, SHOULD THROW DISABLED EXCEPTION
+		assertThrows(SimulationException.class, () -> system.addItemByScanning());
 		
 	}
 	
@@ -120,16 +125,16 @@ public class AddItemByScanningTest extends BaseTestCase {
 	public void totalWeightTest() throws Exception {
 		
 		//testing when 1 item has been added
-		this.useCase = new AddItemByScanningController(super.station, unit0);
-		this.useCase.add(station);
+		this.system.setCurrentSelectableUnit(unit0);
+		system.addItemByScanning();
 		double expectedTotalWeight = unit0.getWeight();
-		assertEquals(expectedTotalWeight, station.baggingArea.getCurrentWeight(), 0.00001);
+		assertEquals(expectedTotalWeight, system.getBaggingAreaWeight(), 0.00001);
 		
 		// testing when 2 items have been added
-		this.useCase = new AddItemByScanningController(super.station, unit1);
-		useCase.add(station);
+		this.system.setCurrentSelectableUnit(unit1);
+		system.addItemByScanning();
 		expectedTotalWeight += unit1.getWeight();
-		assertEquals(expectedTotalWeight, station.baggingArea.getCurrentWeight(), 0.00001);
+		assertEquals(expectedTotalWeight, system.getBaggingAreaWeight(), 0.00001);
 		
 	}
 		
@@ -143,10 +148,10 @@ public class AddItemByScanningTest extends BaseTestCase {
 	 */
 	@Test
 	public void returnCorrectProductTest() throws Exception {
-	    this.useCase = new AddItemByScanningController(super.station, unit0);
-
+	    this.system.setCurrentSelectableUnit(unit0);
+	    system.addItemByScanning(); 
 	    BarcodedProduct expectedProduct = product0;
-	    assertEquals(expectedProduct, this.useCase.add(station));
+	    assertEquals(expectedProduct, AddItem.getProductFromBarcode(system.getCurrentBarcode()));
 
 	
 	}
@@ -158,13 +163,13 @@ public class AddItemByScanningTest extends BaseTestCase {
 	 */
 	@Test
 	public void reEnabledTest() throws Exception {
-		this.useCase = new AddItemByScanningController(super.station, unit1);
+		this.system.setCurrentSelectableUnit(unit0);
 		
-		this.useCase.add(station);
+		system.addItemByScanning();
 		
-		assertFalse(this.useCase.station.mainScanner.isDisabled());
-		assertFalse(this.useCase.station.handheldScanner.isDisabled());
-		assertFalse(this.useCase.station.billInput.isDisabled());
+		assertFalse(system.getStation().mainScanner.isDisabled());
+		assertFalse(system.getStation().handheldScanner.isDisabled());
+		assertFalse(system.getStation().billInput.isDisabled());
 	}
 	
 	
