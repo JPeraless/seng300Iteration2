@@ -27,6 +27,7 @@ import com.autovend.devices.SelfCheckoutStation;
 import com.autovend.devices.SimulationException;
 import com.autovend.external.ProductDatabases;
 import com.autovend.products.BarcodedProduct;
+import com.autovend.products.Product;
 
 
 /**
@@ -235,7 +236,7 @@ public class PurchaseBagsTest extends BaseTestCase {
 		setUp();
 		
 		// now let's simulate a case when there are already items on the bill
-		ArrayList<BarcodedProduct> billList = new ArrayList<>();
+		ArrayList<Product> billList = new ArrayList<>();
 		for (int i = 0; i < 31; ++i) {
 			billList.add(new BarcodedProduct(new Barcode(new Numeral[] {Numeral.eight}), "Arbitrary test item", BigDecimal.valueOf(100f) , 10f));
 		}
@@ -257,11 +258,11 @@ public class PurchaseBagsTest extends BaseTestCase {
 		// now let's go through our bill list and inspect every item 
 		// with a purchased bag barcode
 		// lets ensure that all of the information on the item is correct
-		for (BarcodedProduct product : this.system.getBillList()) {
-			if (product.getBarcode().equals(PurchaseBagsController.PURCHASEDBAGBARCODE)) {
-				assertEquals(product.getDescription(), "Purchased bag");
+		for (Product product : this.system.getBillList()) {
+			if (((BarcodedProduct) product).getBarcode().equals(PurchaseBagsController.PURCHASEDBAGBARCODE)) {
+				assertEquals(((BarcodedProduct)product).getDescription(), "Purchased bag");
 				assertEquals(product.getPrice(), PurchaseBagsController.PURCHASED_BAG_PRICE);
-				assertEquals(product.getExpectedWeight(), PurchaseBagsController.BAG_WEIGHT, 0.0001);
+				assertEquals(((BarcodedProduct)product).getExpectedWeight(), PurchaseBagsController.BAG_WEIGHT, 0.0001);
 			}
 		}
 	}
@@ -292,7 +293,7 @@ public class PurchaseBagsTest extends BaseTestCase {
 		
 		
 		// now lets purchase some items before we purchase the bags
-		ArrayList<BarcodedProduct> billList = new ArrayList<>();
+		ArrayList<Product> billList = new ArrayList<>();
 		for (int i = 0; i < 31; ++i) {
 			billList.add(new BarcodedProduct(new Barcode(new Numeral[] {Numeral.eight}), "Arbitrary test item", BigDecimal.valueOf(100f) , 10f));
 		}
