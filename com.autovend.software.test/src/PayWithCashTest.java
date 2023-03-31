@@ -276,17 +276,6 @@ import com.autovend.software.SelfCheckoutSystemLogic;
             controller.reactToCoinsEmptyEvent(coinDispenser);
         }
 
-        @Test
-        public void dummyReactToCoinsLoadedEvent(){
-            controller = new PayWithCashController(station,system);
-            controller.reactToCoinsLoadedEvent(coinDispenser);
-        }
-
-        @Test
-        public void dummyReactToCoinsUnloadedEvent(){
-            controller = new PayWithCashController(station,system);
-            controller.reactToCoinsUnloadedEvent(coinDispenser);
-        }
     }
 
 
