@@ -1,16 +1,19 @@
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
+import com.autovend.Barcode;
 import com.autovend.BarcodedUnit;
 import com.autovend.SellableUnit;
+import com.autovend.devices.BarcodeScanner;
 import com.autovend.devices.ElectronicScale;
 import com.autovend.devices.SelfCheckoutStation;
+import com.autovend.devices.observers.BarcodeScannerObserver;
 import com.autovend.products.BarcodedProduct;
 import com.autovend.products.Product;
 
-public class AddItemByScanning extends AddItem<BarcodedProduct> {
+public class AddItemByScanningController extends AddItem<BarcodedProduct> implements BarcodeScannerObserver {
 
-	public AddItemByScanning(SelfCheckoutStation station, SelfCheckoutSystemLogic system) {
+	public AddItemByScanningController(SelfCheckoutStation station, SelfCheckoutSystemLogic system) {
 		super(station, system);
 		this.station.mainScanner.enable();
 	
@@ -62,9 +65,14 @@ public class AddItemByScanning extends AddItem<BarcodedProduct> {
 		return null;
 		
 		
+	
+		
 	}
 
-
+	@Override
+	public void reactToBarcodeScannedEvent(BarcodeScanner barcodeScanner, Barcode barcode) {
+		this.system.setCurrentBarcode(barcode);
+	}
 	
 	
 

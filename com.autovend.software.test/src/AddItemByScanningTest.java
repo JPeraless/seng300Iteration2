@@ -37,7 +37,7 @@ import com.autovend.devices.OverloadException;
 
 
 public class AddItemByScanningTest extends BaseTestCase {
-	AddItemByScanning useCase;
+	AddItemByScanningController useCase;
 
 	
 	SellableUnit unit0;
@@ -105,7 +105,7 @@ public class AddItemByScanningTest extends BaseTestCase {
 	 */
 	@Test
 	public void scanWhenDisabled() {
-		this.useCase = new AddItemByScanning(super.station, unit0);
+		this.useCase = new AddItemByScanningController(super.station, unit0);
 		this.station.mainScanner.disable();
 		assertThrows(DisabledException.class, () -> this.useCase.add(super.station));
 		
@@ -120,13 +120,13 @@ public class AddItemByScanningTest extends BaseTestCase {
 	public void totalWeightTest() throws Exception {
 		
 		//testing when 1 item has been added
-		this.useCase = new AddItemByScanning(super.station, unit0);
+		this.useCase = new AddItemByScanningController(super.station, unit0);
 		this.useCase.add(station);
 		double expectedTotalWeight = unit0.getWeight();
 		assertEquals(expectedTotalWeight, station.baggingArea.getCurrentWeight(), 0.00001);
 		
 		// testing when 2 items have been added
-		this.useCase = new AddItemByScanning(super.station, unit1);
+		this.useCase = new AddItemByScanningController(super.station, unit1);
 		useCase.add(station);
 		expectedTotalWeight += unit1.getWeight();
 		assertEquals(expectedTotalWeight, station.baggingArea.getCurrentWeight(), 0.00001);
@@ -143,7 +143,7 @@ public class AddItemByScanningTest extends BaseTestCase {
 	 */
 	@Test
 	public void returnCorrectProductTest() throws Exception {
-	    this.useCase = new AddItemByScanning(super.station, unit0);
+	    this.useCase = new AddItemByScanningController(super.station, unit0);
 
 	    BarcodedProduct expectedProduct = product0;
 	    assertEquals(expectedProduct, this.useCase.add(station));
@@ -158,7 +158,7 @@ public class AddItemByScanningTest extends BaseTestCase {
 	 */
 	@Test
 	public void reEnabledTest() throws Exception {
-		this.useCase = new AddItemByScanning(super.station, unit1);
+		this.useCase = new AddItemByScanningController(super.station, unit1);
 		
 		this.useCase.add(station);
 		

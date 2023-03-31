@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.Currency;
 import java.util.List;
 
+import com.autovend.Barcode;
 import com.autovend.BarcodedUnit;
 import com.autovend.Bill;
 import com.autovend.SellableUnit;
@@ -38,6 +39,9 @@ public class SelfCheckoutSystemLogic {
 	
 	// FROM PLU
 	private SellableUnit currentSelectedUnit;
+	
+	// FROM SCANNER
+	private Barcode currentBarcode;
 	
 	private boolean isMember = false;
 	private String memberNumber;
@@ -351,6 +355,16 @@ public class SelfCheckoutSystemLogic {
 	public void setCurrentSelectableUnit(SellableUnit unit) {
 		this.currentSelectedUnit = unit;
 	}
+	
+	public void setCurrentBarcode(Barcode val) {
+		this.currentBarcode	 = val;
+	}
+	
+	public Barcode getCurrentBarcode() {
+		return this.currentBarcode;
+	}
+	
+
 	
 
 }
