@@ -1,3 +1,4 @@
+package com.autovend.software;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -14,14 +15,27 @@ import com.autovend.devices.SimulationException;
 import com.autovend.devices.observers.AbstractDeviceObserver;
 import com.autovend.devices.observers.ElectronicScaleObserver;
 
-public class AddOwnBags implements ElectronicScaleObserver {
+public class AddOwnBagsController {
 	//TODO: I THINK THIS FIELD CAN BE CUT, SHOULD REALLY ONLY BE USED AS PARAMETER I THINK
 	private boolean attendantApprovedBags;
+	private int numberOfBagsOwned;
 	
 	// TODO: ITEMS CAN'T HAVE A NULL BARCODE, SO JUST MADE A CONSTANT BARCODE HERE FOR BAGS
 	//		 THAT THE WHOLE SYSTEM CAN ACCESS
 	public static final Barcode BAG_BARCODE = new Barcode(new Numeral[] {Numeral.nine, Numeral.nine, Numeral.nine, Numeral.nine});
+
+	
+	private SelfCheckoutStation station;
+	private SelfCheckoutSystemLogic system;
 		
+	
+	public AddOwnBagsController(SelfCheckoutStation station, SelfCheckoutSystemLogic system) {
+		this.station = station;
+		this.system = system;
+		this.numberOfBagsOwned = this.system.getCustomerIO().getNumberOfPersonalBags();
+	}
+	
+	
 	/**
 	 * @param station - SelfCheckoutStation in use
 	 * @param bags - Total number of bags customer wants to add
@@ -30,30 +44,34 @@ public class AddOwnBags implements ElectronicScaleObserver {
 	 * 
 	 */
 	
-	public void addOwnBags(SelfCheckoutStation station, int number_bags, boolean attendantApproved) throws OverloadException {
+	public void addOwnBags() throws OverloadException {
 		// if disabled handle exception
 		if (station.baggingArea.isDisabled()) {
 			throw new DisabledException();
 		}
 		
-		if (number_bags == 0) {
+		if (this.numberOfBagsOwned == 0) {
 			return;
 		}
 		
+		
 		// get the attendant approval flag
-		this.attendantApprovedBags = attendantApproved;
+		this.attendantApprovedBags = this.system.getAttendentStub().getDiscrepancyApproved();
 		
 		// assumed that customer was signaled that they want to add bags
 		System.out.println("Please add your bags");
 		
 		// array to store bags in memory
-		BarcodedUnit[] bags = new BarcodedUnit[number_bags];
+		BarcodedUnit[] bags = new BarcodedUnit[this.numberOfBagsOwned];
 		
 		// add bags, increment running weight of bags
 		double bagWeight = 0;
-		for(int i = 0; i < number_bags; i ++) {
+		for(int i = 0; i < this.numberOfBagsOwned; i ++) {
 			bags[i] = getBag();
+			
 			bagWeight += bags[i].getWeight();
+			
+			this.system.weightDiscrepency(this.system.getBaggingAreaWeight() + bags[i].getWeight());
 			station.baggingArea.add(bags[i]);
 			
 			// calling this is literally the only way to get an overload exception from
@@ -71,25 +89,7 @@ public class AddOwnBags implements ElectronicScaleObserver {
 		
 		// If attendant does not approve of bags
 		if (!attendantApprovedBags) {
-			//throw new SimulationException("Bags not approved");
-			/**
-			 * When an attendant disproves of adding bags, I think that
-			 * is still in line with / part of a successful simulation.
-			 * 
-			 *  So maybe instead, if an attendant doesn't approve bags, 
-			 *  we should enable the station again but remove the added bags first
-			 *  to allow the customer to continue doing what they were doing.
-			 *  
-			 *  Ideally the attendant would have cleared this up through 
-			 *  communication with the customer right?
-			 *  
-			 *  Let me know what you think we can change the details again
-			 * 
-			 * 
-			 */
-			
-			// so here, if the attendant has not approved, we remove all of the bags from the scale
-			// and proceed with transaction
+			this.system.setDiscrepancyActive(true);
 			for (BarcodedUnit bag : bags) {
 				station.baggingArea.remove(bag);
 			}
@@ -113,7 +113,7 @@ public class AddOwnBags implements ElectronicScaleObserver {
 	 */
 	public BarcodedUnit getBag() {
 		double weight = new Random().nextDouble(0.1, 1);
-		return new BarcodedUnit(AddOwnBags.BAG_BARCODE, weight);
+		return new BarcodedUnit(AddOwnBagsController.BAG_BARCODE, weight);
 	}
 	
 	/** 
@@ -137,34 +137,5 @@ public class AddOwnBags implements ElectronicScaleObserver {
 	}
 	
 
-	@Override
-	public void reactToEnabledEvent(AbstractDevice<? extends AbstractDeviceObserver> device) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void reactToDisabledEvent(AbstractDevice<? extends AbstractDeviceObserver> device) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void reactToWeightChangedEvent(ElectronicScale scale, double weightInGrams) {
-		System.out.println(String.format("New bag added\n Bag weight: %.2f\nCurrent total weight: %.2f\n", weightInGrams));
-
-	}
-
-	@Override
-	public void reactToOverloadEvent(ElectronicScale scale) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void reactToOutOfOverloadEvent(ElectronicScale scale) {
-		// TODO Auto-generated method stub
-		
-	}	
 	
 }

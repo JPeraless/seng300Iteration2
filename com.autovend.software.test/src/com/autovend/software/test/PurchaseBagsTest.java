@@ -1,3 +1,4 @@
+package com.autovend.software.test;
 import static org.junit.Assert.*;
 
 import org.junit.After;
@@ -28,6 +29,7 @@ import com.autovend.devices.SimulationException;
 import com.autovend.external.ProductDatabases;
 import com.autovend.products.BarcodedProduct;
 import com.autovend.products.Product;
+import com.autovend.software.PurchaseBagsController;
 
 
 /**

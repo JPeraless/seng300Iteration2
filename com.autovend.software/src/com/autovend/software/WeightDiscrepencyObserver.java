@@ -1,3 +1,4 @@
+package com.autovend.software;
 import com.autovend.devices.AbstractDevice;
 import com.autovend.devices.ElectronicScale;
 import com.autovend.devices.observers.*;

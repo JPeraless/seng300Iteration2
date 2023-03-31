@@ -1,3 +1,4 @@
+package com.autovend.software.test;
  import static org.junit.Assert.*;
 
 import java.math.BigDecimal;
@@ -11,6 +12,7 @@ import com.autovend.devices.SelfCheckoutStation;
 import com.autovend.devices.SimulationException;
 import com.autovend.external.*;
 import com.autovend.products.PLUCodedProduct;
+import com.autovend.software.AddItemByPLUController;
 
 import org.junit.After;
 import org.junit.Before;

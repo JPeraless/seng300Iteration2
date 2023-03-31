@@ -1,3 +1,4 @@
+package com.autovend.software;
 import com.autovend.Barcode;
 import com.autovend.BarcodedUnit;
 import com.autovend.SellableUnit;

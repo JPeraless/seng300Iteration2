@@ -1,3 +1,4 @@
+package com.autovend.software.test;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
@@ -10,6 +11,10 @@ import com.autovend.external.CardIssuer;
 import com.autovend.external.ProductDatabases;
 import com.autovend.products.BarcodedProduct;
 import com.autovend.software.CustomerIO;
+import com.autovend.software.Pay;
+import com.autovend.software.PayWithCard;
+import com.autovend.software.PayWithCardObserver;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -358,6 +363,7 @@ public class PayWithCardTest {
         catch (SimulationException e) {
             e.printStackTrace();
         }
+       
 
         Assert.assertEquals(new BigDecimal(0), pay.getAmountPaid());
         Assert.assertEquals(new BigDecimal("5.50"), pay.getTotalAmountDue() - pay.getAmountPaid());

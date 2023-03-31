@@ -1,3 +1,4 @@
+package com.autovend.software;
 	import java.util.Scanner;
 
 public class MembershipCard {

@@ -1,4 +1,4 @@
-package com.autovend;
+package com.autovend.software;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Scanner;
 
+import com.autovend.Card;
 import com.autovend.Card.CardData;
 import com.autovend.devices.*;
 import com.autovend.devices.observers.CardReaderObserver;
 import com.autovend.external.CardIssuer;
-import com.autovend.software.CustomerIO;
 
 /**
  * PayWithCard as credit and debit need literally the same things and their

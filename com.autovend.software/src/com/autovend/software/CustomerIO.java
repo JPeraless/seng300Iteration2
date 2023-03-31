@@ -10,6 +10,16 @@ public class CustomerIO implements PrintReceiptObserver {
 //    private String name;
 //    private String password;
     
+
+    private boolean customerNoBag;
+    
+    private int numberOfBagsPurchased;
+    private int numberOfPersonalBags;
+    
+
+//    private String name;
+//    private String password;
+    
     public String printToDisplay() {
     	return message;
     }
@@ -81,6 +91,28 @@ public class CustomerIO implements PrintReceiptObserver {
 		
 	}
      
+    public boolean getCustomerNoBag() {
+    	return this.customerNoBag;
+    }
     
+    public void setCustomerNoBag(boolean val) {
+    	this.customerNoBag = val;
+    }
+    
+    public int getNumberOfBagsPurchased() {
+    	return this.numberOfBagsPurchased;
+    }
+    
+    public void setNumberOfBagsPurchased(int val) {
+    	this.numberOfBagsPurchased = val;
+    }
+    
+    public int getNumberOfPersonalBags() {
+    	return this.numberOfPersonalBags;
+    }
+    
+    public void setNumberOfPersonalBags(int val) {
+    	this.numberOfPersonalBags = val;
+    }
 
 }

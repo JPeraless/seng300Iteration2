@@ -1,3 +1,4 @@
+package com.autovend.software.test;
 import static org.junit.Assert.*;
 
 import java.math.BigDecimal;
@@ -11,6 +12,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.autovend.devices.SelfCheckoutStation;
+import com.autovend.software.SelfCheckoutSystemLogic;
 
 public class BaseTestCase {
 	protected SelfCheckoutStation station;

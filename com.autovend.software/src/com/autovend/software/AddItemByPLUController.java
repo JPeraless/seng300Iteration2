@@ -1,3 +1,4 @@
+package com.autovend.software;
 import com.autovend.PriceLookUpCodedUnit;
 import com.autovend.SellableUnit;
 import com.autovend.devices.SelfCheckoutStation;

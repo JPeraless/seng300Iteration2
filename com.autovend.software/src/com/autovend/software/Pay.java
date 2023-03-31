@@ -1,4 +1,4 @@
-package com.autovend;
+package com.autovend.software;
 
 import com.autovend.devices.SelfCheckoutStation;
 import com.autovend.devices.SimulationException;

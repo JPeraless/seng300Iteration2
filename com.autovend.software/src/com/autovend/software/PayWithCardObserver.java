@@ -1,4 +1,4 @@
-package com.autovend;
+package com.autovend.software;
 
 import java.math.BigDecimal;
 import java.util.Calendar;
@@ -11,8 +11,6 @@ import com.autovend.devices.SelfCheckoutStation;
 import com.autovend.devices.observers.AbstractDeviceObserver;
 import com.autovend.devices.observers.CardReaderObserver;
 import com.autovend.external.CardIssuer;
-import com.autovend.software.CustomerIO;
-import com.autovend.software.SelfCheckoutSystemLogic;
 
 public class PayWithCardObserver extends SelfCheckoutSystemLogic implements CardReaderObserver {
 

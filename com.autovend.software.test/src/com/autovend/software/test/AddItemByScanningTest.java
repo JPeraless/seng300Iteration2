@@ -1,3 +1,4 @@
+package com.autovend.software.test;
 import static org.junit.Assert.*;
 
 import java.math.BigDecimal;
@@ -16,10 +17,8 @@ import com.autovend.devices.SelfCheckoutStation;
 import com.autovend.devices.SimulationException;
 import com.autovend.external.*;
 import com.autovend.products.BarcodedProduct;
- 
-
-
-
+import com.autovend.software.AddItem;
+import com.autovend.software.AddItemByScanningController;
 
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertEquals;

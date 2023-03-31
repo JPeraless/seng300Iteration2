@@ -1,3 +1,4 @@
+package com.autovend.software.test;
 
 import static org.junit.Assert.assertEquals;
 import java.math.BigDecimal;

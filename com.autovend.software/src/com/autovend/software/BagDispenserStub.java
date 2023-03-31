@@ -1,3 +1,4 @@
+package com.autovend.software;
 import java.math.BigDecimal;
 
 import com.autovend.Barcode;

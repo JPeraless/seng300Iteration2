@@ -18,11 +18,16 @@ public class AttendentStub implements PrintReceiptObserver {
 	List<BarcodedProduct> duplicateBill;
 	private boolean maintainenceRequired;
 	
+
+
+	private boolean discrepancyApproved;
+	
 	public AttendentStub(PrintReceipt ob) {
 		PrintReceipt observer = ob;
 		printer = observer.getPrinter();
 	}
 	
+	public AttendentStub() {};	
 	public boolean addPaperToPrinter() {
 		try {
 			printer.addPaper(1 << 9);
@@ -32,6 +37,7 @@ public class AttendentStub implements PrintReceiptObserver {
 //			observer.reactToPaperAddedEvent(printer);
 			return false;
 		} 
+	
 		catch (EmptyException f) {
 			return false;
 		}
@@ -73,6 +79,15 @@ public class AttendentStub implements PrintReceiptObserver {
 	public void requiresMaintainence(SelfCheckoutStation station, String message) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	
+	public void setDiscrepancyApproved(boolean bool) {
+		this.discrepancyApproved = bool;
+	}
+	
+	public boolean getDiscrepancyApproved() {
+		return this.discrepancyApproved;
 	}
 
 }

@@ -1,3 +1,4 @@
+package com.autovend.software.test;
 
 
 
@@ -21,6 +22,7 @@ import com.autovend.Numeral;
 import com.autovend.devices.DisabledException;
 import com.autovend.devices.OverloadException;
 import com.autovend.devices.SelfCheckoutStation;
+import com.autovend.software.AddOwnBagsController;
 
 
 public class AddOwnBagsTest extends BaseTestCase {

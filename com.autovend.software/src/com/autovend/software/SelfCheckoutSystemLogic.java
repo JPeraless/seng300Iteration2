@@ -3,7 +3,9 @@ import java.util.ArrayList;
 import java.util.Currency;
 import java.util.List;
 
+import com.autovend.Barcode;
 import com.autovend.Bill;
+import com.autovend.SellableUnit;
 import com.autovend.devices.BillDispenser;
 import com.autovend.devices.CoinDispenser;
 import com.autovend.devices.EmptyException;
@@ -11,24 +13,51 @@ import com.autovend.devices.OverloadException;
 import com.autovend.devices.SelfCheckoutStation;
 import com.autovend.devices.SimulationException;
 import com.autovend.products.BarcodedProduct;
+import com.autovend.products.Product;
 
 
 public class SelfCheckoutSystemLogic {
 
+
+
+
+
+	
+	private PrintReceipt receiptController;
+
+	
 	private SelfCheckoutStation station;
-	private List<BarcodedProduct> billList = new ArrayList<BarcodedProduct>();
+	private List<Product> billList = new ArrayList<Product>();
 	private double changeDispensed = 0;
 	private double amountDue = 0;
 	private boolean paymentProcess = false;
+	
+	private double baggingAreaWeight;
+	private double expectedBagginAreaWeight;
 
 	private boolean printing;
 	
-	private boolean isMember;
+	private boolean unhandledDiscrepancy;
+	private boolean unApprovedDiscrepancy;
+	private boolean discrepancyActive = false;
+	private boolean doNotBagItemActive = false;
+	
+	private boolean attendantApprovedOwnBags;
+	
+	// FROM PLU
+	private SellableUnit currentSelectedUnit;
+	
+	// FROM SCANNER
+	private Barcode currentBarcode;
+	
+	private boolean isMember = false;
 	private String memberNumber;
 	
-	private PrintReceipt receiptController;
+	//private PrintReceipt receiptController;
 	private CustomerIO customerio;
 	private AttendentStub attendent;
+	private BagDispenserStub bagDispenser;
+	private final int BAG_DISPENSER_DEFAULT_LIMIT = 100;
 
 	public SelfCheckoutSystemLogic(SelfCheckoutStation station, CustomerIO cs, AttendentStub att) {
 		this.station = station;
@@ -55,6 +84,10 @@ public class SelfCheckoutSystemLogic {
 		this.station.mainScanner.disable();
 		this.station.billInput.disable();
 		this.station.coinSlot.disable();
+		
+		this.customerio = new CustomerIO();
+		this.attendent = new AttendentStub();
+		this.bagDispenser = new BagDispenserStub(BAG_DISPENSER_DEFAULT_LIMIT);
 	}
 	
 	
@@ -93,6 +126,7 @@ public class SelfCheckoutSystemLogic {
 			}
 		}
 
+	
 	/**
 	 * Prints the receipt and notifies attendant of problems
 	 * @throws EmptyException 
@@ -112,10 +146,105 @@ public class SelfCheckoutSystemLogic {
 	}
 	
 	
+
+	public void addItemByScanning() throws Exception {
+		AddItemByScanningController controller = new AddItemByScanningController(this.station, this);
+		controller.add(this.currentSelectedUnit);
+	}
+	
+	public void addItemByPLU() throws Exception {
+		AddItemByPLUController controller = new AddItemByPLUController(this.station, this);
+		controller.add(this.currentSelectedUnit);
+	}
+	
+	
+	public void addOwnBags() throws OverloadException {
+		AddOwnBagsController controller = new AddOwnBagsController(this.station, this);
+		controller.addOwnBags();
+	}
+	
+	
+	public void purchaseBags() throws OverloadException, EmptyException {
+		PurchaseBagsController pb = new PurchaseBagsController(this.station, this);
+		this.baggingAreaWeight = this.station.baggingArea.getCurrentWeight();
+		pb.addBagsToBill();
+	}
+	
+
+	
+	
+	
+	public void weightDiscrepency(double expectedWeight) throws OverloadException {
+		// weithDiscrep = true
+		WeightDiscrepancyController wd = new WeightDiscrepancyController(this.station, this);
+		this.station.baggingArea.register(wd);
+		this.expectedBagginAreaWeight = expectedWeight;
+	}
+	
+	
+	public void checkDiscrepancy(double actualWeight) {
+	
+		
+		// if no discrepancy is found, program can continue
+		if (actualWeight == this.expectedBagginAreaWeight) {
+			station.handheldScanner.enable();
+			station.mainScanner.enable();
+			station.billInput.enable();
+			return;
+		}
+		
+		// otherwise discrepancy found, disable station
+		station.handheldScanner.disable();
+		station.mainScanner.disable();
+		station.billInput.disable();
+		
+		this.weightDiscrepancyOptions();
+	}
+	
+	
+	
+	/**
+	 * Method to determine and decide how to handle weight discrepancy
+	 * based on attendant and customer decisions
+	 * 
+	 * 
+	 * @return - true if no exception was found
+	 * @throws OverloadException - if weight limit in bagging area is exceeded
+	 * @throws SimulationException - if attendant does not approve of discrepancy
+	 */
+	private void weightDiscrepancyOptions() {
+
+		
+		// attendant is not approving of discrepancy, will have to go take a look manually
+		if (!this.attendent.getDiscrepancyApproved()) {
+			this.unApprovedDiscrepancy = true;
+			this.discrepancyActive = true;
+			return;
+		}
+		
+		// this case will have to react with the "Do Not Bag Item" use case in the future,
+		// so let's leave this here for now but just pretend it is resolved by returning true
+		if (this.customerio.getCustomerNoBag()) {
+
+			this.doNotBagItemActive = true;
+			this.discrepancyActive = true;
+			return;
+		}
+		
+		// otherwise if the attendant approved of the weight discrepancy, let's enable the station
+		// and get ready for another transaction
+		station.handheldScanner.enable();
+		station.mainScanner.enable();
+		station.billInput.enable();
+		this.discrepancyActive = false;
+	}
+	
+	
+	
 	/**
 	 * Adds an item to the end of the current bill list
 	 */
-	public void addBillList(BarcodedProduct product) {
+	public void addBillList(Product product) {
 		billList.add(product);
 	}
 	/**
@@ -128,14 +257,14 @@ public class SelfCheckoutSystemLogic {
 	/**
 	 * gets the current bill List
 	 */
-	public List<BarcodedProduct> getBillList() {
+	public List<Product> getBillList() {
 		return billList;
 	}
 
 	/**
 	 * sets the current bill list
 	 */
-	public void setBillList(List<BarcodedProduct> billList) {
+	public void setBillList(List<Product> billList) {
 		this.billList = billList;
 	}
 
@@ -170,6 +299,76 @@ public class SelfCheckoutSystemLogic {
 
 	public void setChangeDispensed(double changeDispensed) {
 		this.changeDispensed = changeDispensed;
+	}
+	
+
+
+
+	
+	public void setCustomerNoBag(boolean value) {
+		this.customerio.setCustomerNoBag(value);
+	}
+	
+	public void setAttendantApproval(boolean value) {
+		this.attendent.setDiscrepancyApproved(value);
+	}
+	
+	
+	public boolean getUnhandledDiscrepancy() {
+		return unhandledDiscrepancy;
+	}
+	
+	public boolean getUnApprovedDiscrepancy() {
+		return unApprovedDiscrepancy;
+	}
+	
+	public boolean getDiscrepancyActive() {
+		return discrepancyActive;
+	}
+	
+	public boolean getDoNotBagItemActive() {
+		return this.doNotBagItemActive;
+	}
+	
+
+	public CustomerIO getCustomerIO() {
+		return this.customerio;
+	}
+	
+	public AttendentStub getAttendentStub() {
+		return this.attendent;
+	}
+	
+	public BagDispenserStub getBagDispenser() {
+		return this.bagDispenser;
+	}
+	
+	public double getBaggingAreaWeight() {
+		return this.baggingAreaWeight;
+	}
+	
+	public  void setBaggingAreaWeight(double val) {
+		this.baggingAreaWeight = val;
+	}
+	
+	public SellableUnit getCurrentSelectedUnit() {
+		return this.currentSelectedUnit;
+	}
+	
+	public void setCurrentSelectableUnit(SellableUnit unit) {
+		this.currentSelectedUnit = unit;
+	}
+	
+	public void setCurrentBarcode(Barcode val) {
+		this.currentBarcode	 = val;
+	}
+	
+	public Barcode getCurrentBarcode() {
+		return this.currentBarcode;
+	}
+	
+	public void setDiscrepancyActive(boolean val) {
+		this.discrepancyActive = val;
 	}
 	
 }
