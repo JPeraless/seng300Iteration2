@@ -88,13 +88,13 @@ public class AddItemByPLUTest extends BaseTestCase {
 		system.addItemByPLU();
 		double weight = system.getBaggingAreaWeight();
 		System.out.println(system.getBaggingAreaWeight());
-		assertEquals(weight, 1f, 0.00001);
+		assertEquals(1f, weight, 0.00001);
 		
 		// Testing after adding a second item
 		this.system.setCurrentSelectableUnit(unit1);
 		system.addItemByPLU();
 		double weight2 = system.getBaggingAreaWeight();
-		assertEquals(weight2,1f + 2f, 0.00001);
+		assertEquals(1f + 2f,weight2, 0.00001);
 	}
 	
 	@Test
