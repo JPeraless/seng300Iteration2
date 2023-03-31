@@ -94,27 +94,25 @@ public class AddItemByPLUTest extends BaseTestCase {
 		this.system.setCurrentSelectableUnit(unit1);
 		system.addItemByPLU();
 		double weight2 = system.getBaggingAreaWeight();
-		assertEquals(weight2,station.baggingArea.getCurrentWeight(), 0.00001);
+		assertEquals(weight2,1f + 2f, 0.00001);
 	}
 	
 	@Test
 	public void testTotalPrice() throws Exception {
-	    AddItemByPLUController useCase1 = new AddItemByPLUController(station, system);
-	    useCase1.add(unit0);
-	    BigDecimal expectedTotalPrice1 = BigDecimal.valueOf(1f);
-	    assertEquals(expectedTotalPrice1, useCase1.totalPrice);
-double expectedPrice = ProductDatabases.PLU_PRODUCT_DATABASE.get(unit0.getPLUCode()).getPrice().doubleValue();
-		double expectedTotalPrice = expectedPrice * unit0.getWeight();
+	    this.system.setCurrentSelectableUnit(unit0);
+	    system.addItemByPLU();
+	    double expectedTotalPrice1 = BigDecimal.valueOf(1f).doubleValue();
+	    assertEquals(expectedTotalPrice1, system.getAmountDue(), 0.0001);
+        
 	}
 	
 	
 	
 	@Test (expected = SimulationException.class)
 	public void AddingSameItem() throws Exception {
-		this.useCase = new AddItemByPLUController(super.station, system);
-		useCase.add(unit0);
-		this.useCase = new AddItemByPLUController(super.station, system);
-		useCase.add(unit0);
+		this.system.setCurrentSelectableUnit(unit0);
+		system.addItemByPLU();
+		system.addItemByPLU();
 	
 	}
 	
