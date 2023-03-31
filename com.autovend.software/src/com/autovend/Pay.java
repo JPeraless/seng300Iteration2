@@ -10,9 +10,8 @@ import com.autovend.devices.observers.AbstractDeviceObserver;
 public abstract class Pay<T extends AbstractDeviceObserver> {
     protected final SelfCheckoutStation checkoutStation;
     protected final T controller;
-
-    private double totalAmountDue;
-    private double amountPaid;
+    private static double totalAmountDue;
+    private static double amountPaid;
 
     public Pay(SelfCheckoutStation checkoutStation, T controller) {
         if (checkoutStation == null)
@@ -39,11 +38,11 @@ public abstract class Pay<T extends AbstractDeviceObserver> {
         amountPaid += paymentMadeAmount;
     }
 
-    public double getTotalAmountDue() {
+    public static double getTotalAmountDue() {
         return totalAmountDue;
     }
 
-    public double getAmountPaid() {
+    public static double getAmountPaid() {
         return amountPaid;
     }
 }
