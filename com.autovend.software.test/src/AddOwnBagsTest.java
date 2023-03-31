@@ -24,21 +24,18 @@ import com.autovend.devices.SelfCheckoutStation;
 
 
 public class AddOwnBagsTest extends BaseTestCase {
-	private AddOwnBags useCase;
+	private AddOwnBagsController useCase;
 	
 
 	// INITIALIZE STATION IS EXTENDED FROM BaseTestCase.java
 	@Before
 	public void setUp() throws Exception {
 		this.initializeStation();
-		this.useCase = new AddOwnBags();
-		
 	}
 
 	@After
 	public void tearDown() throws Exception {
-		this.station = null;
-		this.useCase = null;
+		this.deinitializeStation();
 	}
 
 	
@@ -54,12 +51,14 @@ public class AddOwnBagsTest extends BaseTestCase {
 	@Test
 	public void addWhileDisabled() {
 		this.station.baggingArea.disable();
-		assertThrows(DisabledException.class, () -> this.useCase.addOwnBags(this.station, 10, true));	
+		this.system.getCustomerIO().setNumberOfPersonalBags(10);
+		this.system.getAttendentStub().setDiscrepancyApproved(true);
+		assertThrows(DisabledException.class, () -> system.addOwnBags());	
 	}
 	
 	
-
-
+	
+	
 	
 	/**
 	 *	Tests the case when an attendant does not approve the use
@@ -76,15 +75,20 @@ public class AddOwnBagsTest extends BaseTestCase {
 	public void attendantNotApproved() throws OverloadException {
 		double weightBefore = this.station.baggingArea.getCurrentWeight();
 		
+		this.system.getCustomerIO().setNumberOfPersonalBags(10);
+		this.system.getAttendentStub().setDiscrepancyApproved(false);
+		
 		// check in the case that 100 bags have been added
-		this.useCase.addOwnBags(this.station, 100, false);
+		this.system.addOwnBags();
 		assertEquals(weightBefore, this.station.baggingArea.getCurrentWeight(), 0.1f);
+		
 		
 		// check in the case that just 1 bag has been added
-		this.useCase.addOwnBags(this.station, 1, false);
+		this.system.addOwnBags();
 		assertEquals(weightBefore, this.station.baggingArea.getCurrentWeight(), 0.1f);
-		
 	}
+	
+	
 	
 	/**
 	 *  Tests to make sure that the weight on the scale has been updated following 
@@ -96,9 +100,11 @@ public class AddOwnBagsTest extends BaseTestCase {
 	@Test
 	public void attendantApproved() throws Exception {
 		double weightBefore = this.station.baggingArea.getCurrentWeight();
+		this.system.getAttendentStub().setDiscrepancyApproved(true);
 		
+		this.system.getCustomerIO().setNumberOfPersonalBags(100);
 		// check in the case that 100 bags have been added
-		this.useCase.addOwnBags(this.station, 100, true);
+		this.system.addOwnBags();
 		assertTrue(weightBefore < this.station.baggingArea.getCurrentWeight());
 		
 		// the bagging area is empty so adding 100 bags with a max of 100 lbs total
@@ -108,19 +114,22 @@ public class AddOwnBagsTest extends BaseTestCase {
 		// given the design of the simulation and getBag() method
 		assertTrue(weightBefore - this.station.baggingArea.getCurrentWeight() <= 100);
 		
-		// clean up the bagging area and reinstantiate it
+		// clean up simulation
 		tearDown();
 		setUp();
 		
+		this.system.getAttendentStub().setDiscrepancyApproved(true);
 		// check in the case that just 1 bag has been added
-		this.useCase.addOwnBags(this.station, 1, true);
+		this.system.getCustomerIO().setNumberOfPersonalBags(1);
+		this.system.addOwnBags();
 		assertTrue(weightBefore < this.station.baggingArea.getCurrentWeight());
 		
 		// make sure that the weight of the added bags is not more than possible
 		// given the design of the simulation and getBag() method
-		assertTrue(weightBefore - this.station.baggingArea.getCurrentWeight() <= 1);
+		assertTrue(this.station.baggingArea.getCurrentWeight() - weightBefore <= 1);
 	}
-
+	
+	
 	
 	/**
 	 *  Test to make sure that an OverloadExcepiton is thrown if an attendant
@@ -128,15 +137,18 @@ public class AddOwnBagsTest extends BaseTestCase {
 	 * @throws Exception 
 	 * 
 	 */
-	
 	@Test
 	public void tooManyBags() throws Exception {
 		// fill scale with heavy item
 		BarcodedUnit reallyHeavyItem = new BarcodedUnit(new Barcode(new Numeral[] {Numeral.one}), this.weightLimit);
 		this.station.baggingArea.add(reallyHeavyItem);
 		
+		this.system.getAttendentStub().setDiscrepancyApproved(true);
+		
+		this.system.getCustomerIO().setNumberOfPersonalBags(100);
+		
 		// make sure that trying to add many bags will cause an overload exception
-		assertThrows(OverloadException.class, () -> this.useCase.addOwnBags(this.station, 100, true));
+		assertThrows(OverloadException.class, () -> this.system.addOwnBags());
 		
 		tearDown();
 		setUp();
@@ -144,24 +156,26 @@ public class AddOwnBagsTest extends BaseTestCase {
 		// make sure that trying to add even one bag will cause an overload exception
 		reallyHeavyItem = new BarcodedUnit(new Barcode(new Numeral[] {Numeral.one}), this.weightLimit);
 		this.station.baggingArea.add(reallyHeavyItem);
-		assertThrows(OverloadException.class, () -> this.useCase.addOwnBags(this.station, 1, true));
+		
+		this.system.getAttendentStub().setDiscrepancyApproved(true);
+		
+		this.system.getCustomerIO().setNumberOfPersonalBags(1);
+		assertThrows(OverloadException.class, () -> this.system.addOwnBags());
 		
 	}
 	
-	/**
-	 * 	Edge case for when a customer may accidentally choose to add personal
-	 *  bags when they have none. Let's make sure that the user can enter 0
-	 *  with no erros happening. Weight should be the same before and after adding bags
-	 * @throws Exception 
-	 * 
-	 */
+
+
+
 	
 	@Test
 	public void addNoBags() throws Exception {
 		
 		// make sure that if attendant approval is true, this works
 		double weightBefore = this.station.baggingArea.getCurrentWeight();
-		this.useCase.addOwnBags(station, 0, true);
+		this.system.getAttendentStub().setDiscrepancyApproved(true);
+		this.system.getCustomerIO().setNumberOfPersonalBags(0);
+		this.system.addOwnBags();
 		assertEquals(weightBefore, this.station.baggingArea.getCurrentWeight(), 0.00001);
 		
 		tearDown();
@@ -173,9 +187,13 @@ public class AddOwnBagsTest extends BaseTestCase {
 		//	about no bags being added, so the check can be skipped
 		//	let me know what you think to whoever reads this
 		weightBefore = this.station.baggingArea.getCurrentWeight();
-		this.useCase.addOwnBags(station, 0, false);
+		this.system.getAttendentStub().setDiscrepancyApproved(false);
+		this.system.getCustomerIO().setNumberOfPersonalBags(0);
+		
+		this.system.addOwnBags();
 		assertEquals(weightBefore, this.station.baggingArea.getCurrentWeight(), 0.00001);
 		
 	}
-	
+
 }
+

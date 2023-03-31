@@ -14,6 +14,7 @@ import com.autovend.devices.SelfCheckoutStation;
 
 public class BaseTestCase {
 	protected SelfCheckoutStation station;
+	protected SelfCheckoutSystemLogic system;
 	protected int weightLimit = 100; 
 
 	protected void initializeStation() {
@@ -31,6 +32,7 @@ public class BaseTestCase {
 		int scaleSensitivity = 1;
 		
 		this.station = new SelfCheckoutStation(curr, billDenoms, coinDenoms, scaleMax, scaleSensitivity);
+		this.system = new SelfCheckoutSystemLogic(this.station);
 	}
 
 	
