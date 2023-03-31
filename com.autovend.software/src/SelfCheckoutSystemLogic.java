@@ -156,7 +156,7 @@ public class SelfCheckoutSystemLogic {
 	}
 	
 	
-	public void addOwnBags() {
+	public void addOwnBags() throws OverloadException {
 		AddOwnBagsController controller = new AddOwnBagsController(this.station, this);
 		controller.addOwnBags();
 	}
