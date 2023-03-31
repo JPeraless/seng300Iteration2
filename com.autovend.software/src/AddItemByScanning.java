@@ -10,8 +10,8 @@ import com.autovend.products.Product;
 
 public class AddItemByScanning extends AddItem<BarcodedProduct> {
 
-	public AddItemByScanning(SelfCheckoutStation station, SellableUnit currentUnit) {
-		super(station, currentUnit);
+	public AddItemByScanning(SelfCheckoutStation station, SelfCheckoutSystemLogic system) {
+		super(station, system);
 		this.station.mainScanner.enable();
 	
 	}

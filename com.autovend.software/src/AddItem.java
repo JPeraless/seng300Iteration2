@@ -46,10 +46,10 @@ public class AddItem<T extends Product> implements BarcodeScannerObserver{
 	 * @param staion - the station being used by the system
 	 * @param currentUnit - Unit to be added (PLU or barcoded)
 	 */
-	public AddItem(SelfCheckoutStation station, SellableUnit currentUnit){
+	public AddItem(SelfCheckoutStation station, SelfCheckoutSystemLogic system){
 		
 		this.station = station;
-		this.unit = currentUnit; 
+		this.system = system;
 
 	}
 

@@ -22,7 +22,7 @@ import static org.junit.Assert.assertEquals;
 
 
 public class AddItemByPLUTest extends BaseTestCase {
-	AddItemByPLU useCase;
+	AddItemByPLUController useCase;
 	
 	SellableUnit unit0;
 	SellableUnit unit1;
@@ -81,13 +81,13 @@ public class AddItemByPLUTest extends BaseTestCase {
 	
 	@Test
 	public void WeightEquals() throws Exception {
-		this.useCase = new AddItemByPLU(super.station, unit0);
+		this.useCase = new AddItemByPLUController(super.station, unit0);
 		useCase.add(station);
 		double weight = useCase.totalWeight;
 		assertEquals(weight,station.baggingArea.getCurrentWeight(), 0.00001);
 		
 		// Testing after adding a second item
-		this.useCase = new AddItemByPLU(super.station, unit1);
+		this.useCase = new AddItemByPLUController(super.station, unit1);
 		useCase.add(station);
 		double weight2 = useCase.totalWeight + weight;
 		assertEquals(weight2,station.baggingArea.getCurrentWeight(), 0.00001);
@@ -95,7 +95,7 @@ public class AddItemByPLUTest extends BaseTestCase {
 	
 	@Test
 	public void testTotalPrice() throws Exception {
-	    AddItemByPLU useCase1 = new AddItemByPLU(station, unit0);
+	    AddItemByPLUController useCase1 = new AddItemByPLUController(station, unit0);
 	    useCase1.add(station);
 	    BigDecimal expectedTotalPrice1 = BigDecimal.valueOf(1f);
 	    assertEquals(expectedTotalPrice1, useCase1.totalPrice);
@@ -106,9 +106,9 @@ public class AddItemByPLUTest extends BaseTestCase {
 	
 	@Test (expected = SimulationException.class)
 	public void AddingSameItem() throws Exception {
-		this.useCase = new AddItemByPLU(super.station, unit0);
+		this.useCase = new AddItemByPLUController(super.station, unit0);
 		useCase.add(station);
-		this.useCase = new AddItemByPLU(super.station, unit0);
+		this.useCase = new AddItemByPLUController(super.station, unit0);
 		useCase.add(station);
 	
 	}

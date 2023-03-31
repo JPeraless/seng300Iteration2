@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.autovend.BarcodedUnit;
 import com.autovend.Bill;
+import com.autovend.SellableUnit;
 import com.autovend.devices.BillDispenser;
 import com.autovend.devices.CoinDispenser;
 import com.autovend.devices.DisabledException;
@@ -14,12 +15,13 @@ import com.autovend.devices.SelfCheckoutStation;
 import com.autovend.devices.SimulationException;
 import com.autovend.external.ProductDatabases;
 import com.autovend.products.BarcodedProduct;
+import com.autovend.products.Product;
 
 
 public class SelfCheckoutSystemLogic {
 
 	private SelfCheckoutStation station;
-	private List<BarcodedProduct> billList = new ArrayList<BarcodedProduct>();
+	private List<Product> billList = new ArrayList<Product>();
 	private double changeDispensed = 0;
 	private double amountDue = 0;
 	private boolean paymentProcess = false;
@@ -33,6 +35,9 @@ public class SelfCheckoutSystemLogic {
 	private boolean unApprovedDiscrepancy;
 	private boolean discrepancyActive = false;
 	private boolean doNotBagItemActive = false;
+	
+	// FROM PLU
+	private SellableUnit currentSelectedUnit;
 	
 	private boolean isMember = false;
 	private String memberNumber;
@@ -113,6 +118,7 @@ public class SelfCheckoutSystemLogic {
 
 	/**
 	 * Prints the receipt and notifies attendant of problems
+	 * @throws Exception 
 	 * @throws EmptyException 
 	 * @throws OverloadException 
 	 */
@@ -130,6 +136,14 @@ public class SelfCheckoutSystemLogic {
 		}
 	}
 	*/
+	
+	public void addItemByPLU() throws Exception {
+		AddItemByPLUController controller = new AddItemByPLUController(this.station, this);
+		controller.add(this.currentSelectedUnit);
+	}
+	
+	
+	
 	
 	
 	public void purchaseBags() throws OverloadException, EmptyException {
@@ -227,7 +241,7 @@ public class SelfCheckoutSystemLogic {
 	/**
 	 * Adds an item to the end of the current bill list
 	 */
-	public void addBillList(BarcodedProduct product) {
+	public void addBillList(Product product) {
 		billList.add(product);
 	}
 	/**
@@ -240,14 +254,14 @@ public class SelfCheckoutSystemLogic {
 	/**
 	 * gets the current bill List
 	 */
-	public List<BarcodedProduct> getBillList() {
+	public List<Product> getBillList() {
 		return billList;
 	}
 
 	/**
 	 * sets the current bill list
 	 */
-	public void setBillList(List<BarcodedProduct> billList) {
+	public void setBillList(List<Product> billList) {
 		this.billList = billList;
 	}
 
@@ -326,6 +340,19 @@ public class SelfCheckoutSystemLogic {
 		return this.baggingAreaWeight;
 	}
 	
+	public  void setBaggingAreaWeight(double val) {
+		this.baggingAreaWeight = val;
+	}
+	
+	public SellableUnit getCurrentSelectedUnit() {
+		return this.currentSelectedUnit;
+	}
+	
+	public void setCurrentSelectableUnit(SellableUnit unit) {
+		this.currentSelectedUnit = unit;
+	}
+	
+
 }
 
 

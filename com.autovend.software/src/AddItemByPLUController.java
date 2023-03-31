@@ -8,14 +8,14 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 
 
-public class AddItemByPLU extends AddItem {
+public class AddItemByPLUController extends AddItem {
 	
-	public AddItemByPLU(SelfCheckoutStation station, SellableUnit unit) {
-		super(station, unit);
+	public AddItemByPLUController(SelfCheckoutStation station, SelfCheckoutSystemLogic system) {
+		super(station, system);
 	}
 	
 	 
-	public void add(SelfCheckoutStation station) throws Exception {
+	public void add(SellableUnit currentSelectedItem) throws Exception {
 		  PriceLookUpCodedUnit copyOfUnit = (PriceLookUpCodedUnit) this.unit;
 		  PLUCodedProduct pluProduct = getProductFromPLU(copyOfUnit.getPLUCode());
 		  
@@ -38,13 +38,16 @@ public class AddItemByPLU extends AddItem {
           // notify customer
           System.out.println("Please place your item in the bagging area");
 
+          system.weightDiscrepency(this.station.baggingArea.getCurrentWeight() + weightInGrams);
+          
           // add item to the baggingArea ElectronicScale
           station.baggingArea.add(copyOfUnit);
           
-          
+          this.system.addBillList(pluProduct);
+
 
           // increment weight total
-          this.totalWeight += weightInGrams;
+          this.system.setBaggingAreaWeight(this.system.getAmountDue());
           
          
           // mathcontext object to specify decimal precision
@@ -57,6 +60,7 @@ public class AddItemByPLU extends AddItem {
 
           // increment price total
           this.totalPrice = price.plus();
+          this.system.setAmountDue(this.system.getAmountDue() + totalPrice.doubleValue());
           
           //System.out.println(this.totalPrice);
           
