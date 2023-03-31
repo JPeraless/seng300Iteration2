@@ -48,7 +48,7 @@ public class SelfCheckoutSystemLogic {
 	private boolean isMember = false;
 	private String memberNumber;
 	
-	private PrintReceipt receiptController;
+	//private PrintReceipt receiptController;
 	private CustomerIO customerio;
 	private AttendentStub attendent;
 	private BagDispenserStub bagDispenser;
@@ -68,7 +68,7 @@ public class SelfCheckoutSystemLogic {
 		//receiptController.registerCustomerIO(customerio);
 		//receiptController.registerAttendent(attendent);
 		
-		station.printer.register(receiptController);
+		//station.printer.register(receiptController);
 	}
 
 	

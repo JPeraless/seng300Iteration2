@@ -13,7 +13,7 @@ public class AttendentStub {
 //	public void fillPrinterWithPaper() {
 //		
 //	}
-	PrintReceipt observer;
+	//PrintReceipt observer;
 	ReceiptPrinter printer;
 	List<BarcodedProduct> duplicateBill;
 	private boolean maintainenceRequired;

@@ -166,6 +166,7 @@ public class AddOwnBagsTest extends BaseTestCase {
 	
 
 
+
 	
 	@Test
 	public void addNoBags() throws Exception {
