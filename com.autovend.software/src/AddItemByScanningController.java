@@ -20,13 +20,13 @@ public class AddItemByScanningController extends AddItem<BarcodedProduct> implem
 	}
 	
 	
-	public BarcodedProduct add(SelfCheckoutStation station) throws Exception {
-		BarcodedUnit copyOfUnit = (BarcodedUnit) this.unit;
-		BarcodedProduct barcodedProduct = getProductFromBarcode(copyOfUnit.getBarcode());
+	public BarcodedProduct add(SellableUnit currentSelectedUnit) throws Exception {
+		
 
 		
-		if(station.mainScanner.scan(copyOfUnit)) {
-		
+		if(station.mainScanner.scan((BarcodedUnit) currentSelectedUnit)) {
+			BarcodedUnit copyOfUnit = (BarcodedUnit) currentSelectedUnit;
+			BarcodedProduct barcodedProduct = getProductFromBarcode(this.system.getCurrentBarcode());
 			//disable station
 			addItemStationDisable();
 			
@@ -34,25 +34,21 @@ public class AddItemByScanningController extends AddItem<BarcodedProduct> implem
 			//get product/unit info
 			double weightInGrams = copyOfUnit.getWeight();
 			
-			
 			//notify customer
 			System.out.println("Please place your item in the bagging area");
 			
+			this.system.weightDiscrepency(this.station.baggingArea.getCurrentWeight() + weightInGrams);
 			//add item to the baggingArea ElectronicScale
 			station.baggingArea.add(copyOfUnit);
 			
 		
 			
 			//increment weight total
-			this.totalWeight += weightInGrams;
+			this.system.setBaggingAreaWeight(this.system.getBaggingAreaWeight() + weightInGrams);
 			
-			//boolean discrepancyCheck = wd.weightDiscrepancyOptions();
+
 			
-			//if (!discrepancyCheck) {
-			//	throw new SimulationException("User added or removed item in repsonse");
-			//}
-			
-			
+
 			
 			//react to barcode scanned event (adds barcodedUnit to BillList)
 			reactToBarcodeScannedEvent(station.mainScanner, copyOfUnit.getBarcode());

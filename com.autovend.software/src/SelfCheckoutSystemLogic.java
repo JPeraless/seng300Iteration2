@@ -141,6 +141,12 @@ public class SelfCheckoutSystemLogic {
 	}
 	*/
 	
+	
+	public void addItemByScanning() throws Exception {
+		AddItemByScanningController controller = new AddItemByScanningController(this.station, this);
+		controller.add(this.currentSelectedUnit);
+	}
+	
 	public void addItemByPLU() throws Exception {
 		AddItemByPLUController controller = new AddItemByPLUController(this.station, this);
 		controller.add(this.currentSelectedUnit);
