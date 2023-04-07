@@ -55,11 +55,7 @@ public class PrintReceipt implements ReceiptPrinterObserver {
 	public PrintReceipt(SelfCheckoutStation stn) {
 		station = stn;
 	}
-	
-	public void registerObserver(PrintReceiptObserver observer) {
-		observers.add(observer);
-	}
-	
+		
 	public void registerCustomerIO(CustomerIO anotherCO) {
 		CO = anotherCO;
 		observers.add(anotherCO);
